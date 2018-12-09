@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Questfy-TW</string>
+    <string name="or">or</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign up</string>
+    <string name="just_passing_by">Just Passing by</string>
 </resources>
