@@ -6,4 +6,14 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign up</string>
     <string name="just_passing_by">Just Passing by</string>
+    <string name="creat_account">Creat an account</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="id">ID</string>
+    <string name="country">Country</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="real_name">Real Name</string>
+    <string name="privacy_agreement">Privacy Agreement</string>
+    <string name="term_of_service">Term of service</string>
+    <string name="register">Register</string>
 </resources>

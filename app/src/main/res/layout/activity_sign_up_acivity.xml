@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginRelated.SignUpAcivity">
+
+
+    <RelativeLayout
+        android:id="@+id/relaySignUp1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:text="@string/creat_account"
+            android:textColor="@color/ＭainOrange"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relaySignUp1">
+
+        <LinearLayout
+            android:id="@+id/relaySignUp2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <EditText
+                    android:id="@+id/editEmailRegis"
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/e_mail"
+                    android:textSize="24sp"
+                    android:maxLength="26"
+                    android:inputType="textEmailAddress"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editPasswordRegis"
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:textSize="24sp"
+                    android:maxLength="26"
+                    android:inputType="textPassword"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editConfirmPasswordRegis"
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_password"
+                    android:textSize="24sp"
+                    android:maxLength="26"
+                    android:inputType="textPassword"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editIDRegis"
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/id"
+                    android:textSize="24sp"
+                    android:maxLength="26"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editRealNameRegis"
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:hint="@string/real_name"
+                    android:textSize="24sp"
+                    android:maxLength="26"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/male"
+                    android:textSize="32sp" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/female"
+                    android:textSize="32sp" />
+
+            </RadioGroup>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/checkPrivacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/privacy_agreement"
+                    android:textSize="24sp" />
+
+                <CheckBox
+                    android:id="@+id/checkTermService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/checkPrivacy"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/term_of_service"
+                    android:textSize="24sp" />
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/register_rectangle"
+                android:text="@string/register"
+                android:textColor="@color/FullWhite"
+                android:textSize="32sp"
+                android:elevation="10dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

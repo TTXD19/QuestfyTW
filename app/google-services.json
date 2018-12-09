@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "31006726738",
+    "firebase_url": "https://questfytw.firebaseio.com",
+    "project_id": "questfytw",
+    "storage_bucket": "questfytw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31006726738:android:cd4e182c19cf2463",
+        "android_client_info": {
+          "package_name": "com.example.welsenho.questfy_tw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31006726738-l9n8e60c1sq838skpvg34ftpatn2ts4f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.welsenho.questfy_tw",
+            "certificate_hash": "c45edbea18591d9d5e3a5d1b0edcdad42b459553"
+          }
+        },
+        {
+          "client_id": "31006726738-jikvbsouvd7r47hgkcgsdoda3esbmd29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANVnIoSVi_-ykaEML657AtUIYfC_T5XbI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31006726738-jikvbsouvd7r47hgkcgsdoda3esbmd29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,4 +9,5 @@
     <color name="signInRetangleRed">#FC3B30</color>
     <color name="signUpRectangle">#795548</color>
     <color name="guestLogin">#FF2D55</color>
+    <color name="register">#FF3B30</color>
 </resources>
