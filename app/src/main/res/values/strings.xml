@@ -16,4 +16,8 @@
     <string name="privacy_agreement">Privacy Agreement</string>
     <string name="term_of_service">Term of service</string>
     <string name="register">Register</string>
+    <string name="regis_missing">***Oops ! something is missing</string>
+    <string name="regis_type_success">Register Success</string>
+    <string name="regis_type_failed">Register Unsuccessful</string>
+    <string name="regis_type_password_not_equal">"Password is not equal to confirm password"</string>
 </resources>

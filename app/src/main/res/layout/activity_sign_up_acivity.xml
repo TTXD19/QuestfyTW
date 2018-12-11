@@ -24,6 +24,7 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/scrollRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/relaySignUp1">
@@ -119,18 +120,21 @@
             </android.support.design.widget.TextInputLayout>
 
             <RadioGroup
+                android:id="@+id/radioGpSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/radioBtMale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/male"
                     android:textSize="32sp" />
 
                 <RadioButton
+                    android:id="@+id/radioBtFemale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/female"
@@ -172,6 +176,18 @@
                 android:textColor="@color/FullWhite"
                 android:textSize="32sp"
                 android:elevation="10dp"/>
+
+            <TextView
+                android:id="@+id/txtMissing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="15sp"
+                android:textColor="@color/register"
+                android:textAlignment="textEnd"
+                android:gravity="end"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
     </ScrollView>
