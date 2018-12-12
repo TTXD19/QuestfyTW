@@ -90,7 +90,7 @@
             >
 
             <EditText
-                android:id="@+id/txtEmail"
+                android:id="@+id/editEmailLogin"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/e_mail"
@@ -111,7 +111,7 @@
             android:layout_marginTop="15dp">
 
             <EditText
-                android:id="@+id/txtPassword"
+                android:id="@+id/editPasswordLogin"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
@@ -122,6 +122,17 @@
                 />
 
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/txtWrongPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="***Password or E-mail Incorrect"
+            android:textColor="@color/signInRetangleRed"
+            android:layout_alignStart="@+id/txtInputEmail"
+            android:textSize="16sp"
+            android:layout_below="@+id/txtInputPassword"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnSignIn"
