@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainUserActivity.MainActivity"
-    android:orientation="vertical">
+    android:id="@+id/main_activity_drawerLayout"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ＭainOrange"
+        app:title="Questfy"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -13,4 +26,18 @@
         android:orientation="vertical"
         android:id="@+id/main_activity_frameLayout"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/main_activity_navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginLeft="-65dp"
+        app:menu="@menu/main_activity_navigation_drawer"
+        app:itemTextColor="@color/FullBlack"
+        android:layout_marginStart="-65dp"/>
+
+
+
+</android.support.v4.widget.DrawerLayout>
