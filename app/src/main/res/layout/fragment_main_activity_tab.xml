@@ -12,6 +12,7 @@
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:background="@color/ＭainOrange"
+        app:tabTextColor="@color/FullWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.design.widget.TabLayout>

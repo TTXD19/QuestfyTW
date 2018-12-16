@@ -1,4 +1,4 @@
-package com.example.welsenho.questfy_tw;
+package com.example.welsenho.questfy_tw.LoginRelated;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,9 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.welsenho.questfy_tw.LoginRelated.SignUpAcivity;
-import com.example.welsenho.questfy_tw.LoginRelated.SignUpMethod;
+import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnSignIn;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
     private SignUpMethod signUpMethod;
 
@@ -44,8 +45,16 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         signUpMethod = new SignUpMethod();
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog.setTitle("Signing your account");
 
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null) {
+            signUpMethod.autoLogin(firebaseUser, getApplicationContext());
+            finish();
+        }
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,10 +66,11 @@ public class LoginActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 email = editEmail.getText().toString();
                 password = editPassword.getText().toString();
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), progressDialog);
+                    signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), LoginActivity.this);
                 }else{
                     txtWrongPassword.setVisibility(View.VISIBLE);
                 }
@@ -71,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "Resume", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         if (intent.getStringExtra("email") != null){
             editEmail.setText(intent.getStringExtra("email"));

@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#FF9500</color>
     <color name="colorAccent">#D81B60</color>
     <color name="ＭainOrange">#FF9800</color>
+    <color name="LightMainOrange">#FCA037</color>
     <color name="FullWhite">#FFFFFF</color>
     <color name="FullBlack">#000000</color>
+    <color name="LightBlackText">#4C5264</color>
     <color name="signInRetangleRed">#FC3B30</color>
     <color name="signUpRectangle">#795548</color>
     <color name="guestLogin">#FF2D55</color>
     <color name="register">#FF3B30</color>
+    <color name="messageLightBlue">#5887F9</color>
 </resources>

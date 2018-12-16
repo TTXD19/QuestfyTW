@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -107,6 +108,9 @@ public class SignUpAcivity extends AppCompatActivity {
         loginType = "false";
 
         if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty() && !ID.isEmpty() && !realName.isEmpty()) {
+            progressDialog.setMessage("Please hold on a moment while we log in your account.");
+            progressDialog.setTitle("Logging in");
+            progressDialog.show();
             if (password.equals(confirmPassword)) {
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -114,7 +118,14 @@ public class SignUpAcivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(SignUpAcivity.this, R.string.regis_type_success, Toast.LENGTH_SHORT).show();
                             Uid = firebaseAuth.getUid();
-                            signUpMethod.firebaseProfileSignUp(databaseReference, Uid, email, ID, realName, sex, loginType, getApplicationContext(), progressDialog);
+                            signUpMethod.firebaseProfileSignUp(databaseReference, Uid, email, ID, realName, sex, loginType, getApplicationContext());
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            signUpMethod.emailVarification(firebaseUser, getApplicationContext());
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(ID).build();
+                            if (firebaseUser != null) {
+                                firebaseUser.updateProfile(profileUpdates);
+                            }
                         } else {
                             Toast.makeText(SignUpAcivity.this, R.string.regis_type_failed, Toast.LENGTH_SHORT).show();
                         }
@@ -132,6 +143,7 @@ public class SignUpAcivity extends AppCompatActivity {
             txtMissing.setVisibility(View.VISIBLE);
             scrollView.fullScroll(View.FOCUS_DOWN);
         }
+        progressDialog.dismiss();
     }
 
     private String checkSex(){

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Questfy-TW</string>
+    <string name="or">或</string>
+    <string name="e_mail">信箱</string>
+    <string name="password">密碼</string>
+    <string name="sign_in">登入</string>
+    <string name="sign_up">註冊</string>
+    <string name="just_passing_by">訪客</string>
+    <string name="creat_account">註冊帳號</string>
+    <string name="confirm_password">密碼確認</string>
+    <string name="id">暱稱</string>
+    <string name="country">國家</string>
+    <string name="male">男性</string>
+    <string name="female">女性</string>
+    <string name="real_name">真實名字</string>
+    <string name="privacy_agreement">隱私權政策</string>
+    <string name="term_of_service">服務條款</string>
+    <string name="register">註冊</string>
+    <string name="regis_missing">＊＊＊空格不能為空白喔</string>
+    <string name="regis_type_success">註冊成功</string>
+    <string name="regis_type_failed">註冊失敗</string>
+    <string name="regis_type_password_not_equal">密碼與確認密碼不一致</string>
+    <string name="action_drawer_open">drawer open</string>
+    <string name="action_drawer_close">drawer close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+</resources>

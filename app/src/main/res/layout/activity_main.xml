@@ -8,6 +8,21 @@
     android:id="@+id/main_activity_drawerLayout"
     >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_activity_floatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="25dp"
+            android:backgroundTint="@color/LightMainOrange"
+            />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +33,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ＭainOrange"
-        app:title="Questfy"/>
+        app:title="Questfy"
+        app:titleTextColor="@color/FullWhite"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -28,6 +44,8 @@
 
     </LinearLayout>
 
+    </RelativeLayout>
+
     <android.support.design.widget.NavigationView
         android:id="@+id/main_activity_navigationView"
         android:layout_width="wrap_content"
@@ -36,8 +54,7 @@
         android:layout_marginLeft="-65dp"
         app:menu="@menu/main_activity_navigation_drawer"
         app:itemTextColor="@color/FullBlack"
-        android:layout_marginStart="-65dp"/>
-
-
+        android:layout_marginStart="-65dp"
+        app:headerLayout="@layout/main_header_view"/>
 
 </android.support.v4.widget.DrawerLayout>

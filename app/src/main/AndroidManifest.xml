@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginRelated.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginRelated.SignUpAcivity" />
-        <activity android:name=".MainUserActivity.MainActivity"></activity>
+        <activity android:name=".MainUserActivity.MainActivity" />
+        <activity android:name=".OtherUserProfileActivity" />
+        <activity android:name=".EditActivityRelated.EditInitActivity"></activity>
     </application>
 
 </manifest>
