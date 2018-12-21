@@ -12,9 +12,10 @@
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:background="@color/ＭainOrange"
-        app:tabTextColor="@color/FullWhite"
+        app:tabTextColor="#DEDEDE"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:tabSelectedTextColor="@color/FullWhite">
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager

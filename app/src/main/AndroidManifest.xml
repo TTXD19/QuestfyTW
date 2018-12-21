@@ -21,7 +21,9 @@
         <activity android:name=".LoginRelated.SignUpAcivity" />
         <activity android:name=".MainUserActivity.MainActivity" />
         <activity android:name=".OtherUserProfileActivity" />
-        <activity android:name=".EditActivityRelated.EditInitActivity"></activity>
+        <activity android:name=".EditActivityRelated.EditInitActivity" />
+        <activity android:name=".EditActivityRelated.EditDetailMeetUpActivity" />
+        <activity android:name=".EditActivityRelated.EditQuestionRelateMajorChose"></activity>
     </application>
 
 </manifest>

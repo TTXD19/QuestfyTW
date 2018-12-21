@@ -1,9 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/FullWhite"
+    android:orientation="vertical"
     tools:context=".EditActivityRelated.EditInitActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/edit_init_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/LightMainOrange"
+        app:title="Back"
+        >
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/edit_init_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_init_toolbar"
+        android:layout_above="@+id/edit_init_relay1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/edit_init_circle_image_user"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/user_default_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/edit_init_circle_image_user"
+                    android:layout_toEndOf="@+id/edit_init_circle_image_user"
+                    android:layout_toRightOf="@+id/edit_init_circle_image_user"
+                    android:text="Bred Pete"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/edit_init_circle_image_user"
+                    android:layout_toEndOf="@+id/edit_init_circle_image_user"
+                    android:layout_toRightOf="@+id/edit_init_circle_image_user"
+                    android:text="Upload Date"
+                    android:textColor="@color/DateBlue"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/editTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/FullWhite"
+                android:hint="Title"
+                android:scrollbars="none"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/edit_init_txt_chooseMajor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Click to select a major related"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/ＭainOrange"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:hint="Description"
+                android:background="@color/FullWhite"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/edit_init_relay1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/FullWhite"
+        android:layout_alignParentBottom="true">
+        
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/photocamera_1"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/edit_init_img_addImage"
+            android:layout_toStartOf="@+id/edit_init_img_addImage"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp" />
+
+        <ImageView
+            android:id="@+id/edit_init_img_addImage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/picture"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/edit_init_img_preview"
+            android:layout_toStartOf="@+id/edit_init_img_preview"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp" />
+
+        <ImageView
+            android:id="@+id/edit_init_img_preview"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/eye"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"/>
+
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

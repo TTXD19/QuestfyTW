@@ -23,12 +23,14 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditInitActivity;
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
+import com.example.welsenho.questfy_tw.LoginRelated.SignUpMethod;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
     private TextView txtID;
     private TextView txtEmail;
+    private TextView txtCheckVerified;
+    private Button btnSendVerificationEmail;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private FragmentTransaction fragmentTransaction;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private FloatingActionButton floatingActionButton;
 
     private MainActivityMethods mainActivityMethods;
+    private SignUpMethod signUpMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +72,38 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         headerView = navigationView.getHeaderView(0);
         txtID = headerView.findViewById(R.id.txt_nav_header_userID);
         txtEmail = headerView.findViewById(R.id.txt_nav_header_userEmail);
+        txtCheckVerified = headerView.findViewById(R.id.txt_nav_header_userVerified);
+        btnSendVerificationEmail = headerView.findViewById(R.id.btn_nav_header_userVerified);
         //----------------------------------------------------
 
 
         mainActivityMethods = new MainActivityMethods();
+        signUpMethod = new SignUpMethod();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         txtID.setText(firebaseUser.getDisplayName());
         txtEmail.setText(firebaseUser.getEmail());
+        if (firebaseUser.isEmailVerified()){
+            txtCheckVerified.setText(R.string.verified);
+            btnSendVerificationEmail.setVisibility(View.GONE);
+        }else{
+            txtCheckVerified.setText(R.string.not_verified);
+            btnSendVerificationEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btnSendVerificationEmail.setText("Sending...");
+                    signUpMethod.emailVarification(firebaseUser, getApplicationContext());
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnSendVerificationEmail.setText("Click to send email verification");
+                        }
+                    },2000);
 
+                }
+            });
+        }
 
         /**
          * Lets inflate the very first fragment

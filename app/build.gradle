@@ -34,5 +34,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.6'
 
     // Third party SDK tool
+    //icon button
     implementation 'com.githang:com-phillipcalvin-iconbutton:1.0.1@aar'
+    //circle image view
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

@@ -13,4 +13,5 @@
     <color name="guestLogin">#FF2D55</color>
     <color name="register">#FF3B30</color>
     <color name="messageLightBlue">#5887F9</color>
+    <color name="DateBlue">#237BFF</color>
 </resources>

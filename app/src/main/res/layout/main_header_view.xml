@@ -2,7 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
+    android:maxHeight="250dp"
+    android:minHeight="200dp"
     android:background="@drawable/main_nav_header_backgroud"
     >
 
@@ -42,13 +44,26 @@
         android:id="@+id/txt_nav_header_userVerified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(Verified)"
+        android:text="@string/verified"
         android:textSize="14sp"
         android:layout_below="@+id/txt_nav_header_userEmail"
         android:layout_marginTop="5dp"
         android:textColor="@color/FullWhite"
         android:layout_centerHorizontal="true"
         />
+
+    <Button
+        android:id="@+id/btn_nav_header_userVerified"
+        android:layout_width="245dp"
+        android:layout_height="30dp"
+        android:text="Click to send email verification"
+        android:textSize="12sp"
+        android:background="@drawable/main_nav_header_btn_send_email_verify"
+        android:layout_below="@+id/txt_nav_header_userVerified"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/LightMainOrange"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 
 
 
