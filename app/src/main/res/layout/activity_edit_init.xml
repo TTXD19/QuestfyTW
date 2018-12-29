@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/LightMainOrange"
-        app:title="Back"
-        >
+        app:title="Back">
 
     </android.support.v7.widget.Toolbar>
 
@@ -22,10 +21,12 @@
         android:id="@+id/edit_init_scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/edit_init_lin_layout_expan"
         android:layout_below="@+id/edit_init_toolbar"
-        android:layout_above="@+id/edit_init_relay1">
+        android:layout_marginBottom="3dp">
 
         <LinearLayout
+            android:id="@+id/edit_init_lin_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -43,6 +44,7 @@
                     android:src="@drawable/user_default_image" />
 
                 <TextView
+                    android:id="@+id/edit_init_txt_userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/edit_init_circle_image_user"
@@ -53,6 +55,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/edit_init_txt_UploadDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/edit_init_circle_image_user"
@@ -64,7 +67,7 @@
             </RelativeLayout>
 
             <EditText
-                android:id="@+id/editTest"
+                android:id="@+id/edit_init_edit_Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -73,77 +76,142 @@
                 android:hint="Title"
                 android:scrollbars="none"
                 android:textSize="30sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/edit_init_txt_chooseMajor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Click to select a major related"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/ＭainOrange"
-                android:textSize="16sp"
                 android:layout_marginTop="5dp"
-                />
+                android:layout_marginRight="10dp"
+                android:text="Click to select a major related"
+                android:textColor="@color/ＭainOrange"
+                android:textSize="16sp" />
 
             <EditText
+                android:id="@+id/edit_init_edit_Content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:hint="Description"
-                android:background="@color/FullWhite"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"/>
+                android:background="@color/FullWhite"
+                android:hint="Description"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
     </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/edit_init_lin_layout_expan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/edit_init_relay1"
+        android:orientation="vertical">
+
+        <com.github.florent37.expansionpanel.ExpansionHeader
+            android:id="@+id/expanTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:expansion_headerIndicator="@id/imgHeader"
+            app:expansion_layout="@id/expansionLayout"
+            app:expansion_toggleOnClick="true"
+            android:layout_marginBottom="2dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+               <ImageView
+                   android:id="@+id/imgHeader"
+                   android:layout_width="30dp"
+                   android:layout_height="30dp"
+                   android:src="@drawable/down_arrow"
+                   android:rotation="180"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginStart="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/click_to_check"
+                    android:layout_toRightOf="@+id/imgHeader"
+                    android:textSize="18sp"
+                    android:textColor="@color/FullBlack"
+                    android:layout_alignBottom="@id/imgHeader"
+                    android:layout_toEndOf="@+id/imgHeader" />
+
+            </RelativeLayout>
+
+
+        </com.github.florent37.expansionpanel.ExpansionHeader>
+
+        <com.github.florent37.expansionpanel.ExpansionLayout
+            android:id="@+id/expansionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/edit_init_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+
+            </android.support.v7.widget.RecyclerView>
+
+            <!-- CONTENT -->
+
+
+        </com.github.florent37.expansionpanel.ExpansionLayout>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/edit_init_relay1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/FullWhite"
-        android:layout_alignParentBottom="true">
-        
+        android:layout_alignParentBottom="true"
+        android:background="@color/FullWhite">
+
         <ImageView
+            android:id="@+id/edit_init_img_takeImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/photocamera_1"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/edit_init_img_addImage"
-            android:layout_toStartOf="@+id/edit_init_img_addImage"
+            android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_toStartOf="@+id/edit_init_img_addImage"
+            android:layout_toLeftOf="@+id/edit_init_img_addImage"
+            android:src="@drawable/photocamera_1" />
 
         <ImageView
             android:id="@+id/edit_init_img_addImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/picture"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/edit_init_img_preview"
-            android:layout_toStartOf="@+id/edit_init_img_preview"
+            android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_toStartOf="@+id/edit_init_img_preview"
+            android:layout_toLeftOf="@+id/edit_init_img_preview"
+            android:src="@drawable/picture" />
 
         <ImageView
             android:id="@+id/edit_init_img_preview"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/eye"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp"/>
-
+            android:src="@drawable/eye" />
 
 
     </RelativeLayout>
-
 
 
 </RelativeLayout>

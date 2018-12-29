@@ -4,6 +4,7 @@ public class FirebaseDatabaseGetSet {
 
     private String Major;
     private Boolean isSelected;
+    private String editInitImageUploadViewUri;
 
     public String getMajor() {
         return Major;
@@ -19,5 +20,13 @@ public class FirebaseDatabaseGetSet {
 
     public void setIsSelected(Boolean isSelected) {
         this.isSelected = isSelected;
+    }
+
+    public String getEditInitImageUploadViewUri() {
+        return editInitImageUploadViewUri;
+    }
+
+    public void setEditInitImageUploadViewUri(String editInitImageUploadViewUri) {
+        this.editInitImageUploadViewUri = editInitImageUploadViewUri;
     }
 }

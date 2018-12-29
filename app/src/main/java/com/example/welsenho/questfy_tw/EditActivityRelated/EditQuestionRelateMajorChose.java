@@ -81,6 +81,9 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReciever, new IntentFilter("Custom_message"));
     }
 
+    /**
+     * Receive broad cast from EditQuestioRealteRecyclerViewAdapter.class and send back to EditInitActivity
+     */
     public BroadcastReceiver mMessageReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

@@ -31,6 +31,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-core:16.0.6'
 
     // Third party SDK tool
@@ -38,4 +39,10 @@ dependencies {
     implementation 'com.githang:com-phillipcalvin-iconbutton:1.0.1@aar'
     //circle image view
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //Expansion panels : https://github.com/florent37/ExpansionPanel
+    implementation 'com.github.florent37:expansionpanel:1.1.1'
+    //Material Progress Bar : https://github.com/DreaminginCodeZH/MaterialProgressBar
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.1'
 }

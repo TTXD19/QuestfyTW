@@ -25,6 +25,8 @@
     <string name="action_drawer_close">drawer close</string>
     <string name="verified">(已認證)</string>
     <string name="not_verified">(未認證)</string>
+    <string name="click_to_check">查看圖片</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
