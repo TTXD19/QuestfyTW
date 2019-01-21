@@ -1,9 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/user_profile_background"
     tools:context=".MainUserActivity.UserProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-</FrameLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="350dp"
+        android:layout_height="550dp"
+        android:layout_centerInParent="true"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_changeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:text="更改頭像"
+                    android:textColor="@color/DateBlue" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_profile_fm_circleImage_userImage"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_below="@+id/user_profile_fm_txt_changeImage"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/user_default_image" />
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_circleImage_userImage"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:text="User Name"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_createDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_userName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="18dp"
+                    android:text="Create Date"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_schoolName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_createDate"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="朝陽科技大學"
+                    android:textColor="@color/LightMainOrange"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_schoolMajor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_schoolName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="企業管理系"
+                    android:textColor="@color/ＭainOrange"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_specialityDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_schoolMajor"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:text="專長"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_speciality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_specialityDisplay"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="商業管理，會計，統計學，管理學"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/user_profile_fm_btn_emailCertificate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_speciality"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/add_friend_btn_background"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="信箱已認證&#10; welsen9595@gmail.com"
+                    android:textColor="@color/FullWhite" />
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

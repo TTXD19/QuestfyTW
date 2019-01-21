@@ -2,11 +2,13 @@ package com.example.welsenho.questfy_tw.EditActivityRelated;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
@@ -28,16 +30,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
+import com.github.florent37.expansionpanel.ExpansionHeader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,6 +57,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.philliphsu.bottomsheetpickers.date.DatePickerDialog;
+import com.philliphsu.bottomsheetpickers.time.BottomSheetTimePickerDialog;
+import com.philliphsu.bottomsheetpickers.time.numberpad.NumberPadTimePickerDialog;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -59,35 +67,50 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class EditInitActivity extends AppCompatActivity {
+public class EditInitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, BottomSheetTimePickerDialog.OnTimeSetListener{
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
+    private static final String TAG = "tag";
 
     private String getDownloadUri;
     private String articleUid;
+    private boolean hasDate = false;
+    private boolean hasTime = false;
+    private boolean isMeet = false;
     private int countImages;
 
     private Toolbar toolbar;
     private TextView txtChooseMajor;
     private TextView txtUserName;
     private TextView txtUploadDate;
+    private TextView txtImageView;
+    private TextView txtShowMeetUp;
+    private TextView txtTimePick;
     private EditText editTitle;
     private EditText editContent;
+    private ImageView imgDateTimePicker;
+    private ImageView imgPlcePicker;
     private ImageView imgTakePhoto;
     private ImageView imgChooseImage;
     private ImageView imgPreview;
+    private Switch swithMeetUp;
+    private CircleImageView circleImageView;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
     private ArrayList<String> getMajors;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private ExpansionHeader expansionHeader;
 
     private EditRelatedMethod editRelatedMethod;
     private EditInitRelateRecyclerViewAdapterImageViews adapterImageViews;
@@ -100,6 +123,8 @@ public class EditInitActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
 
+    private DatePickerDialog datePickerDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,12 +134,21 @@ public class EditInitActivity extends AppCompatActivity {
         txtChooseMajor = findViewById(R.id.edit_init_txt_chooseMajor);
         txtUserName = findViewById(R.id.edit_init_txt_userName);
         txtUploadDate = findViewById(R.id.edit_init_txt_UploadDate);
+        txtImageView = findViewById(R.id.edit_init_txt_imageView);
+        txtShowMeetUp = findViewById(R.id.edit_init_txt_DatePick);
+        txtTimePick = findViewById(R.id.edit_init_txt_TimePick);
         editTitle = findViewById(R.id.edit_init_edit_Title);
         editContent = findViewById(R.id.edit_init_edit_Content);
         imgTakePhoto = findViewById(R.id.edit_init_img_takeImage);
         imgChooseImage = findViewById(R.id.edit_init_img_addImage);
         imgPreview = findViewById(R.id.edit_init_img_preview);
+        imgDateTimePicker = findViewById(R.id.edit_init_img_dateTimePicker);
+        imgPlcePicker = findViewById(R.id.edit_init_img_placePicker);
+        swithMeetUp = findViewById(R.id.edit_init_switch_meetUp);
+        circleImageView = findViewById(R.id.edit_init_circle_image_user);
         recyclerView = findViewById(R.id.edit_init_recyclerView);
+        expansionHeader = findViewById(R.id.edit_init_expan_header);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -123,12 +157,11 @@ public class EditInitActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
         editRelatedMethod = new EditRelatedMethod();
         storageReference = firebaseStorage.getReference();
-        getMajors = new ArrayList<>();
 
+        getMajors = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
 
-        txtUserName.setText(firebaseUser.getDisplayName());
-        txtUploadDate.setText(editRelatedMethod.getUploadDate());
+        LoadUserProfile();
 
         //Relate to MajorChoose BroadCast Intent
         if (getIntent().getStringArrayListExtra("getMajors") != null) {
@@ -139,10 +172,13 @@ public class EditInitActivity extends AppCompatActivity {
             showCurrent();
         }
 
-
-        //Decide to push a random key or not
+        /**
+         * Decide to push a random key or not
+         * (Initially will push a random key)
+         */
         if (articleUid == null) {
             articleUid = databaseReference.push().getKey();
+            expansionHeader.setVisibility(View.GONE);
             countImages = 0;
         }
 
@@ -163,7 +199,7 @@ public class EditInitActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /**
-         * HANDLE EACH BUTTON AND TEXTVIEW CLICK
+         * Handle each item click
          */
         ItemClick();
     }
@@ -195,33 +231,6 @@ public class EditInitActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void ItemClick() {
-        txtChooseMajor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
-                Intent intent = new Intent(EditInitActivity.this, EditQuestionRelateMajorChose.class);
-                startActivity(intent);
-            }
-        });
-
-        imgTakePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
-                dispatchTakePictureIntent();
-            }
-        });
-
-        imgChooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
-                selectPhotoFromMedia();
-            }
-        });
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -243,6 +252,7 @@ public class EditInitActivity extends AppCompatActivity {
 
     /**
      * For User take an Instant photo save it and create a unique file name then upload to firebase storage
+     * PROCESS SEQUENCE FROM LINE 259-->238-->307-->331-->343
      */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -277,12 +287,22 @@ public class EditInitActivity extends AppCompatActivity {
 
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("User_ID", firebaseUser.getUid());
-            hashMap.put("User_Image", "null");
             hashMap.put("User_Name", txtUserName.getText().toString());
             hashMap.put("Upload_Date", txtUploadDate.getText().toString());
             hashMap.put("Title", title);
             hashMap.put("Majors", getMajors.toString());
             hashMap.put("Content", content);
+            hashMap.put("Article_ID", articleUid);
+            if (firebaseUser.getPhotoUrl() != null){
+                hashMap.put("User_Image", firebaseUser.getPhotoUrl().toString());
+            }else {
+                String default_Image = "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6";
+                hashMap.put("User_Image", default_Image);
+            }
+            if (isMeet){
+                hashMap.put("MeetUpDate", txtShowMeetUp.getText());
+                hashMap.put("MeetUpTime", txtTimePick.getText());
+            }
             databaseReference.child("Users_Question_Articles").child(articleUid).updateChildren(hashMap);
             return true;
         } else {
@@ -323,7 +343,8 @@ public class EditInitActivity extends AppCompatActivity {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("editInitImageUploadViewUri", String.valueOf(uri));
         databaseReference.child("Users_Question_Articles").child(articleUid).child("Images").child("Images" + countImages).updateChildren(hashMap);
-        LoadImageFromFirebase();
+        editRelatedMethod.LoadImageFromFirebase(databaseReference, articleUid, arrayList, expansionHeader, recyclerView, adapterImageViews, txtImageView);
+        //LoadImageFromFirebase();
 
     }
 
@@ -334,15 +355,17 @@ public class EditInitActivity extends AppCompatActivity {
                 arrayList.clear();
                 if (dataSnapshot.exists()){
                     arrayList.clear();
-                    Log.d("FirebaseDatabase", "exist");
+                    expansionHeader.setVisibility(View.VISIBLE);
+                    txtImageView.setText("Loading Image...");
                     for (DataSnapshot DS : dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapterImageViews);
+                        txtImageView.setText(R.string.click_to_check);
                         Log.d("RecyclerViewTask", "Success");
                     }
                 }else {
-                    Log.d("FirebaseDatabase", "not exist");
+                    expansionHeader.setVisibility(View.GONE);
                 }
             }
 
@@ -354,10 +377,132 @@ public class EditInitActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * To show what is save in storageReference
+     * Save when jump out from current activity
+     * specially related to ItemClick
+     */
     private void showCurrent(){
         editRelatedMethod.showCurrent(editTitle, editContent, EditInitActivity.this);
+        editRelatedMethod.showMeetUpDateTime(EditInitActivity.this, txtShowMeetUp, txtTimePick);
         articleUid = editRelatedMethod.getArticleUid();
         countImages = editRelatedMethod.getCountImages();
     }
 
+    /**
+     * HANDLE EACH BUTTON AND TEXTVIEW CLICK
+     * Also save current information
+     */
+    private void ItemClick() {
+        txtChooseMajor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMeetDateTime();
+                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                Intent intent = new Intent(EditInitActivity.this, EditQuestionRelateMajorChose.class);
+                startActivity(intent);
+            }
+        });
+
+        imgTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMeetDateTime();
+                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                dispatchTakePictureIntent();
+            }
+        });
+
+        imgChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMeetDateTime();
+                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                selectPhotoFromMedia();
+            }
+        });
+
+        /**
+         * For choosing Date & Time
+         */
+        imgDateTimePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NumberPadTimePickerDialog pad = NumberPadTimePickerDialog.newInstance(EditInitActivity.this, true);
+                pad.show(getSupportFragmentManager(), TAG);
+
+                Calendar now = Calendar.getInstance();
+                datePickerDialog = DatePickerDialog.newInstance(
+                        EditInitActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show(getSupportFragmentManager(), TAG);
+            }
+        });
+
+        swithMeetUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    isMeet = true;
+                    imgDateTimePicker.setVisibility(View.VISIBLE);
+                    imgPlcePicker.setVisibility(View.VISIBLE);
+                }else {
+                    isMeet = false;
+                    imgDateTimePicker.setVisibility(View.GONE);
+                    imgPlcePicker.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void LoadUserProfile(){
+        txtUserName.setText(firebaseUser.getDisplayName());
+        Picasso.get().load(firebaseUser.getPhotoUrl()).into(circleImageView);
+        txtUploadDate.setText(editRelatedMethod.getUploadDate());
+    }
+
+
+    /**
+     To retrieve the date or time set in the pickers, implement an appropriate callback interface.
+     */
+    @Override
+    public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+        Log.d("TimeDateTimeFirst", "1");
+        Calendar cal = new java.util.GregorianCalendar();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, monthOfYear);
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        if (DateFormat.getDateInstance().format(cal.getTime()) != null){
+            txtShowMeetUp.setText("Meet up on " + DateFormat.getDateInstance().format(cal.getTime()));
+            hasDate = true;
+        }
+    }
+
+    @Override
+    public void onTimeSet(ViewGroup viewGroup, int hourOfDay, int minute) {
+        Log.d("TimeDateDateFirst", "1");
+        Calendar cal = new java.util.GregorianCalendar();
+        cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        cal.set(Calendar.MINUTE, minute);
+        if (hasDate) {
+            if (DateFormat.getTimeInstance().format(cal.getTime()) != null) {
+                txtTimePick.setText(DateFormat.getTimeInstance().format(cal.getTime()));
+                txtShowMeetUp.setVisibility(View.VISIBLE);
+                txtTimePick.setVisibility(View.VISIBLE);
+                hasTime = true;
+            }
+        }
+    }
+
+    /**
+     * For saving meet up date and time
+     */
+    private void saveMeetDateTime(){
+        if (hasTime) {
+            editRelatedMethod.saveMeetUpDateTime(EditInitActivity.this, txtShowMeetUp, txtTimePick);
+            Toast.makeText(this, "SaveDateTime", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

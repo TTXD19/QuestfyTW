@@ -89,6 +89,61 @@
                 android:textColor="@color/ＭainOrange"
                 android:textSize="16sp" />
 
+            <Switch
+                android:id="@+id/edit_init_switch_meetUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/want_to_meet_up"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="18sp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/edit_init_txt_DatePick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Date"
+                    android:textColor="@color/signInRetangleRed"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/edit_init_txt_TimePick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/edit_init_txt_DatePick"
+                    android:text="Set up time"
+                    android:textColor="@color/signInRetangleRed"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@id/edit_init_txt_DatePick"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Place Name"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:textSize="18sp"
+                android:textColor="@color/FullBlack"
+                android:visibility="gone"
+                />
+
             <EditText
                 android:id="@+id/edit_init_edit_Content"
                 android:layout_width="match_parent"
@@ -112,36 +167,37 @@
         android:orientation="vertical">
 
         <com.github.florent37.expansionpanel.ExpansionHeader
-            android:id="@+id/expanTest"
+            android:id="@+id/edit_init_expan_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             app:expansion_headerIndicator="@id/imgHeader"
             app:expansion_layout="@id/expansionLayout"
-            app:expansion_toggleOnClick="true"
-            android:layout_marginBottom="2dp">
+            app:expansion_toggleOnClick="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-               <ImageView
-                   android:id="@+id/imgHeader"
-                   android:layout_width="30dp"
-                   android:layout_height="30dp"
-                   android:src="@drawable/down_arrow"
-                   android:rotation="180"
-                   android:layout_marginLeft="10dp"
-                   android:layout_marginStart="10dp" />
+                <ImageView
+                    android:id="@+id/imgHeader"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:rotation="180"
+                    android:src="@drawable/down_arrow" />
 
                 <TextView
+                    android:id="@+id/edit_init_txt_imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/click_to_check"
-                    android:layout_toRightOf="@+id/imgHeader"
-                    android:textSize="18sp"
-                    android:textColor="@color/FullBlack"
                     android:layout_alignBottom="@id/imgHeader"
-                    android:layout_toEndOf="@+id/imgHeader" />
+                    android:layout_toEndOf="@+id/imgHeader"
+                    android:layout_toRightOf="@+id/imgHeader"
+                    android:text="@string/click_to_check"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
@@ -158,7 +214,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
 
 
             </android.support.v7.widget.RecyclerView>
@@ -178,6 +233,30 @@
         android:background="@color/FullWhite">
 
         <ImageView
+            android:id="@+id/edit_init_img_placePicker"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toStartOf="@+id/edit_init_img_dateTimePicker"
+            android:layout_toLeftOf="@+id/edit_init_img_dateTimePicker"
+            android:src="@drawable/placeholder"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/edit_init_img_dateTimePicker"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toStartOf="@+id/edit_init_img_takeImage"
+            android:layout_toLeftOf="@+id/edit_init_img_takeImage"
+            android:src="@drawable/date_time_picker"
+            android:visibility="gone"/>
+
+        <ImageView
             android:id="@+id/edit_init_img_takeImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -186,7 +265,7 @@
             android:layout_marginRight="20dp"
             android:layout_toStartOf="@+id/edit_init_img_addImage"
             android:layout_toLeftOf="@+id/edit_init_img_addImage"
-            android:src="@drawable/photocamera_1" />
+            android:src="@drawable/photocamera_1"/>
 
         <ImageView
             android:id="@+id/edit_init_img_addImage"

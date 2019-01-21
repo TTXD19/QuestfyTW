@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.welsenho.questfy_tw"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -29,6 +29,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    //Firebase implements
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-database:16.0.5'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
@@ -45,4 +47,10 @@ dependencies {
     implementation 'com.github.florent37:expansionpanel:1.1.1'
     //Material Progress Bar : https://github.com/DreaminginCodeZH/MaterialProgressBar
     implementation 'me.zhanghai.android.materialprogressbar:library:1.4.1'
+    //Shine button
+    implementation 'com.sackcentury:shinebutton:0.2.0'
+    //ButtonSheetDateTimePicker : https://github.com/philliphsu/BottomSheetPickers
+    implementation 'com.philliphsu:bottomsheetpickers:2.4.1'
+
+
 }

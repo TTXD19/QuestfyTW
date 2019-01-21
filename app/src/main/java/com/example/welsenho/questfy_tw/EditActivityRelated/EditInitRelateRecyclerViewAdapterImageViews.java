@@ -32,7 +32,7 @@ public class EditInitRelateRecyclerViewAdapterImageViews extends RecyclerView.Ad
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         FirebaseDatabaseGetSet getSet = arrayList.get(i);
-        Picasso.get().load(getSet.getEditInitImageUploadViewUri()).resize(200,180).into(viewHolder.imgViews);
+        Picasso.get().load(getSet.getEditInitImageUploadViewUri()).resize(400,380).into(viewHolder.imgViews);
     }
 
     @Override

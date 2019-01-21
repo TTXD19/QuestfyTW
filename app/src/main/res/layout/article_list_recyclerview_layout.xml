@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtArticleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sample article"
+        android:textSize="24sp"
+        android:textColor="@color/FullBlack"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"/>
+    
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/user_default_image"
+        android:layout_alignLeft="@+id/list_article_recycLayout_txtArticleName"
+        android:layout_alignStart="@+id/list_article_recycLayout_txtArticleName"
+        android:layout_below="@+id/list_article_recycLayout_txtArticleName"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User_Name"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"
+        android:layout_toRightOf="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_toEndOf="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_alignTop="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"/>
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtUploadData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018 Aug, 18"
+        android:textColor="@color/DateBlue"
+        android:textSize="12sp"
+        android:layout_toRightOf="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_toEndOf="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_below="@+id/list_article_recycLayout_txtUserName"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"/>
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TAG"
+        android:textSize="16sp"
+        android:textColor="@color/ＭainOrange"
+        android:textStyle="bold"
+        android:layout_below="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_alignLeft="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_alignStart="@+id/list_article_recycLayout_circleUserImage"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtViews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_article_recycLayout_txtTag"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="10000000"
+        android:textColor="@color/FullBlack"
+        android:textSize="12sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"/>
+
+</RelativeLayout>

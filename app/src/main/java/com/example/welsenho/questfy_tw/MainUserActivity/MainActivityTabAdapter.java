@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestArticleFragment;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
+
 public class MainActivityTabAdapter extends FragmentPagerAdapter {
 
     MainActivityTabAdapter(FragmentManager fm) {

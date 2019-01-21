@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), LoginActivity.this);
                 }else{
                     txtWrongPassword.setVisibility(View.VISIBLE);
+                    progressDialog.dismiss();
                 }
             }
         });
@@ -81,9 +82,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         if (intent.getStringExtra("email") != null){
             editEmail.setText(intent.getStringExtra("email"));
-        }
+        }*/
     }
 }

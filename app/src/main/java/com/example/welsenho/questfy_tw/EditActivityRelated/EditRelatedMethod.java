@@ -6,21 +6,32 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.R;
+import com.github.florent37.expansionpanel.ExpansionHeader;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class EditRelatedMethod {
@@ -28,7 +39,7 @@ public class EditRelatedMethod {
 
     /**
      * Below is for user taking an instant photo getSet is for returning photo instant uri
-     * step by strp
+     * step by step
      */
     private String mCurrentPhotoPath;
     private String articleUid;
@@ -60,7 +71,10 @@ public class EditRelatedMethod {
     }
 
 
-
+    /**
+     * get current date for the article
+     * @return
+     */
     public String getDate(){
         SimpleDateFormat timeStampFormat = new SimpleDateFormat("yyyyMMddHHmmssSS");
         Date myDate = new Date();
@@ -75,10 +89,6 @@ public class EditRelatedMethod {
     }
 
 
-
-
-
-
     public void saveCurrent(EditText editTitle, EditText editContent, Activity activity, String articleUid, int CountImages){
         String title = editTitle.getText().toString();
         String content = editContent.getText().toString();
@@ -91,8 +101,6 @@ public class EditRelatedMethod {
         editor.apply();
     }
 
-
-
     public void showCurrent(EditText editTitle, EditText editContent, Activity activity){
         SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
         articleUid = sharedPreferences.getString("ArticleUid", null);
@@ -101,11 +109,32 @@ public class EditRelatedMethod {
         editContent.setText(sharedPreferences.getString("Content", "Description"));
     }
 
+    public void saveMeetUpDateTime(Activity activity, TextView txtDate, TextView txtTime ){
+        String date = txtDate.getText().toString();
+        String time = txtTime.getText().toString();
+        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("meetDate", date);
+        editor.putString("meetTime", time);
+        editor.apply();
+    }
+
+    public void showMeetUpDateTime(Activity activity, TextView txtDate, TextView txtTime){
+        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
+        txtDate.setVisibility(View.VISIBLE);
+        txtTime.setVisibility(View.VISIBLE);
+        txtDate.setText(sharedPreferences.getString("meetDate", "Set again"));
+        txtTime.setText(sharedPreferences.getString("meetTime", "Set again"));
+    }
+
+
     public void DeleteCurrent(Activity activity){
         SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear().apply();
     }
+
+
 
     public String getArticleUid() {
         return articleUid;
@@ -121,5 +150,35 @@ public class EditRelatedMethod {
 
     public void setCountImages(int countImages) {
         this.countImages = countImages;
+    }
+
+    public void LoadImageFromFirebase(DatabaseReference databaseReference, String ArticleUid, final ArrayList<FirebaseDatabaseGetSet> arrayList, final ExpansionHeader expansionHeader, final RecyclerView recyclerView,
+    final EditInitRelateRecyclerViewAdapterImageViews adapterImageViews, final TextView txtImageView){
+        databaseReference.child("Users_Question_Articles").child(ArticleUid).child("Images").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                if (dataSnapshot.exists()){
+                    arrayList.clear();
+                    expansionHeader.setVisibility(View.VISIBLE);
+                    txtImageView.setText("Loading Image...");
+                    for (DataSnapshot DS : dataSnapshot.getChildren()){
+                        FirebaseDatabaseGetSet firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        arrayList.add(firebaseDatabaseGetSet);
+                        recyclerView.setAdapter(adapterImageViews);
+                        txtImageView.setText(R.string.click_to_check);
+                        Log.d("RecyclerViewTask", "Success");
+                    }
+                }else {
+                    expansionHeader.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

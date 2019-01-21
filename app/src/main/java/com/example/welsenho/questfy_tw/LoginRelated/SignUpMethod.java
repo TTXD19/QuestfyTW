@@ -52,6 +52,7 @@ public class SignUpMethod {
                      if (task.isSuccessful()){
                          Log.d("Login : ", "success");
                          Intent intent = new Intent(context, MainActivity.class);
+                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                          context.startActivity(intent);
                          activity.finish();
                      }else {
@@ -73,6 +74,7 @@ public class SignUpMethod {
     public void autoLogin(FirebaseUser firebaseUser, Context context){
         if (firebaseUser != null){
             Intent intent = new Intent(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
     }

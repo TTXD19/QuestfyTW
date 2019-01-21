@@ -14,4 +14,6 @@
     <color name="register">#FF3B30</color>
     <color name="messageLightBlue">#5887F9</color>
     <color name="DateBlue">#237BFF</color>
+    <color name="LightGrayBackground">#EEEDED</color>
+    <color name="PlaceAddressColor">#ffc647</color>
 </resources>

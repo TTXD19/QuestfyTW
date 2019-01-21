@@ -6,14 +6,20 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestArticleFragment;
 import com.example.welsenho.questfy_tw.R;
 
+import java.util.ArrayList;
 
-public class MainActivityTabFragment extends Fragment {
+
+public class MainActivityTabFragment extends Fragment{
 
     public TabLayout tabLayout;
     public ViewPager viewPager;
@@ -38,9 +44,37 @@ public class MainActivityTabFragment extends Fragment {
                 tabLayout.setupWithViewPager(viewPager);
             }
         });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                mListener.getTabCurrentPage(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener){
+            mListener = (OnFragmentInteractionListener) context;
+        }else {
+            throw new RuntimeException(context.toString() +
+            " must implement OnFragmentInteractionListener");
+        }
+    }
 
     @Override
     public void onDetach() {
@@ -48,18 +82,8 @@ public class MainActivityTabFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    interface OnFragmentInteractionListener {
+    interface OnFragmentInteractionListener{
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void getTabCurrentPage(int page);
     }
 }

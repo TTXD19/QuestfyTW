@@ -3,10 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.welsenho.questfy_tw">
 
-    <uses-feature android:name="android.hardware.camera"
+
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -16,7 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.welsenho.provider"
@@ -24,7 +28,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/img_file_paths"></meta-data>
+                android:resource="@xml/img_file_paths" />
         </provider>
 
         <activity android:name=".LoginRelated.LoginActivity">
@@ -37,9 +41,12 @@
         <activity android:name=".LoginRelated.SignUpAcivity" />
         <activity android:name=".MainUserActivity.MainActivity" />
         <activity android:name=".OtherUserProfileActivity" />
-        <activity android:name=".EditActivityRelated.EditInitActivity" />
+        <activity android:name=".EditActivityRelated.EditInitActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name=".EditActivityRelated.EditDetailMeetUpActivity" />
-        <activity android:name=".EditActivityRelated.EditQuestionRelateMajorChose"></activity>
+        <activity android:name=".EditActivityRelated.EditQuestionRelateMajorChose" />
+        <activity android:name=".ReadArticleRelated.ReadArticleActivity"></activity>
     </application>
 
 </manifest>
