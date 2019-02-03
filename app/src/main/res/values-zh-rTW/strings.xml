@@ -27,9 +27,11 @@
     <string name="not_verified">(未認證)</string>
     <string name="click_to_check">查看圖片</string>
     <string name="want_to_meet_up">想見面嗎 ？  </string>
+    <string name="click_to_replay_an_answer">點擊回覆答案.......</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">Home</string>
+    <string name="birthday">出生年月日（年/月/日）</string>
 </resources>

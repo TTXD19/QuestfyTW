@@ -3,15 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.welsenho.questfy_tw">
 
-
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -40,13 +38,20 @@
         </activity>
         <activity android:name=".LoginRelated.SignUpAcivity" />
         <activity android:name=".MainUserActivity.MainActivity" />
-        <activity android:name=".OtherUserProfileActivity" />
-        <activity android:name=".EditActivityRelated.EditInitActivity"
+        <activity android:name=".OtherUserProfileRelatedMethod.OtherUserProfileActivity" />
+        <activity
+            android:name=".EditActivityRelated.EditInitActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".EditActivityRelated.EditDetailMeetUpActivity" />
         <activity android:name=".EditActivityRelated.EditQuestionRelateMajorChose" />
-        <activity android:name=".ReadArticleRelated.ReadArticleActivity"></activity>
+        <activity android:name=".ReadArticleRelated.ReadArticleActivity" />
+        <activity android:name=".AnswerReplyActivityRelated.ReadAnswersActivity" />
+        <activity android:name=".AnswerReplyActivityRelated.AnswerReplyActivity" />
+        <activity android:name=".ReigisterCompleteInfoRelated.RealNameRegisterActivity" />
+        <activity android:name=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity" />
+        <activity android:name=".ReigisterCompleteInfoRelated.UniversityRegister" />
+        <activity android:name=".ReigisterCompleteInfoRelated.MainCourseRegister"></activity>
     </application>
 
 </manifest>

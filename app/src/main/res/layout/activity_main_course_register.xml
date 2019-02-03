@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReigisterCompleteInfoRelated.MainCourseRegister">
+
+    <TextView
+        android:id="@+id/mainCourse_register_txtProcess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select your main course"
+        android:textColor="@color/ＭainOrange"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mainCourse_register_txtProcess"
+        android:layout_marginTop="15dp">
+
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/mainCourse_register_btnPrevious"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mainCourse_register_btnNext"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Previous"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:background="@drawable/sign_in_rectangle"
+        android:textColor="@color/FullWhite"
+        />
+
+    <Button
+        android:id="@+id/mainCourse_register_btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:background="@drawable/add_friend_btn_background"
+        android:textColor="@color/FullWhite"/>
+
+</RelativeLayout>

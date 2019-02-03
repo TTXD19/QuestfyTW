@@ -1,6 +1,7 @@
 package com.example.welsenho.questfy_tw.LoginRelated;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -69,26 +70,26 @@ public class SignUpAcivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.radioGpSignUp);
 
 
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Registering...");
         progressDialog.setMessage("Creating your account");
 
         signUpMethod = new SignUpMethod();
-
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkSex();
-                if (checkSex() == null){
+                if (checkSex() == null) {
                     txtMissing.setText("Please select your sex");
                     txtMissing.setVisibility(View.VISIBLE);
                     scrollView.fullScroll(View.FOCUS_DOWN);
-                }else {
+                } else {
+                    progressDialog.setMessage("Please hold on a moment while we register your account");
+                    progressDialog.setTitle("Registering.......");
+                    progressDialog.show();
                     register();
                 }
             }
@@ -97,67 +98,72 @@ public class SignUpAcivity extends AppCompatActivity {
     }
 
 
-    private void register(){
+    private void register() {
 
-        progressDialog.show();
-        email = editEmail.getText().toString();
-        password = editPassword.getText().toString();
-        confirmPassword = editConfirmPassword.getText().toString();
-        ID = editID.getText().toString();
-        realName = editRealName.getText().toString();
-        loginType = "false";
+        getUserInput();
 
         if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty() && !ID.isEmpty() && !realName.isEmpty()) {
-            progressDialog.setMessage("Please hold on a moment while we log in your account.");
-            progressDialog.setTitle("Logging in");
-            progressDialog.show();
             if (password.equals(confirmPassword)) {
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(SignUpAcivity.this, R.string.regis_type_success, Toast.LENGTH_SHORT).show();
-                            Uid = firebaseAuth.getUid();
-                            signUpMethod.firebaseProfileSignUp(databaseReference, Uid, email, ID, realName, sex, loginType, getApplicationContext());
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            signUpMethod.emailVarification(firebaseUser, getApplicationContext());
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(ID).build();
-                            if (firebaseUser != null) {
-                                firebaseUser.updateProfile(profileUpdates);
-                            }
+                            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()){
+                                        databaseReference = FirebaseDatabase.getInstance().getReference();
+                                        firebaseUser = firebaseAuth.getCurrentUser();
+                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, realName, checkSex(), loginType, getApplicationContext());
+                                        signUpMethod.setUpFirebaseProfile(firebaseUser, ID);
+                                        firebaseAuth.signOut();
+                                        progressDialog.dismiss();
+                                        Intent intent = new Intent(SignUpAcivity.this, LoginActivity.class);
+                                        intent.putExtra("Email", email);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
                         } else {
                             Toast.makeText(SignUpAcivity.this, R.string.regis_type_failed, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-            }else {
-                progressDialog.dismiss();
+            } else {
+                //progressDialog.dismiss();
                 txtMissing.setText(R.string.regis_type_password_not_equal);
                 txtMissing.setVisibility(View.VISIBLE);
                 scrollView.fullScroll(View.FOCUS_DOWN);
             }
-        }else {
-            progressDialog.dismiss();
+        } else {
+            //progressDialog.dismiss();
             txtMissing.setText(R.string.regis_missing);
             txtMissing.setVisibility(View.VISIBLE);
             scrollView.fullScroll(View.FOCUS_DOWN);
         }
-        progressDialog.dismiss();
     }
 
-    private String checkSex(){
+    private String checkSex() {
         //-1代表radioGroup.getCheckedRadioButtonId()未被選擇
-        if (radioGroup.getCheckedRadioButtonId() != -1){
+        if (radioGroup.getCheckedRadioButtonId() != -1) {
             int checkSex = radioGroup.getCheckedRadioButtonId();
             radioButton = findViewById(checkSex);
             sex = radioButton.getText().toString();
-        }else {
+        } else {
             sex = null;
         }
         return sex;
     }
 
+    private void getUserInput(){
+        email = editEmail.getText().toString();
+        password = editPassword.getText().toString();
+        confirmPassword = editConfirmPassword.getText().toString();
+        ID = editID.getText().toString();
+        realName = editRealName.getText().toString();
+        loginType = "false";
+    }
 
 
 }

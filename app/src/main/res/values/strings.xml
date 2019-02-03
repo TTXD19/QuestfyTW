@@ -32,6 +32,9 @@
     <string name="title" translatable="false"></string>
     <string name="content" translatable="false"></string>
     <string name="want_to_meet_up">Want to meet up ?  </string>
+    <string name="click_to_replay_an_answer">Click to reply an answer.......</string>
+    <string name="title_activity_answer_reply">AnswerReplyActivity</string>
+    <string name="birthday">Birthday</string>
 
 
 </resources>

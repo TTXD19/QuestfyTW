@@ -293,6 +293,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             hashMap.put("Majors", getMajors.toString());
             hashMap.put("Content", content);
             hashMap.put("Article_ID", articleUid);
+            hashMap.put("userUid", firebaseAuth.getUid());
             if (firebaseUser.getPhotoUrl() != null){
                 hashMap.put("User_Image", firebaseUser.getPhotoUrl().toString());
             }else {
@@ -448,10 +449,14 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                     isMeet = true;
                     imgDateTimePicker.setVisibility(View.VISIBLE);
                     imgPlcePicker.setVisibility(View.VISIBLE);
+                    txtShowMeetUp.setVisibility(View.VISIBLE);
+                    txtTimePick.setVisibility(View.VISIBLE);
                 }else {
                     isMeet = false;
                     imgDateTimePicker.setVisibility(View.GONE);
                     imgPlcePicker.setVisibility(View.GONE);
+                    txtShowMeetUp.setVisibility(View.GONE);
+                    txtTimePick.setVisibility(View.GONE);
                 }
             }
         });

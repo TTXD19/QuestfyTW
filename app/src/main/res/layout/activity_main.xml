@@ -20,7 +20,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_margin="25dp"
-            android:backgroundTint="@color/LightMainOrange"
+            android:backgroundTint="@color/ＭainOrange"
+            android:src="@drawable/help"
             />
 
     <LinearLayout

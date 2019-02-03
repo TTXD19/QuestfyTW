@@ -27,19 +27,29 @@ import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditInitActivity;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.FriendRelatedActivity.FriendMessageFragment;
+import com.example.welsenho.questfy_tw.FriendRelatedActivity.FriendRequestFragment;
+import com.example.welsenho.questfy_tw.FriendRelatedActivity.MainFriendFragment;
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.LoginRelated.SignUpMethod;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestArticleFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.R;
+import com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MainActivityTabFragment.OnFragmentInteractionListener,
         MainActivityLatestArticleFragment.OnFragmentInteractionListener, UserProfileFragment.OnFragmentInteractionListener,
-        MostPopularFragment.OnFragmentInteractionListener {
+        MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
+        FriendRequestFragment.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
     private int currentFilterPage;
@@ -47,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private TextView txtID;
     private TextView txtEmail;
     private TextView txtCheckVerified;
-    private Button btnSendVerificationEmail;
+    private TextView txtCheckCompleteInfo;
+    private Button btnCompleteUserInfo;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private FragmentTransaction fragmentTransaction;
@@ -55,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private android.support.v7.widget.Toolbar toolbar;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
     private View headerView;
     private FloatingActionButton floatingActionButton;
 
@@ -80,37 +93,23 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         txtID = headerView.findViewById(R.id.txt_nav_header_userID);
         txtEmail = headerView.findViewById(R.id.txt_nav_header_userEmail);
         txtCheckVerified = headerView.findViewById(R.id.txt_nav_header_userVerified);
-        btnSendVerificationEmail = headerView.findViewById(R.id.btn_nav_header_userVerified);
+        txtCheckCompleteInfo = headerView.findViewById(R.id.txt_nav_header_userInfoComplete);
+        btnCompleteUserInfo = headerView.findViewById(R.id.btn_nav_header_completeUserInfo);
         //----------------------------------------------------
 
+        InitFirebase();
 
         mainActivityMethods = new MainActivityMethods();
         signUpMethod = new SignUpMethod();
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
         txtID.setText(firebaseUser.getDisplayName());
         txtEmail.setText(firebaseUser.getEmail());
         if (firebaseUser.isEmailVerified()) {
             txtCheckVerified.setText(R.string.verified);
-            btnSendVerificationEmail.setVisibility(View.GONE);
-        } else {
-            txtCheckVerified.setText(R.string.not_verified);
-            btnSendVerificationEmail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    btnSendVerificationEmail.setText("Sending...");
-                    signUpMethod.emailVarification(firebaseUser, getApplicationContext());
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            btnSendVerificationEmail.setText("Click to send email verification");
-                        }
-                    }, 2000);
-
-                }
-            });
+            btnCompleteUserInfo.setVisibility(View.GONE);
         }
+
+        ItmeClick();
 
         /**
          * Lets inflate the very first fragment
@@ -135,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
          * init each arrayList for searchView
          */
         initializeArrayList();
+        checkCompleteInfo();
     }
 
     @Override
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             public boolean onQueryTextChange(String s) {
                 if (currentFilterPage == 0) {
                     searchFilter(s, latestArrayList);
-                }else if (currentFilterPage == 1){
+                } else if (currentFilterPage == 1) {
                     searchFilter(s, mostPopularArrayList);
                 }
                 return true;
@@ -184,11 +184,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         floatingActionButton.hide();
                         break;
 
+                    case R.id.Main_Friend_Fragment:
+                        FragmentTransaction mainFriendFragment = fragmentManager.beginTransaction();
+                        mainFriendFragment.replace(R.id.main_activity_frameLayout, new MainFriendFragment()).commit();
+                        floatingActionButton.hide();
+                        break;
+
                     case R.id.Sign_out:
                         firebaseAuth.signOut();
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
+                        break;
 
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -233,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
      * 2 : use search view onQueryTextListener to get input text
      * 3 : use searchFilter method to filter the arrayList and let filterList add it
      * 4 : return back to fragment and recyclerview it again
+     *
      * @param uri
      */
     @Override
@@ -242,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
     /**
      * currentFilterPage is for getting the current view page num in tab fragment
+     *
      * @param page
      */
     @Override
@@ -266,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
      * 3. let FilterList become either latest articleList or mostPopularList
      * 4. Do Filtering process
      * 5. return to each LatestArticle & MostPopular fragment's returnFilterList(Array<List>) method
+     *
      * @param inputText
      * @param decidedFilterList
      */
@@ -286,10 +296,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                             latestArticleFragment.returnFilterList(filterList);
                         }
                     }
-                }else if (currentFilterPage == 1){
+                } else if (currentFilterPage == 1) {
                     MostPopularFragment mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(1);
-                    if (mostPopularFragment != null){
-                        if (!filterList.isEmpty()){
+                    if (mostPopularFragment != null) {
+                        if (!filterList.isEmpty()) {
                             mostPopularFragment.returnFilterList(filterList);
                         }
                     }
@@ -299,8 +309,59 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
     }
 
-    private void initializeArrayList(){
+    private void initializeArrayList() {
         latestArrayList = new ArrayList<>();
         mostPopularArrayList = new ArrayList<>();
+    }
+
+    private void InitFirebase() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+    }
+
+    private void checkCompleteInfo() {
+
+        databaseReference.child("Users_profile").child(firebaseAuth.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
+                String completeInfo = firebaseDatabaseGetSet.getCompleteInformationCheck();
+                if (completeInfo.equals("False")) {
+                    btnCompleteUserInfo.setVisibility(View.VISIBLE);
+                    txtCheckCompleteInfo.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void sendEmainVerificationProcess() {
+        txtCheckVerified.setText(R.string.not_verified);
+
+        btnCompleteUserInfo.setText("Sending...");
+        signUpMethod.emailVarification(firebaseUser, getApplicationContext());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnCompleteUserInfo.setText("Click to send email verification");
+            }
+        }, 2000);
+    }
+
+    private void ItmeClick(){
+        btnCompleteUserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RealNameRegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

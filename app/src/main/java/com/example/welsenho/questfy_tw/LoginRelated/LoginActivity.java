@@ -51,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
+        if (getIntent().getStringExtra("Email") != null){
+            editEmail.setText(getIntent().getStringExtra("Email"));
+        }
+
         if (firebaseUser != null) {
             signUpMethod.autoLogin(firebaseUser, getApplicationContext());
             finish();
@@ -82,9 +86,5 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        /*Intent intent = new Intent();
-        if (intent.getStringExtra("email") != null){
-            editEmail.setText(intent.getStringExtra("email"));
-        }*/
     }
 }

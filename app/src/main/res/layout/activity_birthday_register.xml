@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please type in your birthday"
+        android:textColor="@color/ＭainOrange"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="95dp"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
+        >
+
+        <EditText
+            android:id="@+id/birthday_register_editName"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/birthday"
+            android:textSize="24sp"
+            android:maxLength="26"
+            android:inputType="textPersonName"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/birthday_register_btnPrevious"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/birthday_register_btnNext"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Previous"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:background="@drawable/sign_in_rectangle"
+        android:textColor="@color/FullWhite"
+        />
+
+    <Button
+        android:id="@+id/birthday_register_btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:background="@drawable/add_friend_btn_background"
+        android:textColor="@color/FullWhite"/>
+
+
+</RelativeLayout>

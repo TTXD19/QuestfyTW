@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="100dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/recycler_layout_read_answers_userImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/user_default_image"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/recycler_layout_read_answers_txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User_Name"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"
+        android:layout_toRightOf="@+id/recycler_layout_read_answers_userImage"
+        android:layout_toEndOf="@+id/recycler_layout_read_answers_userImage"
+        android:layout_alignTop="@+id/recycler_layout_read_answers_userImage"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"/>
+
+    <TextView
+        android:id="@+id/recycler_layout_read_answers_txtUpdateDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018 Aug, 18"
+        android:textColor="@color/DateBlue"
+        android:textSize="12sp"
+        android:layout_toRightOf="@+id/recycler_layout_read_answers_userImage"
+        android:layout_toEndOf="@+id/recycler_layout_read_answers_userImage"
+        android:layout_below="@+id/recycler_layout_read_answers_txtUserName"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"/>
+
+    <TextView
+        android:id="@+id/recycler_layout_read_answers_txtAnswerContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_below="@+id/recycler_layout_read_answers_txtUpdateDate"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/FullBlack"
+        />
+
+
+
+
+</RelativeLayout>

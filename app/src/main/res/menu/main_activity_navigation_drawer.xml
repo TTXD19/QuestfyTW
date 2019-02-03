@@ -9,6 +9,12 @@
     <item
         android:id="@+id/User_profile"
         android:title="User_profile"/>
+
+    <item
+        android:id="@+id/Main_Friend_Fragment"
+        android:title="Friends"
+        />
+
     <item
         android:id="@+id/Sign_out"
         android:title="Sign Out"/>

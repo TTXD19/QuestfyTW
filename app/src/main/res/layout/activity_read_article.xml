@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ReadArticleRelated.ReadArticleActivity">
 
+    <ProgressBar
+        android:id="@+id/read_article_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/read_article_toolbar"
         android:layout_width="match_parent"
@@ -183,7 +189,7 @@
         android:id="@+id/read_article_LinearBot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/read_article_relaytiveBot"
+        android:layout_above="@+id/read_article_relaytive_ClcikToSeeAnswer"
         android:orientation="vertical">
 
         <com.github.florent37.expansionpanel.ExpansionHeader
@@ -248,7 +254,7 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/read_article_relaytiveBot"
+        android:id="@+id/read_article_relaytive_ClcikToSeeAnswer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

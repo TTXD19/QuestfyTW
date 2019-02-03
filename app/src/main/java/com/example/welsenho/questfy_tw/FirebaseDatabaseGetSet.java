@@ -18,6 +18,21 @@ public class FirebaseDatabaseGetSet {
     //For Major choose
     private String Major;
 
+    //For readAnswer
+    private String AnswerContent;
+    private String AnswerID;
+    private String UpdateDate;
+    private String UserID;
+    private String UserImage;
+    private String UserName;
+
+    //For gettingUserProfile
+    private String ID;
+    private String userUid;
+
+    //For CheckingUserCompleteInfo
+    private String CompleteInformationCheck;
+
 
 
     //GetSet for firebase
@@ -99,5 +114,77 @@ public class FirebaseDatabaseGetSet {
 
     public void setArticle_ID(String article_ID) {
         Article_ID = article_ID;
+    }
+
+    public String getAnswerContent() {
+        return AnswerContent;
+    }
+
+    public void setAnswerContent(String answerContent) {
+        AnswerContent = answerContent;
+    }
+
+    public String getAnswerID() {
+        return AnswerID;
+    }
+
+    public void setAnswerID(String answerID) {
+        AnswerID = answerID;
+    }
+
+    public String getUpdateDate() {
+        return UpdateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        UpdateDate = updateDate;
+    }
+
+    public String getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(String userID) {
+        UserID = userID;
+    }
+
+    public String getUserImage() {
+        return UserImage;
+    }
+
+    public void setUserImage(String userImage) {
+        UserImage = userImage;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public String getCompleteInformationCheck() {
+        return CompleteInformationCheck;
+    }
+
+    public void setCompleteInformationCheck(String completeInformationCheck) {
+        CompleteInformationCheck = completeInformationCheck;
     }
 }

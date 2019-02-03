@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AnswerReplyActivityRelated.ReadAnswersActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/read_answers_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/LightMainOrange">
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/read_answers_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/read_answers_toolBar"
+        android:layout_above="@+id/read_answers_relay_2"
+        android:background="@color/LightGrayBackground">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/read_answers_txtTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="16dp"
+                    android:text="How to play this song"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/read_answers_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/read_answers_txtTitle"
+                android:layout_marginTop="10dp">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+            <ProgressBar
+                android:id="@+id/read_answers_progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/read_answers_relay_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+
+        <ImageView
+            android:id="@+id/read_answers_imgReply"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/eye"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="18dp"/>
+
+        <TextView
+            android:id="@+id/read_answers_txtReplyAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/click_to_replay_an_answer"
+            android:layout_toRightOf="@+id/read_answers_imgReply"
+            android:layout_marginTop="3dp"
+            android:textSize="18sp"
+            android:textColor="@color/LightMainOrange"
+            android:layout_toEndOf="@+id/read_answers_imgReply"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="28dp"/>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
