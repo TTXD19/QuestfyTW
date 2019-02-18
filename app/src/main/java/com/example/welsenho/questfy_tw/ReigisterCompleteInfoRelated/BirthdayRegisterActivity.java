@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.R;
 
@@ -32,6 +33,7 @@ public class BirthdayRegisterActivity extends AppCompatActivity implements DateP
         setContentView(R.layout.activity_birthday_register);
 
         realName = getIntent().getStringExtra("realName");
+        Toast.makeText(this, realName, Toast.LENGTH_SHORT).show();
         InitItem();
         ItemClick();
 
@@ -60,7 +62,7 @@ public class BirthdayRegisterActivity extends AppCompatActivity implements DateP
             public void onClick(View v) {
                 if (birthdayDate != null) {
                     Intent intent = new Intent(BirthdayRegisterActivity.this, UniversityRegister.class);
-                    intent.putExtra("readName", realName);
+                    intent.putExtra("realName", realName);
                     intent.putExtra("birthdayDate", birthdayDate);
                     startActivity(intent);
                 }

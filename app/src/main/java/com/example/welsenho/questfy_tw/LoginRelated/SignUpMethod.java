@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,22 +25,24 @@ import java.util.HashMap;
 public class SignUpMethod {
 
 
-    public void firebaseProfileSignUp(DatabaseReference databaseReference, String Uid, final String email, String ID, String realName, String sex, String loginType,
+    public void firebaseProfileSignUp(DatabaseReference databaseReference, String Uid, final String email, String ID, String sex, String loginType,
                                       final Context context){
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("Email", email);
         hashMap.put("ID", ID);
-        hashMap.put("Real_Name", realName);
         hashMap.put("Sex", sex);
+        hashMap.put("User_image_uri", "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6");
         hashMap.put("loginType", loginType);
         hashMap.put("CompleteInformationCheck", "False");
         databaseReference.child("Users_profile").child(Uid).updateChildren(hashMap);
     }
 
     public void setUpFirebaseProfile(FirebaseUser firebaseProfile, String ID){
+        Uri photoUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6");
         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(ID)
+                .setPhotoUri(photoUri)
                 .build();
         firebaseProfile.updateProfile(profileUpdate);
     }

@@ -15,9 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,6 +56,7 @@ public class UserProfileFragment extends Fragment {
     private Button btnEmailCertifiacte;
     private CircleImageView circleImageView;
     private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -83,8 +86,11 @@ public class UserProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         txtChangeImage = view.findViewById(R.id.user_profile_fm_txt_changeImage);
         txtUserName = view.findViewById(R.id.user_profile_fm_txt_userName);
+        txtSchoolName = view.findViewById(R.id.user_profile_fm_txt_schoolName);
+        txtSchoolMajor = view.findViewById(R.id.user_profile_fm_txt_schoolMajor);
         btnEmailCertifiacte = view.findViewById(R.id.user_profile_fm_btn_emailCertificate);
         circleImageView = view.findViewById(R.id.user_profile_fm_circleImage_userImage);
+        progressBar = view.findViewById(R.id.user_profile_fm_progressBar);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -102,6 +108,7 @@ public class UserProfileFragment extends Fragment {
         });
 
         LoadUserProfile();
+        getFirebaseData();
 
 
         return view;
@@ -177,7 +184,14 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void LoadUserProfile(){
-        Picasso.get().load(firebaseUser.getPhotoUrl()).resize(128, 128).into(circleImageView);
+
+        if (firebaseUser.getPhotoUrl() != null) {
+            Picasso.get().load(firebaseUser.getPhotoUrl()).resize(128, 128).into(circleImageView);
+
+        }else {
+            Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6")
+                    .resize(128, 128).into(circleImageView);
+        }
         txtUserName.setText(firebaseUser.getDisplayName());
         if (firebaseUser.isEmailVerified()) {
             btnEmailCertifiacte.setText("信箱已認證\n" + firebaseUser.getEmail());
@@ -194,6 +208,26 @@ public class UserProfileFragment extends Fragment {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("User_image_uri", uri.toString());
         databaseReference.child("Users_profile").child(firebaseAuth.getUid()).updateChildren(hashMap);
+    }
+
+    private void getFirebaseData(){
+        databaseReference.child("Users_profile").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
+                    if (firebaseDatabaseGetSet.getCompleteInformationCheck().equals("success")) {
+                        txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
+                        txtSchoolMajor.setText(firebaseDatabaseGetSet.getCourseName());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

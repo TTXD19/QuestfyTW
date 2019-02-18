@@ -41,6 +41,15 @@
                     android:layout_marginTop="10dp"
                     android:src="@drawable/user_default_image" />
 
+                <ProgressBar
+                    android:id="@+id/user_profile_fm_progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignTop="@+id/user_profile_fm_circleImage_userImage"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"/>
+
                 <TextView
                     android:id="@+id/user_profile_fm_txt_userName"
                     android:layout_width="wrap_content"

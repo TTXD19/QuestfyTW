@@ -19,6 +19,7 @@
         android:layout_marginStart="5dp"/>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/mainCourse_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mainCourse_register_txtProcess"
@@ -36,7 +37,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Previous"
+        android:text="@string/previous"
         android:textAllCaps="false"
         android:textSize="24sp"
         android:background="@drawable/sign_in_rectangle"
@@ -51,7 +52,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Next"
+        android:text="@string/next"
         android:textAllCaps="false"
         android:textSize="24sp"
         android:background="@drawable/add_friend_btn_background"

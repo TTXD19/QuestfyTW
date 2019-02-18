@@ -124,6 +124,7 @@ public class MostPopularFragment extends Fragment {
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
                         mListener.mostPopularArticleFilter(arrayList);
+                        databaseReference.removeEventListener(this);
                     }
                 }
             }

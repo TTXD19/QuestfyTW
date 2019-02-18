@@ -35,6 +35,15 @@
     <string name="click_to_replay_an_answer">Click to reply an answer.......</string>
     <string name="title_activity_answer_reply">AnswerReplyActivity</string>
     <string name="birthday">Birthday</string>
+    <string name="please_type_in_your_name">Please type in your name</string>
+    <string name="please_type_in_your_birthday">Please type in your birthday</string>
+    <string name="select_your_university">Select your university</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="information_not_complete">Information not complete</string>
+    <string name="click_to_register_your_complete_information">Click to register your complete information</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

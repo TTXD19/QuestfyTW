@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private TextView txtEmail;
     private TextView txtCheckVerified;
     private TextView txtCheckCompleteInfo;
+    private TextView txtSchoolName;
     private Button btnCompleteUserInfo;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         txtEmail = headerView.findViewById(R.id.txt_nav_header_userEmail);
         txtCheckVerified = headerView.findViewById(R.id.txt_nav_header_userVerified);
         txtCheckCompleteInfo = headerView.findViewById(R.id.txt_nav_header_userInfoComplete);
+        txtSchoolName = headerView.findViewById(R.id.txt_nav_header_userSchoolName);
         btnCompleteUserInfo = headerView.findViewById(R.id.btn_nav_header_completeUserInfo);
         //----------------------------------------------------
 
@@ -331,6 +333,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                 if (completeInfo.equals("False")) {
                     btnCompleteUserInfo.setVisibility(View.VISIBLE);
                     txtCheckCompleteInfo.setVisibility(View.VISIBLE);
+                }else {
+                    txtSchoolName.setVisibility(View.VISIBLE);
+                    txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
                 }
             }
 

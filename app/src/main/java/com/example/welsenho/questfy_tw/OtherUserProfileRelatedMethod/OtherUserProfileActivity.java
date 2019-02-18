@@ -1,14 +1,20 @@
 package com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod;
 
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +38,8 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private Button btnFollow;
     private Button btnAddFriend;
     private Button btnSendMessage;
+    private Snackbar snackbar;
+    private CoordinatorLayout coordinatorLayout;
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private OtherUserProfileRelatedMethods otherUserProfileRelatedMethods;
@@ -65,6 +73,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         btnFollow = findViewById(R.id.otherUser_profile_btnFollow);
         btnAddFriend = findViewById(R.id.otherUser_profile_btnAddFriend);
         btnSendMessage = findViewById(R.id.otherUser_profile_btnSendMessage);
+        coordinatorLayout = findViewById(R.id.otherUser_profile_coordinatorLayout);
         otherUserUid = getIntent().getStringExtra("otherUserUid");
         otherUserProfileRelatedMethods = new OtherUserProfileRelatedMethods();
     }
@@ -72,6 +81,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private void InitFirebaseItem(){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = firebaseDatabase.getReference();
         SelfUid = firebaseAuth.getUid();
     }
@@ -115,11 +125,47 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         hashMap.put("SenderUid", SelfUid);
         hashMap.put("Status", "UnFriend");
         hashMap.put("RequestDate", otherUserProfileRelatedMethods.getRequestDate());
+        hashMap.put("RequestName", firebaseUser.getDisplayName());
 
 
-        databaseReference.child("FriendAddingProcess").child(otherUserUid).child(ProcessKey).updateChildren(hashMap);
-        databaseReference.child("FriendAddingProcess").child(SelfUid).child(ProcessKey).updateChildren(hashMap);
+        databaseReference.child("FriendAddingProcess").child(otherUserUid).child(SelfUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    createSnackBar();
+                }
+            }
+        });
+        databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).updateChildren(hashMap);
+        /*databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    btnAddFriend.setBackgroundColor(Resources.getSystem().getColor(R.color.FullWhite));
+                    btnAddFriend.setTextColor(Resources.getSystem().getColor(R.color.ＭainOrange));
+                    btnAddFriend.setText("Waiting for friend accept");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
 
 
+    }
+
+    private void createSnackBar(){
+        snackbar = Snackbar.make(coordinatorLayout, "Add friend successfully", Snackbar.LENGTH_LONG);
+        snackbar.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.child("FriendAddingProcess").child(otherUserUid).child(SelfUid).removeValue();
+                databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).removeValue();
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
     }
 }

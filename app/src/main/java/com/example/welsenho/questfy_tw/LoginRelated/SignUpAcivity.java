@@ -33,7 +33,6 @@ public class SignUpAcivity extends AppCompatActivity {
     private String password;
     private String confirmPassword;
     private String ID;
-    private String realName;
     private String loginType;
 
 
@@ -42,7 +41,6 @@ public class SignUpAcivity extends AppCompatActivity {
     private EditText editPassword;
     private EditText editConfirmPassword;
     private EditText editID;
-    private EditText editRealName;
     private Button btnRegister;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
@@ -64,7 +62,6 @@ public class SignUpAcivity extends AppCompatActivity {
         editPassword = findViewById(R.id.editPasswordRegis);
         editConfirmPassword = findViewById(R.id.editConfirmPasswordRegis);
         editID = findViewById(R.id.editIDRegis);
-        editRealName = findViewById(R.id.editRealNameRegis);
         btnRegister = findViewById(R.id.btnRegister);
         scrollView = findViewById(R.id.scrollRegister);
         radioGroup = findViewById(R.id.radioGpSignUp);
@@ -102,7 +99,7 @@ public class SignUpAcivity extends AppCompatActivity {
 
         getUserInput();
 
-        if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty() && !ID.isEmpty() && !realName.isEmpty()) {
+        if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty() && !ID.isEmpty()) {
             if (password.equals(confirmPassword)) {
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -115,7 +112,7 @@ public class SignUpAcivity extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         databaseReference = FirebaseDatabase.getInstance().getReference();
                                         firebaseUser = firebaseAuth.getCurrentUser();
-                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, realName, checkSex(), loginType, getApplicationContext());
+                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, checkSex(), loginType, getApplicationContext());
                                         signUpMethod.setUpFirebaseProfile(firebaseUser, ID);
                                         firebaseAuth.signOut();
                                         progressDialog.dismiss();
@@ -161,7 +158,6 @@ public class SignUpAcivity extends AppCompatActivity {
         password = editPassword.getText().toString();
         confirmPassword = editConfirmPassword.getText().toString();
         ID = editID.getText().toString();
-        realName = editRealName.getText().toString();
         loginType = "false";
     }
 

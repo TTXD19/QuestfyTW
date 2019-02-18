@@ -33,6 +33,15 @@ public class FirebaseDatabaseGetSet {
     //For CheckingUserCompleteInfo
     private String CompleteInformationCheck;
 
+    //For getting university name and it's courses name
+    private String schoolName;
+    private String courseName;
+
+    //For getting request friend list
+    private String SenderUid;
+    private String RequestName;
+    private String RecieverUid;
+
 
 
     //GetSet for firebase
@@ -186,5 +195,45 @@ public class FirebaseDatabaseGetSet {
 
     public void setCompleteInformationCheck(String completeInformationCheck) {
         CompleteInformationCheck = completeInformationCheck;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getSenderUid() {
+        return SenderUid;
+    }
+
+    public void setSenderUid(String senderUid) {
+        SenderUid = senderUid;
+    }
+
+    public String getRequestName() {
+        return RequestName;
+    }
+
+    public void setRequestName(String requestName) {
+        RequestName = requestName;
+    }
+
+    public String getRecieverUid() {
+        return RecieverUid;
+    }
+
+    public void setRecieverUid(String recieverUid) {
+        RecieverUid = recieverUid;
     }
 }

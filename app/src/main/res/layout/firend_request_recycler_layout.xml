@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/friend_request_recyclerView_circleUserImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/user_default_image"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"/>
+
+    <TextView
+        android:id="@+id/friend_request_recyclerView_txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/friend_request_recyclerView_circleUserImage"
+        android:layout_toEndOf="@+id/friend_request_recyclerView_circleUserImage"
+        android:text="Adam Levin"
+        android:layout_alignTop="@+id/friend_request_recyclerView_circleUserImage"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"/>
+
+    <Button
+        android:id="@+id/friend_request_recyclerView_btnConfirm"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:background="@drawable/cofirm_friend_background"
+        android:textColor="@color/FullWhite"
+        android:textAllCaps="false"
+        android:layout_toLeftOf="@+id/friend_request_recyclerView_btnCancel"
+        android:layout_toStartOf="@+id/friend_request_recyclerView_btnCancel"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_centerVertical="true"/>
+
+    <Button
+        android:id="@+id/friend_request_recyclerView_btnCancel"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:background="@drawable/cancel_friend_background"
+        android:textColor="@color/FullWhite"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>

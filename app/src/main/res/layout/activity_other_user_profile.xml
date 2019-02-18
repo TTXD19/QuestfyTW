@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".OtherUserProfileRelatedMethod.OtherUserProfileActivity">
 
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/otherUser_profile_coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -216,5 +221,7 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>
