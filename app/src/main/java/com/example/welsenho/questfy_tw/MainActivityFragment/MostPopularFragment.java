@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -114,7 +115,7 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void LoadData(){
-        databaseReference.child("Users_Question_Articles").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){

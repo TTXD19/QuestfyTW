@@ -42,6 +42,8 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
         viewHolder.txtTitle.setText(getSet.getTitle());
         viewHolder.txtUploadDate.setText(getSet.getUpload_Date());
         viewHolder.txtMajors.setText(getSet.getMajors());
+        viewHolder.txtArticlePreview.setText(getSet.getContent());
+        viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
         Picasso.get().load(getSet.getUser_Image()).into(viewHolder.circleImageViewUserImage);
     }
 
@@ -66,6 +68,8 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
         private TextView txtTitle;
         private TextView txtUploadDate;
         private TextView txtMajors;
+        private TextView txtArticlePreview;
+        private TextView txtArticleCount;
         private CircleImageView circleImageViewUserImage;
 
         public ViewHolder(@NonNull View itemView, final MainAdapterOnClickListener mOnClickListener) {
@@ -75,6 +79,8 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
             txtMajors = itemView.findViewById(R.id.list_article_recycLayout_txtTag);
             txtUploadDate = itemView.findViewById(R.id.list_article_recycLayout_txtUploadData);
             txtUserName  = itemView.findViewById(R.id.list_article_recycLayout_txtUserName);
+            txtArticlePreview = itemView.findViewById(R.id.list_article_recycLayout_txtArticlePreview);
+            txtArticleCount = itemView.findViewById(R.id.list_article_recycLayout_txtViews);
             circleImageViewUserImage = itemView.findViewById(R.id.list_article_recycLayout_circleUserImage);
 
 

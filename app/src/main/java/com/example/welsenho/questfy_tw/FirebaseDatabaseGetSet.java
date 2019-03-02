@@ -14,6 +14,7 @@ public class FirebaseDatabaseGetSet {
     private String User_Name;
     private String Majors;
     private String Article_ID;
+    private int Article_like_count;
 
     //For Major choose
     private String Major;
@@ -42,6 +43,17 @@ public class FirebaseDatabaseGetSet {
     private String RequestName;
     private String RecieverUid;
 
+
+    //For getting friend information
+    private String FriendName;
+    private String FriendImage;
+    private String FriendUid;
+    private String LatestMessage;
+
+    //For getting message information
+    private String Message;
+    private String MessageUserUid;
+    private String MessageType;
 
 
     //GetSet for firebase
@@ -235,5 +247,69 @@ public class FirebaseDatabaseGetSet {
 
     public void setRecieverUid(String recieverUid) {
         RecieverUid = recieverUid;
+    }
+
+    public String getFriendName() {
+        return FriendName;
+    }
+
+    public void setFriendName(String friendName) {
+        FriendName = friendName;
+    }
+
+    public String getFriendImage() {
+        return FriendImage;
+    }
+
+    public void setFriendImage(String friendImage) {
+        FriendImage = friendImage;
+    }
+
+    public String getFriendUid() {
+        return FriendUid;
+    }
+
+    public void setFriendUid(String friendUid) {
+        FriendUid = friendUid;
+    }
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
+    public String getMessageUserUid() {
+        return MessageUserUid;
+    }
+
+    public void setMessageUserUid(String messageUserUid) {
+        MessageUserUid = messageUserUid;
+    }
+
+    public String getMessageType() {
+        return MessageType;
+    }
+
+    public void setMessageType(String messageType) {
+        MessageType = messageType;
+    }
+
+    public String getLatestMessage() {
+        return LatestMessage;
+    }
+
+    public void setLatestMessage(String latestMessage) {
+        LatestMessage = latestMessage;
+    }
+
+    public int getArticle_like_count() {
+        return Article_like_count;
+    }
+
+    public void setArticle_like_count(int article_like_count) {
+        Article_like_count = article_like_count;
     }
 }

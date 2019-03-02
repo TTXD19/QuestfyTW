@@ -26,17 +26,22 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ReadArticleActivity extends AppCompatActivity {
 
+    private Boolean likePress;
     private String Article_ID;
     private String otherUserUid;
+    private int likeCount;
 
     private CircleImageView circleImageView;
     private TextView txtUserName;
@@ -46,6 +51,8 @@ public class ReadArticleActivity extends AppCompatActivity {
     private TextView txtContent;
     private TextView txtCheckImages;
     private Toolbar toolbar;
+    private ShineButton shineButtonHeart;
+    private ShineButton shineButtonLike;
     private ExpansionHeader expansionHeader;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -75,6 +82,10 @@ public class ReadArticleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         InitializeFirebase();
         getContentData();
+        getLikeCount();
+
+        quesrySearch();
+
 
         /**
          * Initialize Image RecyclerView
@@ -88,8 +99,6 @@ public class ReadArticleActivity extends AppCompatActivity {
         editRelatedMethod.LoadImageFromFirebase(databaseReference, Article_ID, arrayList, expansionHeader, recyclerView, adapterImageViews, txtCheckImages);
 
 
-
-
     }
 
     @Override
@@ -99,11 +108,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-    private void InitializeItem(){
+    private void InitializeItem() {
         circleImageView = findViewById(R.id.read_article_circle_image_user);
         txtUserName = findViewById(R.id.read_article_txt_userName);
         txtTitle = findViewById(R.id.read_article_txt_title);
@@ -116,17 +121,23 @@ public class ReadArticleActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.read_article_recyclerView);
         relayReadAnsers = findViewById(R.id.read_article_relaytive_ClcikToSeeAnswer);
         progressBar = findViewById(R.id.read_article_progressBar);
+        shineButtonHeart = findViewById(R.id.read_article_shineBtn_heart);
+        shineButtonLike = findViewById(R.id.read_article_shineBtn_like);
+
+        shineButtonHeart.init(this);
+        shineButtonLike.init(this);
+        likePress = false;
     }
 
 
-    private void InitializeFirebase(){
+    private void InitializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabas = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabas.getReference();
     }
 
-    private void HideItem(){
+    private void HideItem() {
         txtUserName.setVisibility(View.INVISIBLE);
         txtUploadData.setVisibility(View.INVISIBLE);
         txtMajors.setVisibility(View.INVISIBLE);
@@ -136,7 +147,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void ShowItem(){
+    private void ShowItem() {
         txtUserName.setVisibility(View.VISIBLE);
         txtUploadData.setVisibility(View.VISIBLE);
         txtMajors.setVisibility(View.VISIBLE);
@@ -146,12 +157,12 @@ public class ReadArticleActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    private void getContentData(){
+    private void getContentData() {
 
         databaseReference.child("Users_Question_Articles").child(Article_ID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
                     txtUploadData.setText(firebaseDatabaseGetSet.getUpload_Date());
@@ -172,21 +183,17 @@ public class ReadArticleActivity extends AppCompatActivity {
 
     }
 
-    private void getImageData(){
-
-    }
-
-    private void ItemCLick(){
+    private void ItemCLick() {
 
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReadArticleActivity.this, OtherUserProfileActivity.class);
-                if (otherUserUid != null){
+                if (otherUserUid != null) {
                     Toast.makeText(ReadArticleActivity.this, "success", Toast.LENGTH_SHORT).show();
                     intent.putExtra("otherUserUid", getOtherUserUid());
                     startActivity(intent);
-                }else {
+                } else {
                     Toast.makeText(ReadArticleActivity.this, "Fail", Toast.LENGTH_SHORT).show();
                 }
 
@@ -201,7 +208,6 @@ public class ReadArticleActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     public String getOtherUserUid() {
@@ -210,5 +216,73 @@ public class ReadArticleActivity extends AppCompatActivity {
 
     public void setOtherUserUid(String otherUserUid) {
         this.otherUserUid = otherUserUid;
+    }
+
+    private void AddLike() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        likeCount--;
+        hashMap.put("Article_like_count", likeCount);
+        databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
+
+        HashMap<String, Object> userInfo = new HashMap<>();
+        userInfo.put("userUid", firebaseUser.getUid());
+        databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").child(firebaseUser.getUid()).updateChildren(userInfo);
+    }
+
+    private void removeLike() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        if (likeCount != 0) {
+            likeCount++;
+        }
+        hashMap.put("Article_like_count", likeCount);
+        databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
+        databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").child(firebaseUser.getUid()).removeValue();
+    }
+
+    private void getLikeCount() {
+        databaseReference.child("Users_Question_Articles").child(Article_ID).child("Article_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    likeCount = Integer.parseInt(dataSnapshot.getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void quesrySearch() {
+        Query query = databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").orderByChild("userUid").equalTo(firebaseUser.getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    shineButtonLike.setChecked(true);
+                    shineButtonLike.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            removeLike();
+                        }
+                    });
+                }else {
+                    shineButtonLike.setChecked(false);
+                    shineButtonLike.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AddLike();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

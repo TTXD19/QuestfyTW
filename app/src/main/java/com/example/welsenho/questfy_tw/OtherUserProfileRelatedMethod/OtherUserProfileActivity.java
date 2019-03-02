@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +60,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         InitFirebaseItem();
         getOtherUserInfo();
         ItemClick();
+        detectFriend();
     }
 
 
@@ -137,23 +139,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         });
         databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).updateChildren(hashMap);
-        /*databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    btnAddFriend.setBackgroundColor(Resources.getSystem().getColor(R.color.FullWhite));
-                    btnAddFriend.setTextColor(Resources.getSystem().getColor(R.color.ＭainOrange));
-                    btnAddFriend.setText("Waiting for friend accept");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
-
-
     }
 
     private void createSnackBar(){
@@ -167,5 +152,25 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         });
         snackbar.show();
+    }
+
+    private void detectFriend(){
+        databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    btnAddFriend.setText("Waiting for friend accept");
+                    btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void FollowUser(){
     }
 }

@@ -51,7 +51,8 @@
         <activity android:name=".ReigisterCompleteInfoRelated.RealNameRegisterActivity" />
         <activity android:name=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity" />
         <activity android:name=".ReigisterCompleteInfoRelated.UniversityRegister" />
-        <activity android:name=".ReigisterCompleteInfoRelated.MainCourseRegister"></activity>
+        <activity android:name=".ReigisterCompleteInfoRelated.MainCourseRegister" />
+        <activity android:name=".FriendMessagingRelated.FriendMessagingActivity"></activity>
     </application>
 
 </manifest>

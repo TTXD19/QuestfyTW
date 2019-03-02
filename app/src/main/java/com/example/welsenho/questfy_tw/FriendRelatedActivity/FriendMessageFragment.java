@@ -1,71 +1,73 @@
 package com.example.welsenho.questfy_tw.FriendRelatedActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.FriendMessagingRelated.FriendMessagingActivity;
 import com.example.welsenho.questfy_tw.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FriendMessageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FriendMessageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
+
 public class FriendMessageFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private FirebaseDatabaseGetSet getSet;
+    private FriendMessageRecyclerAdapter adapter;
+
+    private View view;
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public FriendMessageFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FriendMessageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FriendMessageFragment newInstance(String param1, String param2) {
-        FriendMessageFragment fragment = new FriendMessageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friend_message, container, false);
+        view = inflater.inflate(R.layout.fragment_friend_message, container, false);
+        InitItem();
+        progressBar.setVisibility(View.VISIBLE);
+        InitRecyclerView();
+        InitFirebase();
+        getFirebaseData();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,5 +107,67 @@ public class FriendMessageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void InitItem(){
+        recyclerView = view.findViewById(R.id.friendMessageRecyclerView);
+        progressBar = view.findViewById(R.id.friendMessageProgressBar);
+        arrayList = new ArrayList<>();
+        adapter = new FriendMessageRecyclerAdapter(arrayList, getContext());
+        adapter.setOnMainClickListener(new onMainFriendRequestClickListener() {
+            @Override
+            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(getContext(), FriendMessagingActivity.class);
+                intent.putExtra("FriendUid", arrayList.get(position).getFriendUid());
+                intent.putExtra("FriendName", arrayList.get(position).getFriendName());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+
+            }
+        });
+    }
+
+
+    private void InitFirebase() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+    }
+
+    private void InitRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+    }
+
+    private void getFirebaseData(){
+        databaseReference.child("UserFriendList").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    arrayList.clear();
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        arrayList.add(getSet);
+                        recyclerView.setAdapter(adapter);
+                        progressBar.setVisibility(View.GONE);
+                        databaseReference.removeEventListener(this);
+                    }
+                }else {
+                    recyclerView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

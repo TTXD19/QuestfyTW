@@ -1,7 +1,9 @@
 package com.example.welsenho.questfy_tw.EditActivityRelated;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
@@ -109,13 +111,14 @@ public class EditRelatedMethod {
         editContent.setText(sharedPreferences.getString("Content", "Description"));
     }
 
-    public void saveMeetUpDateTime(Activity activity, TextView txtDate, TextView txtTime ){
+    public void saveMeetUpDateTime(Activity activity, TextView txtDate, TextView txtTime, Boolean isMeet){
         String date = txtDate.getText().toString();
         String time = txtTime.getText().toString();
         SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("meetDate", date);
         editor.putString("meetTime", time);
+        editor.putBoolean("meetUp", isMeet);
         editor.apply();
     }
 

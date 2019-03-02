@@ -110,7 +110,7 @@
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="@color/DateBlue"
+                    app:btn_fill_color="@color/LightMainOrange"
                     app:allow_random_color="false"
                     app:enable_flashing="false"
                     app:big_shine_color="@color/messageLightBlue"

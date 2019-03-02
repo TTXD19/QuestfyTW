@@ -8,15 +8,15 @@
         />
     <item
         android:id="@+id/User_profile"
-        android:title="User_profile"/>
+        android:title="@string/user_profile"/>
 
     <item
         android:id="@+id/Main_Friend_Fragment"
-        android:title="Friends"
+        android:title="@string/friends"
         />
 
     <item
         android:id="@+id/Sign_out"
-        android:title="Sign Out"/>
+        android:title="@string/sign_out"/>
 
 </menu>

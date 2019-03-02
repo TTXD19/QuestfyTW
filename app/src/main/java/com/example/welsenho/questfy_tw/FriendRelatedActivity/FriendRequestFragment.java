@@ -112,7 +112,13 @@ public class FriendRequestFragment extends Fragment {
                 hashMap.put("FriendUid", arrayList.get(position).getSenderUid());
                 hashMap.put("FriendName", arrayList.get(position).getRequestName());
                 hashMap.put("FriendImage", "null");
-                databaseReference.child("FriendList").child(firebaseUser.getUid()).child(arrayList.get(position).getSenderUid()).updateChildren(hashMap);
+
+                HashMap<String, Object> hashMapFriend = new HashMap<>();
+                hashMapFriend.put("FriendUid", firebaseUser.getUid());
+                hashMapFriend.put("FriendName", firebaseUser.getDisplayName());
+                hashMap.put("FriendImage", "null");
+                databaseReference.child("UserFriendList").child(firebaseUser.getUid()).child(arrayList.get(position).getSenderUid()).updateChildren(hashMap);
+                databaseReference.child("UserFriendList").child(arrayList.get(position).getSenderUid()).child(firebaseUser.getUid()).updateChildren(hashMapFriend);
                 databaseReference.child("FriendAddingProcess").child(firebaseUser.getUid()).child(arrayList.get(position).getSenderUid()).removeValue();
                 databaseReference.child("FriendAddingProcess").child(arrayList.get(position).getSenderUid()).child(firebaseUser.getUid()).removeValue();
 

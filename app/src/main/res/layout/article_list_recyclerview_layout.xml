@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/list_article_recycLayout_txtArticleName"
@@ -67,10 +67,23 @@
         android:layout_marginTop="5dp"/>
 
     <TextView
+        android:id="@+id/list_article_recycLayout_txtArticlePreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sample line"
+        android:textColor="@color/FullBlack"
+        android:textSize="16sp"
+        android:layout_below="@+id/list_article_recycLayout_txtTag"
+        android:layout_alignLeft="@+id/list_article_recycLayout_txtTag"
+        android:layout_alignStart="@+id/list_article_recycLayout_txtTag"
+        android:layout_marginBottom="5dp"
+        android:maxLines="1"/>
+
+    <TextView
         android:id="@+id/list_article_recycLayout_txtViews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/list_article_recycLayout_txtTag"
+        android:layout_below="@+id/list_article_recycLayout_txtArticlePreview"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="10000000"
@@ -79,5 +92,17 @@
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"/>
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/thumb_up"
+        android:layout_alignBottom="@id/list_article_recycLayout_txtViews"
+        android:layout_toLeftOf="@id/list_article_recycLayout_txtViews"
+        android:layout_toStartOf="@id/list_article_recycLayout_txtViews"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp" />
+
+
 
 </RelativeLayout>

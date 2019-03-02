@@ -17,6 +17,7 @@ import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestAr
 import com.example.welsenho.questfy_tw.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class MainActivityTabFragment extends Fragment{
@@ -37,7 +38,7 @@ public class MainActivityTabFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_main_activity_tab, container, false);
         tabLayout = view.findViewById(R.id.main_activity_tabLayout);
         viewPager = view.findViewById(R.id.main_activity_viewpager);
-        viewPager.setAdapter(new MainActivityTabAdapter(getChildFragmentManager()));
+        viewPager.setAdapter(new MainActivityTabAdapter(getChildFragmentManager(), Locale.getDefault().getDisplayLanguage()));
         tabLayout.post(new Runnable() {
             @Override
             public void run() {

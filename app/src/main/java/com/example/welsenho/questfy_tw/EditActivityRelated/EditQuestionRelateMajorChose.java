@@ -70,8 +70,10 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
                 if (!getMajors.isEmpty()){
                     intent.putExtra("getMajors", getMajors);
                     startActivity(intent);
+                    finish();
                 }else {
                     startActivity(intent);
+                    finish();
                 }
                 finish();
 
