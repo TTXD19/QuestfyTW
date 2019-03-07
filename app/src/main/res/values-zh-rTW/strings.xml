@@ -49,4 +49,6 @@
     <string name="user_profile">個人資訊</string>
     <string name="friends">好友</string>
     <string name="sign_out">登出</string>
+    <string name="following">已追蹤</string>
+    <string name="follow">追蹤</string>
 </resources>

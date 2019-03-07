@@ -49,7 +49,7 @@ public class MainActivityTabFragment extends Fragment{
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-
+                mListener.getTabCurrentPage(i);
             }
 
             @Override
@@ -62,7 +62,6 @@ public class MainActivityTabFragment extends Fragment{
 
             }
         });
-
         return view;
     }
 

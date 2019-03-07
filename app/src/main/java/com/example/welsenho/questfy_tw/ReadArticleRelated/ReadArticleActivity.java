@@ -41,7 +41,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private Boolean likePress;
     private String Article_ID;
     private String otherUserUid;
-    private int likeCount;
+    private long likeCount;
 
     private CircleImageView circleImageView;
     private TextView txtUserName;
@@ -50,6 +50,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private TextView txtMajors;
     private TextView txtContent;
     private TextView txtCheckImages;
+    private TextView txtLikeCount;
     private Toolbar toolbar;
     private ShineButton shineButtonHeart;
     private ShineButton shineButtonLike;
@@ -84,7 +85,8 @@ public class ReadArticleActivity extends AppCompatActivity {
         getContentData();
         getLikeCount();
 
-        quesrySearch();
+        queryLikeSearch();
+        queryKeepSearch();
 
 
         /**
@@ -116,6 +118,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         txtContent = findViewById(R.id.read_article_txt_content);
         txtUploadData = findViewById(R.id.read_article_txt_UploadDate);
         txtCheckImages = findViewById(R.id.read_article_txt_CheckimageView);
+        txtLikeCount = findViewById(R.id.read_article_txtLikeCount);
         expansionHeader = findViewById(R.id.read_article_expan_header);
         toolbar = findViewById(R.id.read_article_toolbar);
         recyclerView = findViewById(R.id.read_article_recyclerView);
@@ -169,6 +172,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                     txtMajors.setText(firebaseDatabaseGetSet.getMajors());
                     txtTitle.setText(firebaseDatabaseGetSet.getTitle());
                     txtContent.setText(firebaseDatabaseGetSet.getContent());
+                    txtLikeCount.setText(String.valueOf(Math.abs(firebaseDatabaseGetSet.getArticle_like_count())));
                     setOtherUserUid(firebaseDatabaseGetSet.getUserUid());
                     Picasso.get().load(firebaseDatabaseGetSet.getUser_Image()).into(circleImageView);
                     ShowItem();
@@ -190,7 +194,6 @@ public class ReadArticleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ReadArticleActivity.this, OtherUserProfileActivity.class);
                 if (otherUserUid != null) {
-                    Toast.makeText(ReadArticleActivity.this, "success", Toast.LENGTH_SHORT).show();
                     intent.putExtra("otherUserUid", getOtherUserUid());
                     startActivity(intent);
                 } else {
@@ -219,32 +222,25 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     private void AddLike() {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        likeCount--;
-        hashMap.put("Article_like_count", likeCount);
-        databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
-
         HashMap<String, Object> userInfo = new HashMap<>();
         userInfo.put("userUid", firebaseUser.getUid());
         databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").child(firebaseUser.getUid()).updateChildren(userInfo);
     }
 
     private void removeLike() {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        if (likeCount != 0) {
-            likeCount++;
-        }
-        hashMap.put("Article_like_count", likeCount);
-        databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
         databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").child(firebaseUser.getUid()).removeValue();
     }
 
     private void getLikeCount() {
-        databaseReference.child("Users_Question_Articles").child(Article_ID).child("Article_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    likeCount = Integer.parseInt(dataSnapshot.getValue().toString());
+                    likeCount = dataSnapshot.getChildrenCount();
+                }else {
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("Article_like_count", 0);
+                    databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
                 }
             }
 
@@ -255,12 +251,12 @@ public class ReadArticleActivity extends AppCompatActivity {
         });
     }
 
-    private void quesrySearch() {
+    private void queryLikeSearch() {
         Query query = databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").orderByChild("userUid").equalTo(firebaseUser.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     shineButtonLike.setChecked(true);
                     shineButtonLike.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -268,12 +264,58 @@ public class ReadArticleActivity extends AppCompatActivity {
                             removeLike();
                         }
                     });
-                }else {
+                } else {
                     shineButtonLike.setChecked(false);
                     shineButtonLike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             AddLike();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addToKeep() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Article_ID", Article_ID);
+        hashMap.put("Title", txtTitle.getText());
+        hashMap.put("Majors", txtMajors.getText().toString());
+        hashMap.put("User_Name", txtUserName.getText().toString());
+        hashMap.put("userUid", otherUserUid);
+
+        databaseReference.child("Users_Keep_Articles").child(firebaseUser.getUid()).child(Article_ID).updateChildren(hashMap);
+    }
+
+    private void removeKeep(){
+        databaseReference.child("Users_Keep_Articles").child(firebaseUser.getUid()).child(Article_ID).removeValue();
+    }
+
+    private void queryKeepSearch(){
+        Query query = databaseReference.child("Users_Keep_Articles").child(firebaseUser.getUid()).child(Article_ID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    shineButtonHeart.setChecked(true);
+                    shineButtonHeart.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            removeKeep();
+                        }
+                    });
+                }else {
+                    shineButtonHeart.setChecked(false);
+                    shineButtonHeart.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addToKeep();
                         }
                     });
                 }

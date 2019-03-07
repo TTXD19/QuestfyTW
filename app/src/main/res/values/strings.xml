@@ -50,6 +50,8 @@
     <string name="user_profile">User profile</string>
     <string name="friends">Friends</string>
     <string name="sign_out">Sign Out</string>
+    <string name="following">Following</string>
+    <string name="follow">Follow</string>
 
 
 </resources>

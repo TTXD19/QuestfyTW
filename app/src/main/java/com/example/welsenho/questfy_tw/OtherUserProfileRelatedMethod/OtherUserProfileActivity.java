@@ -1,5 +1,6 @@
 package com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -7,13 +8,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
+import com.example.welsenho.questfy_tw.MainActivityFragment.list_article_recyclerView_adapter;
 import com.example.welsenho.questfy_tw.R;
+import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,14 +30,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class OtherUserProfileActivity extends AppCompatActivity {
 
     private String otherUserUid;
     private String SelfUid;
+    private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private FirebaseDatabaseGetSet getSet;
+    private list_article_recyclerView_adapter adapter;
 
     private TextView txtUserName;
     private TextView txtUniversityName;
@@ -39,6 +52,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private Button btnFollow;
     private Button btnAddFriend;
     private Button btnSendMessage;
+    private RecyclerView recyclerView;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
 
@@ -61,6 +75,10 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         getOtherUserInfo();
         ItemClick();
         detectFriend();
+        getUserArticlesData();
+        setRecyclerView();
+        queryFollow();
+        getFollowers();
     }
 
 
@@ -75,9 +93,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         btnFollow = findViewById(R.id.otherUser_profile_btnFollow);
         btnAddFriend = findViewById(R.id.otherUser_profile_btnAddFriend);
         btnSendMessage = findViewById(R.id.otherUser_profile_btnSendMessage);
+        recyclerView = findViewById(R.id.otherUser_profile_recyclerView);
         coordinatorLayout = findViewById(R.id.otherUser_profile_coordinatorLayout);
         otherUserUid = getIntent().getStringExtra("otherUserUid");
         otherUserProfileRelatedMethods = new OtherUserProfileRelatedMethods();
+
+        arrayList = new ArrayList<>();
+        adapter = new list_article_recyclerView_adapter(arrayList, this);
     }
 
     private void InitFirebaseItem(){
@@ -171,6 +193,102 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void FollowUser(){
+    private void getUserArticlesData(){
+        databaseReference.child("Users_Question_Articles").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    arrayList.clear();
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        if (getSet.getUserUid().equals(otherUserUid)){
+                            arrayList.add(getSet);
+                            txtPostsCount.setText(String.valueOf(arrayList.size()));
+                            recyclerView.setAdapter(adapter);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setRecyclerView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        adapter.setOnMainClickListener(new MainOnClickListener() {
+            @Override
+            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(OtherUserProfileActivity.this, ReadArticleActivity.class);
+                intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void followUser(){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userUid", firebaseUser.getUid());
+        hashMap.put("User_Name", firebaseUser.getDisplayName());
+
+        databaseReference.child("Users_Followers_Section").child(otherUserUid).child(firebaseUser.getUid()).updateChildren(hashMap);
+    }
+
+    private void queryFollow(){
+        Query query = databaseReference.child("Users_Followers_Section").child(otherUserUid).child(firebaseUser.getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    btnFollow.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.LightMainOrange));
+                    btnFollow.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
+                    btnFollow.setText(getString(R.string.following));
+                    btnFollow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            databaseReference.child("Users_Followers_Section").child(otherUserUid).child(firebaseUser.getUid()).removeValue();
+                        }
+                    });
+                }else {
+                    btnFollow.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
+                    btnFollow.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.LightMainOrange));
+                    btnFollow.setText(R.string.follow);
+                    btnFollow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            followUser();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getFollowers(){
+        databaseReference.child("Users_Followers_Section").child(otherUserUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    txtFollowesCount.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                }else {
+                    txtFollowesCount.setText(String.valueOf(0));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
