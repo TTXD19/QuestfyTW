@@ -16,4 +16,6 @@
     <color name="DateBlue">#237BFF</color>
     <color name="LightGrayBackground">#EEEDED</color>
     <color name="PlaceAddressColor">#ffc647</color>
+    <color name="CatergoryLightGrayBackground">#F2F2F2</color>
+    <color name="CatergoryDarkGrayText">#4C5264</color>
 </resources>

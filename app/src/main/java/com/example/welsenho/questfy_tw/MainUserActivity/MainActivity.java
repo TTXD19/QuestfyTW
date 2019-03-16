@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.DailyQuestionsRelated.MainDailyQuestionActivity;
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditInitActivity;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.FriendRelatedActivity.FriendMessageFragment;
@@ -33,6 +34,7 @@ import com.example.welsenho.questfy_tw.FriendRelatedActivity.MainFriendFragment;
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.LoginRelated.SignUpMethod;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestArticleFragment;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainSubjectChooseFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
@@ -43,13 +45,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements MainActivityTabFragment.OnFragmentInteractionListener,
         MainActivityLatestArticleFragment.OnFragmentInteractionListener, UserProfileFragment.OnFragmentInteractionListener,
         MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
-        FriendRequestFragment.OnFragmentInteractionListener {
+        FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener{
 
     private Boolean doubeTapExit = false;
     private int currentFilterPage;
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private TextView txtCheckVerified;
     private TextView txtCheckCompleteInfo;
     private TextView txtSchoolName;
+    private CircleImageView circleImageView;
     private Button btnCompleteUserInfo;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -97,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         txtCheckCompleteInfo = headerView.findViewById(R.id.txt_nav_header_userInfoComplete);
         txtSchoolName = headerView.findViewById(R.id.txt_nav_header_userSchoolName);
         btnCompleteUserInfo = headerView.findViewById(R.id.btn_nav_header_completeUserInfo);
+        circleImageView = headerView.findViewById(R.id.img_nav_header_user);
         //----------------------------------------------------
 
         InitFirebase();
@@ -109,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         if (firebaseUser.isEmailVerified()) {
             txtCheckVerified.setText(R.string.verified);
             btnCompleteUserInfo.setVisibility(View.GONE);
+        }
+
+        if (!firebaseUser.getPhotoUrl().toString().isEmpty()){
+            Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
         }
 
         ItmeClick();
@@ -151,12 +162,23 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (currentFilterPage == 0) {
-                    searchFilter(s, latestArrayList);
-                } else if (currentFilterPage == 1) {
-                    searchFilter(s, mostPopularArrayList);
+                /*Log.d("TAG", "queryChange");
+                if (currentFilterPage == 1) {
+                    if (latestArrayList != null) {
+                        searchFilter(s, latestArrayList);
+                    }
+                } else if (currentFilterPage == 2) {
+                    if (mostPopularArrayList != null) {
+                        searchFilter(s, mostPopularArrayList);
+                    }
+                }*/
+                if (latestArrayList != null){
+                    LatestSearchFilter(s, latestArrayList);
                 }
-                return true;
+                if (mostPopularArrayList != null){
+                    MostPopularFilter(s, mostPopularArrayList);
+                }
+                return false;
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -176,19 +198,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
                         fragmentTransaction1.replace(R.id.main_activity_frameLayout, new MainActivityTabFragment()).commit();
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                        toolbar.setTitle("Questfy");
                         floatingActionButton.show();
+                        break;
+
+                    case R.id.main_related_question_fragment:
+                        FragmentTransaction dailyQuestionFragment = fragmentManager.beginTransaction();
+                        dailyQuestionFragment.replace(R.id.main_activity_frameLayout, new MainDailyQuestionActivity()).commit();
+                        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                        toolbar.setTitle(getString(R.string.do_you_know));
+                        floatingActionButton.hide();
                         break;
 
                     case R.id.User_profile:
                         FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
                         fragmentTransaction2.replace(R.id.main_activity_frameLayout, new UserProfileFragment()).commit();
                         toolbar.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.user_profile_background));
+                        toolbar.setTitle(getString(R.string.personal_info));
                         floatingActionButton.hide();
                         break;
 
                     case R.id.Main_Friend_Fragment:
                         FragmentTransaction mainFriendFragment = fragmentManager.beginTransaction();
                         mainFriendFragment.replace(R.id.main_activity_frameLayout, new MainFriendFragment()).commit();
+                        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                        toolbar.setTitle(getString(R.string.friends));
                         floatingActionButton.hide();
                         break;
 
@@ -266,9 +300,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     }
 
     @Override
-    public void mostPopularArticleFilter(ArrayList<FirebaseDatabaseGetSet> arrayList) {
-        mostPopularArrayList = arrayList;
+    public void mostPopularArticleFilter(ArrayList<FirebaseDatabaseGetSet> orginalMostPopulatArrayList) {
+        mostPopularArrayList = orginalMostPopulatArrayList;
     }
+
 
     /**
      * searchFilter methods working process
@@ -282,24 +317,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
      * @param decidedFilterList
      */
     private void searchFilter(String inputText, ArrayList<FirebaseDatabaseGetSet> decidedFilterList) {
-
         ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
         if (!filterList.isEmpty()) {
             filterList.clear();
         }
 
+        MainActivityLatestArticleFragment latestArticleFragment;
+        MostPopularFragment mostPopularFragment;
+        MainSubjectChooseFragment mainSubjectChooseFragment;
+
+
+        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(1);
+        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(2);
+
         for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decidedFilterList) {
             if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase())) {
                 filterList.add(firebaseDatabaseGetSet);
-                if (currentFilterPage == 0) {
-                    MainActivityLatestArticleFragment latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(0);
+                if (currentFilterPage == 1) {
                     if (latestArticleFragment != null) {
                         if (!filterList.isEmpty()) {
                             latestArticleFragment.returnFilterList(filterList);
                         }
                     }
-                } else if (currentFilterPage == 1) {
-                    MostPopularFragment mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(1);
+                } else if (currentFilterPage == 2) {
                     if (mostPopularFragment != null) {
                         if (!filterList.isEmpty()) {
                             mostPopularFragment.returnFilterList(filterList);
@@ -308,7 +348,48 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                 }
             }
         }
+    }
 
+    private void LatestSearchFilter(String inputText, ArrayList<FirebaseDatabaseGetSet> decideFilterList){
+        ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
+        if (!filterList.isEmpty()) {
+            filterList.clear();
+        }
+
+        MainActivityLatestArticleFragment latestArticleFragment;
+
+
+        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(1);
+
+        for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
+            if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
+                filterList.add(firebaseDatabaseGetSet);
+                if (!filterList.isEmpty()) {
+                    latestArticleFragment.returnFilterList(filterList);
+                }
+            }
+        }
+    }
+
+    private void MostPopularFilter(String inputText, ArrayList<FirebaseDatabaseGetSet> decideFilterList){
+        ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
+        if (!filterList.isEmpty()) {
+            filterList.clear();
+        }
+
+        MostPopularFragment mostPopularFragment;
+
+
+        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(2);
+
+        for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
+            if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
+                filterList.add(firebaseDatabaseGetSet);
+                if (!filterList.isEmpty()) {
+                    mostPopularFragment.returnFilterList(filterList);
+                }
+            }
+        }
     }
 
     private void initializeArrayList() {
@@ -368,5 +449,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onSubjectChooseFilter(String subject) {
+        if (subject.equals("全部")){
+            subject = "";
+        }
+        LatestSearchFilter(subject, latestArrayList);
+        MostPopularFilter(subject, mostPopularArrayList);
+        MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
+        mainActivityTabFragment.changePage();
     }
 }

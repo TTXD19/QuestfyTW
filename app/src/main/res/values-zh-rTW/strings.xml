@@ -51,4 +51,14 @@
     <string name="sign_out">登出</string>
     <string name="following">已追蹤</string>
     <string name="follow">追蹤</string>
+    <string name="history">歷史紀錄</string>
+    <string name="select_a_major_catergory">分類選擇</string>
+    <string name="do_you_know">你知道嗎 ？</string>
+    <string name="daily_question">每日問題</string>
+    <string name="personal_info">個人資訊</string>
+    <string name="copy_right_declare">© 2019 Questfy Co., Ltd 保有所有權</string>
+    <string name="comments">留言區</string>
+    <string name="status_message">想說的話</string>
+
+
 </resources>

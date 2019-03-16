@@ -118,7 +118,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
     }
 
     private void LoadData(){
-        databaseReference.child("Users_Question_Articles").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").orderByChild("Upload_Date").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -126,6 +126,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                     for (DataSnapshot DS : dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
+                        recyclerView.setVisibility(View.VISIBLE);
                         recyclerView.setAdapter(adapter);
                         progressBar.setVisibility(View.INVISIBLE);
                         mListener.latestArticleFilter(arrayList);
@@ -146,16 +147,17 @@ public class MainActivityLatestArticleFragment extends Fragment {
      * @param returnList
      */
     public void returnFilterList(ArrayList<FirebaseDatabaseGetSet> returnList){
-        adapter = new list_article_recyclerView_adapter(returnList, getContext());
-        adapter.setOnMainClickListener(new MainOnClickListener() {
-            @Override
-            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                String postID = arrayList.get(position).getArticle_ID();
-                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
-                intent.putExtra("ArticleID", postID);
-                startActivity(intent);
-            }
-        });
-        recyclerView.setAdapter(adapter);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter = new list_article_recyclerView_adapter(returnList, getContext());
+            adapter.setOnMainClickListener(new MainOnClickListener() {
+                @Override
+                public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                    String postID = arrayList.get(position).getArticle_ID();
+                    Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                    intent.putExtra("ArticleID", postID);
+                    startActivity(intent);
+                }
+            });
+            recyclerView.setAdapter(adapter);
     }
 }

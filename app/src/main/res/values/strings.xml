@@ -24,7 +24,7 @@
     <string name="action_drawer_close">drawer close</string>
     <string name="verified">(Verified)</string>
     <string name="not_verified">(Not verified)</string>
-    <string name="click_to_check">Click to Check</string>
+    <string name="click_to_check">Click to Check pictures</string>
     <string name="Latest_Article">Latest Article</string>
     <string name="Most_Popular">Most Popular</string>
 
@@ -52,6 +52,14 @@
     <string name="sign_out">Sign Out</string>
     <string name="following">Following</string>
     <string name="follow">Follow</string>
+    <string name="history">History</string>
+    <string name="select_a_major_catergory">Select a Major</string>
+    <string name="do_you_know">Do you know ?</string>
+    <string name="daily_question">Daily Question</string>
+    <string name="personal_info">User information</string>
+    <string name="copy_right_declare">© 2019 Questfy Co., Ltd All Rights Reserved</string>
+    <string name="comments">Comments</string>
+    <string name="status_message">Status message</string>
 
 
 </resources>

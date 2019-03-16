@@ -6,6 +6,11 @@
         android:id="@+id/main_activity_tab_home"
         android:title="@string/home"
         />
+
+    <item
+        android:id="@+id/main_related_question_fragment"
+        android:title="@string/do_you_know"/>
+
     <item
         android:id="@+id/User_profile"
         android:title="@string/user_profile"/>

@@ -1,14 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/CatergoryLightGrayBackground"
     tools:context=".MainActivityFragment.MainSubjectChooseFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/MainSubjectChoose_relay_upper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/MainSubjectChoose_txt_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/history"
+                    android:textColor="@color/CatergoryDarkGrayText"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/MainSubjectChoose_recyclerView_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/MainSubjectChoose_txt_history"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/FullWhite">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/MainSubjectChoose_relay_below"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/MainSubjectChoose_relay_upper">
+
+                <TextView
+                    android:id="@+id/MainSubjectChoose_txt_majorChoose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/select_a_major_catergory"
+                    android:textColor="@color/CatergoryDarkGrayText"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/MainSubjectChoose_recyclerView_currentItemClick"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/MainSubjectChoose_txt_majorChoose"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/FullWhite">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

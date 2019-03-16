@@ -3,10 +3,12 @@ package com.example.welsenho.questfy_tw.MainUserActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +40,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
+import java.net.URI;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -47,6 +53,7 @@ import static android.app.Activity.RESULT_OK;
 public class UserProfileFragment extends Fragment {
 
     private static final int REQUEST_IMAGE_SELECT = 1;
+    private final String NEW_CROP_IMAGE = "NewCropImage";
 
     private TextView txtChangeImage;
     private TextView txtUserName;
@@ -65,6 +72,8 @@ public class UserProfileFragment extends Fragment {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
+    private EditRelatedMethod editRelatedMethod;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,7 +84,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
     }
 
@@ -99,6 +107,7 @@ public class UserProfileFragment extends Fragment {
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
         progressDialog = new ProgressDialog(getContext());
+        editRelatedMethod = new EditRelatedMethod();
 
         txtChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,10 +155,18 @@ public class UserProfileFragment extends Fragment {
         if (requestCode == REQUEST_IMAGE_SELECT) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    UploadImage(data.getData());
+                    Log.d("UploadStatus", "Start Uploading");
+                    starCropping(data.getData());
+                    //UploadImage(data.getData());
                 }
             }
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK){
+            Uri cropUri = UCrop.getOutput(data);
+            if (cropUri != null){
+                UploadImage(cropUri);
+            }
         }
+        Log.d("UploadStatus", "Finish Uploading");
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -160,21 +177,25 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void UploadUserProfileImage(Uri userImageuri){
-        UploadTask uploadTask = storageReference.child("User_Profile_Image").child(firebaseUser.getUid()).putFile(userImageuri);
+        final String date = editRelatedMethod.getDate();
+        UploadTask uploadTask = storageReference.child("User_Profile_Image").child(firebaseUser.getUid()).child(date).putFile(userImageuri);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                StorageReference storageReference1 = storageReference.child("User_Profile_Image").child(firebaseUser.getUid());
+                StorageReference storageReference1 = storageReference.child("User_Profile_Image").child(firebaseUser.getUid()).child(date);
                 storageReference1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         Log.d("DownloadUri", uri.toString());
-                        LoadUserProfile();
                         UpdateFirebaseLink(uri);
                         UserProfileChangeRequest userProfile = new UserProfileChangeRequest.Builder().setPhotoUri(uri).build();
-                        firebaseUser.updateProfile(userProfile);
-                        LoadUserProfile();
-                        progressDialog.dismiss();
+                        firebaseUser.updateProfile(userProfile).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
+                                progressDialog.dismiss();
+                            }
+                        });
                     }
                 });
 
@@ -228,6 +249,34 @@ public class UserProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    private void starCropping(Uri uri){
+        String cropFileName = NEW_CROP_IMAGE;
+        cropFileName += ".jpg";
+
+
+        UCrop uCrop  = UCrop.of(uri, Uri.fromFile(new File(getContext().getCacheDir(), cropFileName)));
+        uCrop.withAspectRatio(1,1);
+        uCrop.withMaxResultSize(450, 450);
+        uCrop.withOptions(getCropOthions());
+        uCrop.start(getActivity(), this);
+    }
+
+    private UCrop.Options getCropOthions(){
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionQuality(70);
+
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+
+        options.setHideBottomControls(false);
+        options.setFreeStyleCropEnabled(true);
+        options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.LightMainOrange));
+        options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.LightMainOrange));
+
+        options.setToolbarTitle("Crop Image");
+
+        return options;
     }
 
 }

@@ -100,6 +100,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
         adapter = new list_article_recyclerView_adapter(arrayList, this);
+        recyclerView.setFocusable(false);
     }
 
     private void InitFirebaseItem(){

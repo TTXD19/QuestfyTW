@@ -55,6 +55,16 @@ public class FirebaseDatabaseGetSet {
     private String MessageUserUid;
     private String MessageType;
 
+    //For getting daily question information
+    private String dailyQuestionArticleUid;
+    private String dailyQuestionType;
+    private String dailyQuestionImage;
+    private String dailyQuestionTitle;
+    private String dailyQuestionSubject;
+    private String dailyQuestionAuthor;
+    private String dailyQuestionContent;
+    private String dailyQuestionComment;
+
 
     //GetSet for firebase
     public String getMajor() {
@@ -311,5 +321,69 @@ public class FirebaseDatabaseGetSet {
 
     public void setArticle_like_count(int article_like_count) {
         Article_like_count = article_like_count;
+    }
+
+    public String getDailyQuestionArticleUid() {
+        return dailyQuestionArticleUid;
+    }
+
+    public void setDailyQuestionArticleUid(String dailyQuestionArticleUid) {
+        this.dailyQuestionArticleUid = dailyQuestionArticleUid;
+    }
+
+    public String getDailyQuestionType() {
+        return dailyQuestionType;
+    }
+
+    public void setDailyQuestionType(String dailyQuestionType) {
+        this.dailyQuestionType = dailyQuestionType;
+    }
+
+    public String getDailyQuestionTitle() {
+        return dailyQuestionTitle;
+    }
+
+    public void setDailyQuestionTitle(String dailyQuestionTitle) {
+        this.dailyQuestionTitle = dailyQuestionTitle;
+    }
+
+    public String getDailyQuestionSubject() {
+        return dailyQuestionSubject;
+    }
+
+    public void setDailyQuestionSubject(String dailyQuestionSubject) {
+        this.dailyQuestionSubject = dailyQuestionSubject;
+    }
+
+    public String getDailyQuestionAuthor() {
+        return dailyQuestionAuthor;
+    }
+
+    public void setDailyQuestionAuthor(String dailyQuestionAuthor) {
+        this.dailyQuestionAuthor = dailyQuestionAuthor;
+    }
+
+    public String getDailyQuestionImage() {
+        return dailyQuestionImage;
+    }
+
+    public void setDailyQuestionImage(String dailyQuestionImage) {
+        this.dailyQuestionImage = dailyQuestionImage;
+    }
+
+    public String getDailyQuestionContent() {
+        return dailyQuestionContent;
+    }
+
+    public void setDailyQuestionContent(String dailyQuestionContent) {
+        this.dailyQuestionContent = dailyQuestionContent;
+    }
+
+    public String getDailyQuestionComment() {
+        return dailyQuestionComment;
+    }
+
+    public void setDailyQuestionComment(String dailyQuestionComment) {
+        this.dailyQuestionComment = dailyQuestionComment;
     }
 }

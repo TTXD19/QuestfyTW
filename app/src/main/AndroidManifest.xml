@@ -52,7 +52,12 @@
         <activity android:name=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity" />
         <activity android:name=".ReigisterCompleteInfoRelated.UniversityRegister" />
         <activity android:name=".ReigisterCompleteInfoRelated.MainCourseRegister" />
-        <activity android:name=".FriendMessagingRelated.FriendMessagingActivity"></activity>
+        <activity android:name=".FriendMessagingRelated.FriendMessagingActivity" />
+        <activity android:name=".DailyQuestionsRelated.DailyQuestionArticleRead"></activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

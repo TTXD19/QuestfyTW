@@ -51,6 +51,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private TextView txtContent;
     private TextView txtCheckImages;
     private TextView txtLikeCount;
+    private TextView txtReadAnswers;
     private Toolbar toolbar;
     private ShineButton shineButtonHeart;
     private ShineButton shineButtonLike;
@@ -208,6 +209,7 @@ public class ReadArticleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ReadArticleActivity.this, ReadAnswersActivity.class);
                 intent.putExtra("Article_ID", Article_ID);
+                intent.putExtra("Article_Title", txtTitle.getText().toString());
                 startActivity(intent);
             }
         });

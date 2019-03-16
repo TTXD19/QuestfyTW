@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
@@ -30,10 +32,11 @@ import java.util.ArrayList;
 public class MostPopularFragment extends Fragment {
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
-    private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private ArrayList<FirebaseDatabaseGetSet> orginalMostPopulatArrayList;
     private Context context;
     private list_article_recyclerView_adapter adapter;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,9 +61,11 @@ public class MostPopularFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_most_popular, container, false);
         recyclerView = view.findViewById(R.id.most_pop_fm_recyclerView);
+        progressBar = view.findViewById(R.id.most_pop_fm_progressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
-        arrayList = new ArrayList<>();
-        adapter = new list_article_recyclerView_adapter(arrayList, getContext());
+        orginalMostPopulatArrayList = new ArrayList<>();
+        adapter = new list_article_recyclerView_adapter(orginalMostPopulatArrayList, getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
@@ -115,16 +120,17 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void LoadData(){
-        databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    arrayList.clear();
+                    orginalMostPopulatArrayList.clear();
                     for (DataSnapshot DS : dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(firebaseDatabaseGetSet);
+                        orginalMostPopulatArrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
-                        mListener.mostPopularArticleFilter(arrayList);
+                        progressBar.setVisibility(View.GONE);
+                        mListener.mostPopularArticleFilter(orginalMostPopulatArrayList);
                         databaseReference.removeEventListener(this);
                     }
                 }
@@ -153,5 +159,9 @@ public class MostPopularFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
+    }
+
+    public void NoArticleUpdateYet(){
+        recyclerView.setVisibility(View.GONE);
     }
 }

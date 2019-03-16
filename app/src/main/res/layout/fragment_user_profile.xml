@@ -9,15 +9,18 @@
 
 
     <android.support.v7.widget.CardView
-        android:layout_width="350dp"
-        android:layout_height="550dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         app:cardCornerRadius="30dp"
-        app:cardElevation="20dp">
+        app:cardElevation="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp">
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,7 +60,7 @@
                     android:layout_below="@+id/user_profile_fm_circleImage_userImage"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="30dp"
-                    android:text="User Name"
+                    android:text="---------"
                     android:textColor="@color/FullBlack"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -80,7 +83,7 @@
                     android:layout_below="@+id/user_profile_fm_txt_createDate"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="朝陽科技大學"
+                    android:text="----------------------------------"
                     android:textColor="@color/LightMainOrange"
                     android:textSize="20sp" />
 
@@ -91,7 +94,7 @@
                     android:layout_below="@+id/user_profile_fm_txt_schoolName"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="企業管理系"
+                    android:text="----------------------------"
                     android:textColor="@color/ＭainOrange"
                     android:textSize="18sp" />
 
@@ -122,7 +125,7 @@
                     android:id="@+id/user_profile_fm_btn_emailCertificate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_profile_fm_txt_speciality"
+                    android:layout_below="@+id/user_profile_fm_txt_customMessage"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginLeft="50dp"
@@ -135,8 +138,29 @@
                     android:textColor="@color/FullWhite" />
 
 
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_customMessageDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_speciality"
+                    android:text="@string/status_message"
+                    android:textColor="@color/FullBlack"
+                    android:layout_marginTop="15dp"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/user_profile_fm_txt_customMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_profile_fm_txt_customMessageDisplay"
+                    android:text="-------------------"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"/>
+
             </RelativeLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.v7.widget.CardView>
 

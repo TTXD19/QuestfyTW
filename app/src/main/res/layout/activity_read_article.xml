@@ -155,7 +155,7 @@
                     android:layout_marginRight="10dp"
                     android:text="Title"
                     android:textColor="@color/FullBlack"
-                    android:textSize="36sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/read_article_txt_major"
@@ -174,11 +174,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginRight="10dp"
                     android:text="Content"
                     android:textColor="@color/FullBlack"
-                    android:textSize="22sp" />
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="10dp"/>
 
 
             </LinearLayout>
@@ -262,6 +263,7 @@
         android:background="@color/LightGrayBackground">
 
         <TextView
+            android:id="@+id/read_article_txtReadAnswers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

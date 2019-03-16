@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/daily_question_readArticle_coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DailyQuestionsRelated.DailyQuestionArticleRead">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/daily_question_readArticle_appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/daily_question_readArticle_collaspingToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/CatergoryDarkGrayText"
+            app:contentScrim="@color/LightMainOrange"
+            app:expandedTitleMarginEnd="10dp"
+            app:expandedTitleMarginStart="20dp"
+            app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+            app:layout_scrollFlags="exitUntilCollapsed|scroll">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/daily_question_readArticle_txtTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/daily_question_readArticle_imgPicture"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/FullWhite"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/daily_question_readArticle_imgPicture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/daily_question_readArticle_toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/FullWhite"
+                android:theme="@style/BaseTheme">
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/daily_question_readArticle_relay1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp">
+
+                <TextView
+                    android:id="@+id/daily_question_readArticle_txtSubject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subject"
+                    android:textColor="@color/LightMainOrange"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/daily_question_readArticle_txtAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/daily_question_readArticle_txtSubject"
+                    android:text="Author"
+                    android:textColor="@color/LightMainOrange"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/daily_question_readArticle_txtContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/daily_question_readArticle_txtAuthor"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="10dp"
+                    android:text="Content"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="18sp"
+                    android:textIsSelectable="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/daily_question_readArticle_txtContent"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:text="3 comments"
+                    android:layout_marginTop="85dp"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/daily_question_readArticle_copyRights"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/daily_question_readArticle_txtContent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="120dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/copy_right_declare"
+                    android:textColor="@color/CatergoryDarkGrayText" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/daily_question_readArticle_relay2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/daily_question_readArticle_relay1"
+                android:background="@color/CatergoryLightGrayBackground">
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/daily_question_readArticle_txtComments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comments"
+                android:layout_below="@+id/daily_question_readArticle_relay2"
+                android:textSize="24sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <EditText
+                android:id="@+id/daily_question_readArticle_editComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/daily_question_readArticle_txtComments"
+                android:hint="Write your comment here"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:layout_toLeftOf="@+id/daily_question_readArticle_txtSendComment"
+                android:layout_toStartOf="@+id/daily_question_readArticle_txtSendComment"/>
+
+            <TextView
+                android:id="@+id/daily_question_readArticle_txtSendComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:textColor="@color/ＭainOrange"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/daily_question_readArticle_txtComments"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/daily_question_readArticle_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/daily_question_readArticle_editComments"
+                android:layout_marginTop="8dp">
+
+
+
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </RelativeLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

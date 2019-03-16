@@ -44,7 +44,7 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
         viewHolder.txtMajors.setText(getSet.getMajors());
         viewHolder.txtArticlePreview.setText(getSet.getContent());
         viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
-        Picasso.get().load(getSet.getUser_Image()).into(viewHolder.circleImageViewUserImage);
+        Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
     }
 
     @Override

@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.sackcentury:shinebutton:0.2.0'
     //ButtonSheetDateTimePicker : https://github.com/philliphsu/BottomSheetPickers
     implementation 'com.philliphsu:bottomsheetpickers:2.4.1'
+    //Crop Image
+    implementation 'com.github.yalantis:ucrop:2.2.2'
 
 
 }

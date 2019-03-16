@@ -10,7 +10,9 @@
         android:id="@+id/read_answers_toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/LightMainOrange">
+        android:background="@color/LightMainOrange"
+        app:titleTextColor="@color/FullWhite"
+        android:theme="@style/BaseTheme">
 
 
     </android.support.v7.widget.Toolbar>
@@ -33,12 +35,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="16dp"
                     android:text="How to play this song"
                     android:textColor="@color/FullBlack"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textSize="30sp"
+                    android:textStyle="bold"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/read_answers_recyclerView"

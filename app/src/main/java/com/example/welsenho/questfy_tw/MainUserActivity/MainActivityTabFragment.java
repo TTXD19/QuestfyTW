@@ -35,14 +35,16 @@ public class MainActivityTabFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main_activity_tab, container, false);
+        final View view = inflater.inflate(R.layout.fragment_main_activity_tab, container, false);
         tabLayout = view.findViewById(R.id.main_activity_tabLayout);
         viewPager = view.findViewById(R.id.main_activity_viewpager);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(new MainActivityTabAdapter(getChildFragmentManager(), Locale.getDefault().getDisplayLanguage()));
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
                 tabLayout.setupWithViewPager(viewPager);
+                viewPager.setCurrentItem(1);
             }
         });
 
@@ -85,5 +87,9 @@ public class MainActivityTabFragment extends Fragment{
     interface OnFragmentInteractionListener{
         // TODO: Update argument type and name
         void getTabCurrentPage(int page);
+    }
+
+    public void changePage(){
+        viewPager.setCurrentItem(1);
     }
 }

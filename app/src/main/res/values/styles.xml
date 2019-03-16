@@ -12,4 +12,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/FullWhite</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">@color/FullWhite</item>
+        //the rest of your codes...
+    </style>
+
 </resources>
