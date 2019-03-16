@@ -70,6 +70,7 @@ public class ReadAnswersActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+        Toast.makeText(this, "backPress", Toast.LENGTH_SHORT).show();
         super.onBackPressed();
     }
 
