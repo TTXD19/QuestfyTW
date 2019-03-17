@@ -1,5 +1,6 @@
 package com.example.welsenho.questfy_tw.MainUserActivity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,9 +62,19 @@ public class UserProfileFragment extends Fragment {
 
     private TextView txtChangeImage;
     private TextView txtUserName;
+    private TextView txtSpeciality;
+    private TextView txtStatusMessage;
     private TextView txtCreateDate;
     private TextView txtSchoolName;
     private TextView txtSchoolMajor;
+    private TextView txtPopTitle;
+    private TextView txtCount;
+    private TextView txtSave;
+    private TextView txtCancel;
+    private EditText editText;
+    private ImageButton imageButtonSpeciality;
+    private ImageButton imageButtonStatusMessage;
+    private Dialog dialog;
     private Button btnEmailCertifiacte;
     private CircleImageView circleImageView;
     private ProgressDialog progressDialog;
@@ -92,10 +107,15 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        txtCreateDate = view.findViewById(R.id.user_profile_fm_txt_createDate);
         txtChangeImage = view.findViewById(R.id.user_profile_fm_txt_changeImage);
         txtUserName = view.findViewById(R.id.user_profile_fm_txt_userName);
         txtSchoolName = view.findViewById(R.id.user_profile_fm_txt_schoolName);
         txtSchoolMajor = view.findViewById(R.id.user_profile_fm_txt_schoolMajor);
+        txtSpeciality = view.findViewById(R.id.user_profile_fm_txt_speciality);
+        txtStatusMessage = view.findViewById(R.id.user_profile_fm_txt_customMessage);
+        imageButtonSpeciality = view.findViewById(R.id.user_profile_fm_imgBtn_editSpeciality);
+        imageButtonStatusMessage = view.findViewById(R.id.user_profile_fm_imgBtn_editStatusMessage);
         btnEmailCertifiacte = view.findViewById(R.id.user_profile_fm_btn_emailCertificate);
         circleImageView = view.findViewById(R.id.user_profile_fm_circleImage_userImage);
         progressBar = view.findViewById(R.id.user_profile_fm_progressBar);
@@ -108,6 +128,7 @@ public class UserProfileFragment extends Fragment {
         storageReference = firebaseStorage.getReference();
         progressDialog = new ProgressDialog(getContext());
         editRelatedMethod = new EditRelatedMethod();
+        dialog = new Dialog(getContext());
 
         txtChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +136,8 @@ public class UserProfileFragment extends Fragment {
                 changeImage();
             }
         });
+
+        onItemClick();
 
         LoadUserProfile();
         getFirebaseData();
@@ -168,6 +191,77 @@ public class UserProfileFragment extends Fragment {
         }
         Log.d("UploadStatus", "Finish Uploading");
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void onItemClick(){
+        imageButtonSpeciality.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopUpMessage(getString(R.string.speciality));
+            }
+        });
+
+        imageButtonStatusMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopUpMessage(getString(R.string.status_message));
+            }
+        });
+    }
+
+    private void showPopUpMessage(final String type){
+        dialog.setContentView(R.layout.user_profile_custom_message_editing);
+        txtPopTitle = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtTitle);
+        txtCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
+        txtSave = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtSave);
+        txtCancel = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCancel);
+        editText = dialog.findViewById(R.id.pop_up_userProfile_customMessage_editMessage);
+
+        txtPopTitle.setText(type);
+        dialog.show();
+
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtCount.setText(String.valueOf(s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        txtSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadCustomMessage(type, editText.getText().toString());
+            }
+        });
+    }
+
+    private void uploadCustomMessage(String typeMessage, String message){
+        if (typeMessage.equals(getString(R.string.speciality))){
+            typeMessage = "userSpeciality";
+        } else if (typeMessage.equals(getString(R.string.status_message))){
+            typeMessage = "userStatusMessage";
+        }
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put(typeMessage, message);
+        databaseReference.child("Users_profile").child(firebaseUser.getUid()).updateChildren(hashMap);
+        dialog.dismiss();
     }
 
     private void UploadImage(Uri uri){
@@ -240,6 +334,9 @@ public class UserProfileFragment extends Fragment {
                     if (firebaseDatabaseGetSet.getCompleteInformationCheck().equals("success")) {
                         txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
                         txtSchoolMajor.setText(firebaseDatabaseGetSet.getCourseName());
+                        txtSpeciality.setText(firebaseDatabaseGetSet.getUserSpeciality());
+                        txtStatusMessage.setText(firebaseDatabaseGetSet.getUserStatusMessage());
+                        txtCreateDate.setText(firebaseDatabaseGetSet.getCreateDate());
                     }
                 }
             }

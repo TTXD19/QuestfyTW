@@ -60,6 +60,8 @@
     <string name="copy_right_declare">© 2019 Questfy Co., Ltd All Rights Reserved</string>
     <string name="comments">Comments</string>
     <string name="status_message">Status message</string>
+    <string name="speciality">Speciality</string>
+    <string name="save">Save</string>
 
 
 </resources>

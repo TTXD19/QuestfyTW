@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/otherUser_profile_relayMain"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,11 +22,11 @@
             <RelativeLayout
                 android:id="@+id/relayUserProfile1"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/user_profile_background">
 
-                <ImageView
-                    android:id="@+id/otherUser_profile_imgUser"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/otherUser_profile_circleImgUser"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
@@ -36,9 +37,9 @@
                     android:id="@+id/otherUser_profile_txtUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/otherUser_profile_imgUser"
+                    android:layout_below="@+id/otherUser_profile_circleImgUser"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="35dp"
+                    android:layout_marginTop="20dp"
                     android:text="TTXD"
                     android:textColor="@color/FullWhite"
                     android:textSize="24sp"
@@ -52,9 +53,53 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:text="University Name"
+                    android:textColor="@color/ＭainOrange"
+                    android:textSize="22sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/otherUser_profile_txtMainCourse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Main Course"
+                    android:textSize="20sp"
+                    android:textColor="@color/LightMainOrange"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/otherUser_profile_txtUniName"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/otherUser_profile_txtSpeciality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Speciality"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     android:textColor="@color/FullWhite"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:layout_centerHorizontal="true"
+                    android:textAlignment="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_below="@+id/otherUser_profile_txtMainCourse"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:id="@+id/otherUser_profile_txtStatuseMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status message"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/FullWhite"
+                    android:layout_centerHorizontal="true"
+                    android:textAlignment="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_below="@+id/otherUser_profile_txtSpeciality"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    />
 
             </RelativeLayout>
 
@@ -161,11 +206,11 @@
 
                 </LinearLayout>
 
-                <com.phillipcalvin.iconbutton.IconButton
+                <Button
                     android:id="@+id/otherUser_profile_btnAddFriend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Friend"
+                    android:text="------------------"
                     android:background="@drawable/add_friend_btn_background"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -174,7 +219,8 @@
                     android:layout_marginTop="15dp"
                     android:textAllCaps="false"/>
 
-                <com.phillipcalvin.iconbutton.IconButton
+
+                <Button
                     android:id="@+id/otherUser_profile_btnSendMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

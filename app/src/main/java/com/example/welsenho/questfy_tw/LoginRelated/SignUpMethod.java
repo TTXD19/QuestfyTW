@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,13 +27,14 @@ public class SignUpMethod {
 
 
     public void firebaseProfileSignUp(DatabaseReference databaseReference, String Uid, final String email, String ID, String sex, String loginType,
-                                      final Context context){
+                                      final Context context, String createDate){
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("Email", email);
         hashMap.put("ID", ID);
         hashMap.put("Sex", sex);
         hashMap.put("User_image_uri", "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6");
+        hashMap.put("createDate", createDate);
         hashMap.put("loginType", loginType);
         hashMap.put("CompleteInformationCheck", "False");
         databaseReference.child("Users_profile").child(Uid).updateChildren(hashMap);

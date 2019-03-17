@@ -59,6 +59,8 @@
     <string name="copy_right_declare">© 2019 Questfy Co., Ltd 保有所有權</string>
     <string name="comments">留言區</string>
     <string name="status_message">想說的話</string>
+    <string name="speciality">專長</string>
+    <string name="save">儲存</string>
 
 
 </resources>

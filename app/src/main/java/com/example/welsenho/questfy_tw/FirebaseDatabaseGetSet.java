@@ -11,9 +11,13 @@ public class FirebaseDatabaseGetSet {
     private String Title;
     private String Upload_Date;
     private String User_Image;
+    private String User_image_uri;
     private String User_Name;
     private String Majors;
     private String Article_ID;
+    private String userStatusMessage;
+    private String userSpeciality;
+    private String createDate;
     private int Article_like_count;
 
     //For Major choose
@@ -385,5 +389,37 @@ public class FirebaseDatabaseGetSet {
 
     public void setDailyQuestionComment(String dailyQuestionComment) {
         this.dailyQuestionComment = dailyQuestionComment;
+    }
+
+    public String getUserStatusMessage() {
+        return userStatusMessage;
+    }
+
+    public void setUserStatusMessage(String userStatusMessage) {
+        this.userStatusMessage = userStatusMessage;
+    }
+
+    public String getUserSpeciality() {
+        return userSpeciality;
+    }
+
+    public void setUserSpeciality(String userSpeciality) {
+        this.userSpeciality = userSpeciality;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUser_image_uri() {
+        return User_image_uri;
+    }
+
+    public void setUser_image_uri(String user_image_uri) {
+        User_image_uri = user_image_uri;
     }
 }

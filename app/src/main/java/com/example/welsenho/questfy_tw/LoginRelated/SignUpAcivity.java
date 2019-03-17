@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,6 +51,7 @@ public class SignUpAcivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ScrollView scrollView;
 
+    private EditRelatedMethod editRelatedMethod;
     private SignUpMethod signUpMethod;
 
     @Override
@@ -71,6 +73,7 @@ public class SignUpAcivity extends AppCompatActivity {
         progressDialog.setTitle("Registering...");
         progressDialog.setMessage("Creating your account");
 
+        editRelatedMethod = new EditRelatedMethod();
         signUpMethod = new SignUpMethod();
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -98,6 +101,7 @@ public class SignUpAcivity extends AppCompatActivity {
     private void register() {
 
         getUserInput();
+        final String createDate = editRelatedMethod.getUploadDate();
 
         if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty() && !ID.isEmpty()) {
             if (password.equals(confirmPassword)) {
@@ -112,7 +116,7 @@ public class SignUpAcivity extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         databaseReference = FirebaseDatabase.getInstance().getReference();
                                         firebaseUser = firebaseAuth.getCurrentUser();
-                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, checkSex(), loginType, getApplicationContext());
+                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, checkSex(), loginType, getApplicationContext(), createDate);
                                         signUpMethod.setUpFirebaseProfile(firebaseUser, ID);
                                         firebaseAuth.signOut();
                                         progressDialog.dismiss();
