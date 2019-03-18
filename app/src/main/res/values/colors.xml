@@ -18,4 +18,5 @@
     <color name="PlaceAddressColor">#ffc647</color>
     <color name="CatergoryLightGrayBackground">#F2F2F2</color>
     <color name="CatergoryDarkGrayText">#4C5264</color>
+    <color name="LightGreen">#79E56F</color>
 </resources>

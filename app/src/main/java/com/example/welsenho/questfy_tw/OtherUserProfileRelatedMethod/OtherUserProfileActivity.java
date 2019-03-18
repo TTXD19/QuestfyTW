@@ -82,10 +82,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         InitFirebaseItem();
         getOtherUserInfo();
         detectFriend();
+        detectFollowing();
+        getFollowersCount();
         getUserArticlesData();
         setRecyclerView();
-        queryFollow();
-        getFollowers();
+        onItemClick();
     }
 
 
@@ -325,26 +326,39 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     }
 
     private void followUser(){
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("userUid", firebaseUser.getUid());
-        hashMap.put("User_Name", firebaseUser.getDisplayName());
+        HashMap<String, Object> followBy = new HashMap<>();
+        followBy.put("userUid", firebaseUser.getUid());
+        followBy.put("User_Name", firebaseUser.getDisplayName());
 
-        databaseReference.child("Users_Followers_Section").child(otherUserUid).child(firebaseUser.getUid()).updateChildren(hashMap);
+        HashMap<String, Object> following = new HashMap<>();
+        following.put("userUid", otherUserUid);
+        following.put("User_Name", txtUserName.getText().toString());
+
+        databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").child(otherUserUid).updateChildren(following);
+        databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).updateChildren(followBy);
     }
 
-    private void queryFollow(){
-        Query query = databaseReference.child("Users_Followers_Section").child(otherUserUid).child(firebaseUser.getUid());
-        query.addValueEventListener(new ValueEventListener() {
+    private void onItemClick(){
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                followUser();
+            }
+        });
+    }
+
+    private void detectFollowing(){
+        databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    btnFollow.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.LightMainOrange));
-                    btnFollow.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
+                    btnFollow.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
+                    btnFollow.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.LightGreen));
                     btnFollow.setText(getString(R.string.following));
                     btnFollow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            databaseReference.child("Users_Followers_Section").child(otherUserUid).child(firebaseUser.getUid()).removeValue();
+                            databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).removeValue();
                         }
                     });
                 }else {
@@ -367,12 +381,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void getFollowers(){
-        databaseReference.child("Users_Followers_Section").child(otherUserUid).addValueEventListener(new ValueEventListener() {
+
+    private void getFollowersCount(){
+        databaseReference.child("Users_Followers_Section").child(otherUserUid).child("FollowBy").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    txtFollowesCount.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                    txtFollowesCount.setText(String.valueOf(dataSnapshot.getValue()));
                 }else {
                     txtFollowesCount.setText(String.valueOf(0));
                 }
