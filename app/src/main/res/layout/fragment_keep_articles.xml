@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/keep_article_swipeRefreshLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivityFragment.KeepArticlesFragment">
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+
+       <android.support.v7.widget.RecyclerView
+           android:id="@+id/keep_article_recyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+
+
+       </android.support.v7.widget.RecyclerView>
+
+       <ProgressBar
+           android:id="@+id/keep_articles_progressBar"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerInParent="true"/>
+
+
+   </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

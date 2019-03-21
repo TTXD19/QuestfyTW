@@ -18,6 +18,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -45,10 +47,17 @@ import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.github.florent37.expansionpanel.ExpansionHeader;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,6 +72,8 @@ import com.philliphsu.bottomsheetpickers.date.DatePickerDialog;
 import com.philliphsu.bottomsheetpickers.time.BottomSheetTimePickerDialog;
 import com.philliphsu.bottomsheetpickers.time.numberpad.NumberPadTimePickerDialog;
 import com.squareup.picasso.Picasso;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,9 +83,11 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
@@ -83,7 +96,9 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 3;
     private static final String TAG = "tag";
+    private static final String PLACE_API_KEY = "AIzaSyByDLGHKUl2OutFByrDy0FgPUGU1FywsOg";
 
     private String getDownloadUri;
     private String articleUid;
@@ -99,6 +114,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private TextView txtImageView;
     private TextView txtDatePick;
     private TextView txtTimePick;
+    private TextView txtPlaceName;
+    private TextView txtPlaceAddress;
     private EditText editTitle;
     private EditText editContent;
     private ImageView imgDateTimePicker;
@@ -139,6 +156,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         txtImageView = findViewById(R.id.edit_init_txt_imageView);
         txtDatePick = findViewById(R.id.edit_init_txt_DatePick);
         txtTimePick = findViewById(R.id.edit_init_txt_TimePick);
+        txtPlaceName = findViewById(R.id.edit_init_txt_PlaceNamePick);
+        txtPlaceAddress = findViewById(R.id.edit_init_txt_PlaceAddressPick);
         editTitle = findViewById(R.id.edit_init_edit_Title);
         editContent = findViewById(R.id.edit_init_edit_Content);
         imgTakePhoto = findViewById(R.id.edit_init_img_takeImage);
@@ -204,6 +223,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
          * Handle each item click
          */
         ItemClick();
+
+        InitGooglePlaceApi();
     }
 
     @Override
@@ -243,6 +264,15 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                 if (data != null) {
                     UploadPhotoFirebase(firebaseUser, storageReference, data.getData());
                 }
+            }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                txtPlaceName.setText(place.getName());
+                txtPlaceAddress.setText(place.getAddress());
+
+            }else if (resultCode == AutocompleteActivity.RESULT_ERROR){
+                Toast.makeText(this, "Internet not connect", Toast.LENGTH_SHORT).show();
             }
         }
         showCurrent();
@@ -473,13 +503,28 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                     imgPlcePicker.setVisibility(View.VISIBLE);
                     txtDatePick.setVisibility(View.VISIBLE);
                     txtTimePick.setVisibility(View.VISIBLE);
+                    txtPlaceName.setVisibility(View.VISIBLE);
+                    txtPlaceAddress.setVisibility(View.VISIBLE);
                 }else {
                     isMeet = false;
                     imgDateTimePicker.setVisibility(View.GONE);
                     imgPlcePicker.setVisibility(View.GONE);
                     txtDatePick.setVisibility(View.GONE);
                     txtTimePick.setVisibility(View.GONE);
+                    txtPlaceName.setVisibility(View.GONE);
+                    txtPlaceAddress.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        imgPlcePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMeet) {
+                    saveMeetDateTime();
+                }
+                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                GoogleSearchPlace();
             }
         });
     }
@@ -551,5 +596,25 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                     }
                 }).create();
         dialog.show();
+    }
+
+    private void InitGooglePlaceApi(){
+        // Initialize Places.
+        Places.initialize(getApplicationContext(), PLACE_API_KEY);
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
+    }
+
+    private void GoogleSearchPlace(){
+        // Set the fields to specify which types of place data to
+        // return after the user has made a selection.
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS);
+
+        // Start the autocomplete intent.
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields)
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
     }
 }

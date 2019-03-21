@@ -38,7 +38,7 @@ public class MainActivityTabFragment extends Fragment{
         final View view = inflater.inflate(R.layout.fragment_main_activity_tab, container, false);
         tabLayout = view.findViewById(R.id.main_activity_tabLayout);
         viewPager = view.findViewById(R.id.main_activity_viewpager);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(new MainActivityTabAdapter(getChildFragmentManager(), Locale.getDefault().getDisplayLanguage()));
         tabLayout.post(new Runnable() {
             @Override

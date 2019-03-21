@@ -38,13 +38,13 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         FirebaseDatabaseGetSet getSet = arrayList.get(i);
-        viewHolder.txtUserName.setText(getSet.getUser_Name());
-        viewHolder.txtTitle.setText(getSet.getTitle());
-        viewHolder.txtUploadDate.setText(getSet.getUpload_Date());
-        viewHolder.txtMajors.setText(getSet.getMajors());
-        viewHolder.txtArticlePreview.setText(getSet.getContent());
-        viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
-        Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
+            viewHolder.txtUserName.setText(getSet.getUser_Name());
+            viewHolder.txtTitle.setText(getSet.getTitle());
+            viewHolder.txtUploadDate.setText(getSet.getUpload_Date());
+            viewHolder.txtMajors.setText(getSet.getMajors());
+            viewHolder.txtArticlePreview.setText(getSet.getContent());
+            viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
+            Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
     }
 
     @Override

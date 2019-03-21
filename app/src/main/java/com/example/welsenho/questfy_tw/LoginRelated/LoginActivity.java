@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.InternetConnectionDetect;
+import com.example.welsenho.questfy_tw.MainUserActivity.OutOfConnectionActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
 
     private SignUpMethod signUpMethod;
+    private InternetConnectionDetect internetConnectionDetect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,10 @@ public class LoginActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         signUpMethod = new SignUpMethod();
+        internetConnectionDetect = new InternetConnectionDetect();
 
         progressDialog.setTitle("Signing your account");
-
+        progressDialog.setMessage("Please hold on for a moment");
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -56,8 +60,14 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (firebaseUser != null) {
-            signUpMethod.autoLogin(firebaseUser, getApplicationContext());
-            finish();
+            if (internetConnectionDetect.isNetworkAvailable(getApplicationContext())) {
+                signUpMethod.autoLogin(firebaseUser, getApplicationContext());
+                finish();
+            }else {
+                Intent intent = new Intent(LoginActivity.this, OutOfConnectionActivity.class);
+                startActivity(intent);
+            }
+
         }
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,4 +97,5 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
+
 }

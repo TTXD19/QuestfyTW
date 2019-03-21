@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +41,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
     private list_article_recyclerView_adapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -61,6 +63,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.latest_article_recyclerView);
         progressBar = view.findViewById(R.id.latest_article_progressBar);
+        swipeRefreshLayout = view.findViewById(R.id.latest_article_swipeRefresh);
 
         progressBar.setVisibility(View.VISIBLE);
         arrayList = new ArrayList<>();
@@ -82,6 +85,12 @@ public class MainActivityLatestArticleFragment extends Fragment {
             }
         });
         LoadData();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadData();
+            }
+        });
         return view;
     }
 
@@ -100,6 +109,12 @@ public class MainActivityLatestArticleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoadData();
     }
 
     /**
@@ -123,6 +138,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     arrayList.clear();
+                    progressBar.setVisibility(View.VISIBLE);
                     for (DataSnapshot DS : dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
@@ -131,6 +147,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         mListener.latestArticleFilter(arrayList);
                         databaseReference.removeEventListener(this);
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }
             }

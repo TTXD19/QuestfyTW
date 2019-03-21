@@ -1,28 +1,25 @@
-package com.example.welsenho.questfy_tw.DailyQuestionsRelated;
+package com.example.welsenho.questfy_tw.MainActivityFragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
-import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
+import com.example.welsenho.questfy_tw.DailyQuestionsRelated.DailyQuestionArticleRead;
+import com.example.welsenho.questfy_tw.DailyQuestionsRelated.MainDailyQuestionRecyclerAdapter;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
-import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.R;
+import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,19 +29,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
-public class MainDailyQuestionActivity extends Fragment {
+public class MyOwnPostArticles extends Fragment {
 
-    private int screenWidthDp;
-
-    private View view;
+    private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private ScrollView scrollView;
+    private ProgressBar progressBar;
+    private View view;
 
-
-    private MainDailyQuestionRecyclerAdapter adapter;
+    private list_article_recyclerView_adapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet getSet;
 
@@ -53,28 +47,25 @@ public class MainDailyQuestionActivity extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
-    private OnFragmentInteractionListener mListener;
-
-    public MainDailyQuestionActivity() {
+    public MyOwnPostArticles() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_main_daily_question, container, false);
+        view = inflater.inflate(R.layout.fragment_my_own_post_articles, container, false);
         InitItem();
-        setRecyclerView();
         InitFirebase();
-        getFirebaseData();
+        setRecyclerView();
+        LoadData();
         onItemClick();
         return view;
     }
@@ -112,12 +103,6 @@ public class MainDailyQuestionActivity extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-    }
-
     private void InitFirebase(){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -126,24 +111,26 @@ public class MainDailyQuestionActivity extends Fragment {
     }
 
     private void InitItem(){
-        recyclerView = view.findViewById(R.id.main_daily_recyclerView);
-        scrollView = view.findViewById(R.id.main_daily_scrollView);
-        recyclerView.setFocusable(false);
+        recyclerView = view.findViewById(R.id.my_own_postArticle_recyclerView);
+        progressBar = view.findViewById(R.id.my_own_postArticle_progressBar);
         arrayList = new ArrayList<>();
-        adapter = new MainDailyQuestionRecyclerAdapter(arrayList, getContext());
+        adapter = new list_article_recyclerView_adapter(arrayList, getContext());
     }
 
-    private void getFirebaseData(){
-        databaseReference.child("DailyQuestion").addValueEventListener(new ValueEventListener() {
+    private void LoadData(){
+        databaseReference.child("Users_Question_Articles").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     arrayList.clear();
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(getSet);
-                        recyclerView.setAdapter(adapter);
+                        if (getSet.getUserUid().equals(firebaseUser.getUid())) {
+                            arrayList.add(getSet);
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -157,20 +144,19 @@ public class MainDailyQuestionActivity extends Fragment {
     private void setRecyclerView(){
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         recyclerView.setLayoutManager(layoutManager);
     }
 
     private void onItemClick(){
-        adapter.setOnClickListener(new MainOnClickListener() {
+        adapter.setOnMainClickListener(new MainOnClickListener() {
             @Override
             public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                Intent intent = new Intent(getActivity(), DailyQuestionArticleRead.class);
-                intent.putExtra("ArticleUid", arrayList.get(position).getDailyQuestionArticleUid());
+                String Article_ID = arrayList.get(position).getArticle_ID();
+                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                intent.putExtra("ArticleID", Article_ID);
                 startActivity(intent);
-
             }
         });
     }
-
-
 }

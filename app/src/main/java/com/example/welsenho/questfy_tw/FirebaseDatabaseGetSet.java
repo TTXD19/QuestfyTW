@@ -1,6 +1,6 @@
 package com.example.welsenho.questfy_tw;
 
-public class FirebaseDatabaseGetSet {
+public class FirebaseDatabaseGetSet{
 
 
     private Boolean isSelected;

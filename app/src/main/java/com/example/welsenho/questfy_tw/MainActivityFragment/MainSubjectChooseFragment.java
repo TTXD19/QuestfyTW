@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
@@ -32,6 +33,7 @@ public class MainSubjectChooseFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private View view;
+    private ScrollView scrollView;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private ArrayList<FirebaseDatabaseGetSet> arrayListHistory;
     private FirebaseDatabaseGetSet getSet;
@@ -98,6 +100,7 @@ public class MainSubjectChooseFragment extends Fragment {
     private void InitItemID(){
         recyclerViewCurrent = view.findViewById(R.id.MainSubjectChoose_recyclerView_currentItemClick);
         recyclerViewHistory = view.findViewById(R.id.MainSubjectChoose_recyclerView_history);
+        scrollView = view.findViewById(R.id.MainSubjectChoose_scrollView);
     }
 
     private void InitRecyclerView(RecyclerView recyclerView) {
@@ -119,6 +122,7 @@ public class MainSubjectChooseFragment extends Fragment {
         adapter = new MainSubjectChooseFragmentRecyclerAdapter(arrayList, getContext());
         adapterHistory = new MainSubjectChooseFragmentRecyclerAdapter(arrayListHistory, getContext());
         editRelatedMethod = new EditRelatedMethod();
+        scrollView.setSmoothScrollingEnabled(true);
     }
 
     private void getFirebaseData(){

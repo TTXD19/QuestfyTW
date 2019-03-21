@@ -13,10 +13,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.InternetConnectionDetect;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +40,7 @@ public class MostPopularFragment extends Fragment {
     private list_article_recyclerView_adapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,6 +66,7 @@ public class MostPopularFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_most_popular, container, false);
         recyclerView = view.findViewById(R.id.most_pop_fm_recyclerView);
         progressBar = view.findViewById(R.id.most_pop_fm_progressBar);
+        swipeRefreshLayout = view.findViewById(R.id.most_pop_fm_swipeRefresh);
         progressBar.setVisibility(View.VISIBLE);
 
         orginalMostPopulatArrayList = new ArrayList<>();
@@ -79,6 +84,13 @@ public class MostPopularFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ReadArticleActivity.class);
                 intent.putExtra("ArticleID", postID);
                 startActivity(intent);
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadData();
             }
         });
         LoadData();
@@ -103,6 +115,11 @@ public class MostPopularFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoadData();
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -120,27 +137,28 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void LoadData(){
-        databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    orginalMostPopulatArrayList.clear();
-                    for (DataSnapshot DS : dataSnapshot.getChildren()){
-                        firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        orginalMostPopulatArrayList.add(firebaseDatabaseGetSet);
-                        recyclerView.setAdapter(adapter);
-                        progressBar.setVisibility(View.GONE);
-                        mListener.mostPopularArticleFilter(orginalMostPopulatArrayList);
-                        databaseReference.removeEventListener(this);
+            databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        orginalMostPopulatArrayList.clear();
+                        for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                            firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                            orginalMostPopulatArrayList.add(firebaseDatabaseGetSet);
+                            recyclerView.setAdapter(adapter);
+                            progressBar.setVisibility(View.GONE);
+                            mListener.mostPopularArticleFilter(orginalMostPopulatArrayList);
+                            databaseReference.removeEventListener(this);
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
     }
 
     /**

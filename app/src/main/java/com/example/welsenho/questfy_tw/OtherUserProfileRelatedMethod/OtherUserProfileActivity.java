@@ -1,5 +1,6 @@
 package com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -14,10 +15,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.MainActivityFragment.list_article_recyclerView_adapter;
@@ -37,6 +40,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,16 +60,23 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private TextView txtCorseName;
     private TextView txtSpecility;
     private TextView txtStatusMessage;
+    private TextView txtPopTitle;
+    private TextView txtPopAsk;
+    private TextView txtPopCancel;
+    private TextView txtPopCount;
+    private EditText editPopAskContent;
     private CircleImageView circleImageView;
     private Button btnFollow;
     private Button btnAddFriend;
-    private Button btnSendMessage;
+    private Button btnSendMessageQuestion;
     private RecyclerView recyclerView;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
+    private Dialog dialog;
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private OtherUserProfileRelatedMethods otherUserProfileRelatedMethods;
+    private EditRelatedMethod editRelatedMethod;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -104,15 +115,18 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         circleImageView = findViewById(R.id.otherUser_profile_circleImgUser);
         btnFollow = findViewById(R.id.otherUser_profile_btnFollow);
         btnAddFriend = findViewById(R.id.otherUser_profile_btnAddFriend);
-        btnSendMessage = findViewById(R.id.otherUser_profile_btnSendMessage);
+        btnSendMessageQuestion = findViewById(R.id.otherUser_profile_btnSendMessageQuestion);
         recyclerView = findViewById(R.id.otherUser_profile_recyclerView);
         coordinatorLayout = findViewById(R.id.otherUser_profile_coordinatorLayout);
         otherUserUid = getIntent().getStringExtra("otherUserUid");
         otherUserProfileRelatedMethods = new OtherUserProfileRelatedMethods();
+        editRelatedMethod = new EditRelatedMethod();
 
         arrayList = new ArrayList<>();
         adapter = new list_article_recyclerView_adapter(arrayList, this);
         recyclerView.setFocusable(false);
+
+        dialog = new Dialog(this);
     }
 
     private void InitFirebaseItem(){
@@ -219,7 +233,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                     String detectSender = getFriend.getSenderUid();
                     final String friendName = getFriend.getRequestName();
                     if (detectSender.equals(firebaseUser.getUid())) {
-                        btnAddFriend.setText("Waiting for friend accept (Click to cancel)");
+                        btnAddFriend.setText(getString(R.string.waiting_friend_accept));
                         btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                         btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.sign_in_rectangle));
 
@@ -231,7 +245,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        btnAddFriend.setText("Accept friend request");
+                        btnAddFriend.setText(getString(R.string.accept_friend_request));
                         btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                         btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.sign_in_rectangle));
 
@@ -261,13 +275,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()){
 
 
-                    btnAddFriend.setText("Friends");
+                    btnAddFriend.setText(getString(R.string.friend_added));
                     btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_friend_btn_background));
 
 
                 } else {
-                    btnAddFriend.setText("Add Friend");
+                    btnAddFriend.setText(getString(R.string.add_friend));
                     btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_friend_btn_background));
 
@@ -345,6 +359,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 followUser();
             }
         });
+
+        btnSendMessageQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askMeAnyQustion();
+            }
+        });
     }
 
     private void detectFollowing(){
@@ -381,7 +402,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-
     private void getFollowersCount(){
         databaseReference.child("Users_Followers_Section").child(otherUserUid).child("FollowBy").addValueEventListener(new ValueEventListener() {
             @Override
@@ -399,4 +419,65 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void askMeAnyQustion(){
+        dialog.setContentView(R.layout.user_profile_custom_message_editing);
+        txtPopTitle = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtTitle);
+        txtPopCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
+        txtPopAsk = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtSave);
+        txtPopCancel = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCancel);
+        editPopAskContent = dialog.findViewById(R.id.pop_up_userProfile_customMessage_editMessage);
+
+        String title  = getString(R.string.ask) + txtUserName.getText().toString() + getString(R.string.anything);
+        txtPopTitle.setText(title);
+        txtPopAsk.setText(getString(R.string.ask_it));
+        if (Locale.getDefault().getDisplayLanguage().equals("en")) {
+            editPopAskContent.setHint("What is " + txtCorseName.getText().toString() + " learning ?");
+        } else {
+            editPopAskContent.setHint("例如 : " + txtCorseName.getText().toString() + " 是在學什麼內容呢 ？");
+        }
+        dialog.show();
+
+        txtPopAsk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!editPopAskContent.getText().toString().isEmpty()){
+                    uploadPersonalAsk(editPopAskContent.getText().toString());
+                    dialog.dismiss();
+                }else {
+                    Toast.makeText(OtherUserProfileActivity.this, "Question can not be empty", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        txtPopCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void uploadPersonalAsk(String question){
+
+        String randomAskUid = databaseReference.child("Personal_Ask_Question").push().getKey();
+        String AskDate = editRelatedMethod.getUploadDate();
+
+        HashMap<String, Object> askBy = new HashMap<>();
+        askBy.put("personalQuestion", randomAskUid);
+        askBy.put("AskerUid", firebaseUser.getUid());
+        askBy.put("AskerName", firebaseUser.getDisplayName());
+        askBy.put("AskDate", AskDate);
+        databaseReference.child("Personal_Ask_Question").child(otherUserUid).child("AskedBy").child(firebaseUser.getUid()).updateChildren(askBy);
+
+        HashMap<String, Object> askTo = new HashMap<>();
+        askTo.put("personalQuestion", randomAskUid);
+        askTo.put("AnswererUid", otherUserUid);
+        askTo.put("AnswererName", txtUserName.getText().toString());
+        askTo.put("AskDate", AskDate);
+        databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(otherUserUid).updateChildren(askTo);
+    }
+
+
+
 }

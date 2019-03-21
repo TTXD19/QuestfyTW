@@ -62,6 +62,14 @@
     <string name="status_message">Status message</string>
     <string name="speciality">Speciality</string>
     <string name="save">Save</string>
+    <string name="ask_me_anything">Ask me anything ?</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="waiting_friend_accept">Waiting for friend accept (Click to cancel)</string>
+    <string name="accept_friend_request">Accept friend request</string>
+    <string name="friend_added">Friend added</string>
+    <string name="ask">Ask </string>
+    <string name="ask_it">Ask it</string>
+    <string name="anything"> anything</string>
 
 
 </resources>

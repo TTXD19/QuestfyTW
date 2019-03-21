@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context=".EditActivityRelated.EditInitActivity">
 
+    <fragment android:id="@+id/autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        />
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/edit_init_toolbar"
         android:layout_width="match_parent"
@@ -128,6 +134,34 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_toEndOf="@id/edit_init_txt_DatePick"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/edit_init_txt_PlaceNamePick"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edit_init_txt_DatePick"
+                    android:layout_alignLeft="@+id/edit_init_txt_DatePick"
+                    android:text="Meet up place"
+                    android:textSize="16sp"
+                    android:textColor="@color/signInRetangleRed"
+                    android:layout_alignStart="@+id/edit_init_txt_DatePick"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/edit_init_txt_PlaceAddressPick"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edit_init_txt_PlaceNamePick"
+                    android:layout_alignLeft="@+id/edit_init_txt_DatePick"
+                    android:text="Meet up address"
+                    android:textSize="14sp"
+                    android:textColor="@color/signInRetangleRed"
+                    android:layout_alignStart="@+id/edit_init_txt_DatePick"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:visibility="gone"/>
 
             </RelativeLayout>

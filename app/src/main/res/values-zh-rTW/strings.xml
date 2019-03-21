@@ -61,6 +61,14 @@
     <string name="status_message">想說的話</string>
     <string name="speciality">專長</string>
     <string name="save">儲存</string>
+    <string name="ask_me_anything">問我任何問題吧 ？</string>
+    <string name="add_friend">增加好友</string>
+    <string name="waiting_friend_accept">等待好友接受中 (點擊取消)</string>
+    <string name="accept_friend_request">接受好友請求</string>
+    <string name="friend_added">已加好友</string>
+    <string name="ask">詢問 </string>
+    <string name="ask_it">詢問</string>
+    <string name="anything"> 任何問題</string>
 
 
 </resources>

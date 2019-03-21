@@ -36,6 +36,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-core:16.0.6'
 
+    //Google Cloud apis tools
+    implementation 'com.google.android.libraries.places:places:1.0.0'
+
     // Third party SDK tool
     //icon button
     implementation 'com.githang:com-phillipcalvin-iconbutton:1.0.1@aar'
@@ -53,6 +56,10 @@ dependencies {
     implementation 'com.philliphsu:bottomsheetpickers:2.4.1'
     //Crop Image
     implementation 'com.github.yalantis:ucrop:2.2.2'
+    //Zoom in zoom out image : https://github.com/davemorrissey/subsampling-scale-image-view
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+
+    implementation 'com.jsibbold:zoomage:1.2.0'
 
 
 }

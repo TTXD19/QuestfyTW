@@ -33,9 +33,11 @@ import com.example.welsenho.questfy_tw.FriendRelatedActivity.FriendRequestFragme
 import com.example.welsenho.questfy_tw.FriendRelatedActivity.MainFriendFragment;
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.LoginRelated.SignUpMethod;
+import com.example.welsenho.questfy_tw.MainActivityFragment.KeepArticlesFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestArticleFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainSubjectChooseFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MyOwnPostArticles;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,7 +56,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements MainActivityTabFragment.OnFragmentInteractionListener,
         MainActivityLatestArticleFragment.OnFragmentInteractionListener, UserProfileFragment.OnFragmentInteractionListener,
         MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
-        FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener{
+        FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener,
+        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
     private int currentFilterPage;
@@ -172,11 +175,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         searchFilter(s, mostPopularArrayList);
                     }
                 }*/
-                if (latestArrayList != null){
-                    LatestSearchFilter(s, latestArrayList);
-                }
-                if (mostPopularArrayList != null){
-                    MostPopularFilter(s, mostPopularArrayList);
+                if (getSupportFragmentManager().findFragmentByTag("MainFriendFragment") == null) {
+                    Toast.makeText(MainActivity.this, "null", Toast.LENGTH_SHORT).show();
+                    if (latestArrayList != null) {
+                        LatestSearchFilter(s, latestArrayList);
+                    }
+                    if (mostPopularArrayList != null) {
+                        MostPopularFilter(s, mostPopularArrayList);
+                    }else {
+                        Toast.makeText(MainActivity.this, "no null", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return false;
             }
@@ -196,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
                     case R.id.main_activity_tab_home:
                         FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
-                        fragmentTransaction1.replace(R.id.main_activity_frameLayout, new MainActivityTabFragment()).commit();
+                        fragmentTransaction1.replace(R.id.main_activity_frameLayout, new MainActivityTabFragment(), "MainHomeFragment").commit();
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle("Questfy");
                         floatingActionButton.show();
@@ -204,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
                     case R.id.main_related_question_fragment:
                         FragmentTransaction dailyQuestionFragment = fragmentManager.beginTransaction();
-                        dailyQuestionFragment.replace(R.id.main_activity_frameLayout, new MainDailyQuestionActivity()).commit();
+                        dailyQuestionFragment.replace(R.id.main_activity_frameLayout, new MainDailyQuestionActivity(),"DailyQuestionFragment").commit();
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.do_you_know));
                         floatingActionButton.hide();
@@ -212,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
                     case R.id.User_profile:
                         FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-                        fragmentTransaction2.replace(R.id.main_activity_frameLayout, new UserProfileFragment()).commit();
+                        fragmentTransaction2.replace(R.id.main_activity_frameLayout, new UserProfileFragment(), "UserProfileFragemnt").commit();
                         toolbar.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.user_profile_background));
                         toolbar.setTitle(getString(R.string.personal_info));
                         floatingActionButton.hide();
@@ -220,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
                     case R.id.Main_Friend_Fragment:
                         FragmentTransaction mainFriendFragment = fragmentManager.beginTransaction();
-                        mainFriendFragment.replace(R.id.main_activity_frameLayout, new MainFriendFragment()).commit();
+                        mainFriendFragment.replace(R.id.main_activity_frameLayout, new MainFriendFragment(), "MainFriendFragment").commit();
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.friends));
                         floatingActionButton.hide();

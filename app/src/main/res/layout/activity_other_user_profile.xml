@@ -221,10 +221,10 @@
 
 
                 <Button
-                    android:id="@+id/otherUser_profile_btnSendMessage"
+                    android:id="@+id/otherUser_profile_btnSendMessageQuestion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Message"
+                    android:text="@string/ask_me_anything"
                     android:background="@drawable/message_btn_background"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"

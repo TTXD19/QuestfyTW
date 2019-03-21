@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -17,6 +18,7 @@ import com.example.welsenho.questfy_tw.AnswerReplyActivityRelated.ReadAnswersAct
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditInitRelateRecyclerViewAdapterImageViews;
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.github.florent37.expansionpanel.ExpansionHeader;
@@ -60,6 +62,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private EditInitRelateRecyclerViewAdapterImageViews adapterImageViews;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
+    private FirebaseDatabaseGetSet getUserProfile;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private EditRelatedMethod editRelatedMethod;
     private RelativeLayout relayReadAnsers;
@@ -99,9 +102,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         recyclerView.setHasFixedSize(true);
-        editRelatedMethod.LoadImageFromFirebase(databaseReference, Article_ID, arrayList, expansionHeader, recyclerView, adapterImageViews, txtCheckImages);
+        //editRelatedMethod.LoadImageFromFirebase(databaseReference, Article_ID, arrayList, expansionHeader, recyclerView, adapterImageViews, txtCheckImages);
 
-
+        LoadImageFromFirebase();
     }
 
     @Override
@@ -147,6 +150,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         txtMajors.setVisibility(View.INVISIBLE);
         txtTitle.setVisibility(View.INVISIBLE);
         txtContent.setVisibility(View.INVISIBLE);
+        txtLikeCount.setVisibility(View.INVISIBLE);
+        shineButtonHeart.setVisibility(View.GONE);
+        shineButtonLike.setVisibility(View.GONE);
         circleImageView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -157,6 +163,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         txtMajors.setVisibility(View.VISIBLE);
         txtTitle.setVisibility(View.VISIBLE);
         txtContent.setVisibility(View.VISIBLE);
+        txtLikeCount.setVisibility(View.VISIBLE);
+        shineButtonHeart.setVisibility(View.VISIBLE);
+        shineButtonLike.setVisibility(View.VISIBLE);
         circleImageView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
     }
@@ -167,15 +176,15 @@ public class ReadArticleActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
-                    txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
-                    txtUploadData.setText(firebaseDatabaseGetSet.getUpload_Date());
-                    txtMajors.setText(firebaseDatabaseGetSet.getMajors());
-                    txtTitle.setText(firebaseDatabaseGetSet.getTitle());
-                    txtContent.setText(firebaseDatabaseGetSet.getContent());
-                    txtLikeCount.setText(String.valueOf(Math.abs(firebaseDatabaseGetSet.getArticle_like_count())));
-                    setOtherUserUid(firebaseDatabaseGetSet.getUserUid());
-                    Picasso.get().load(firebaseDatabaseGetSet.getUser_Image()).into(circleImageView);
+                    getUserProfile = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
+                    txtUserName.setText(getUserProfile.getUser_Name());
+                    txtUploadData.setText(getUserProfile.getUpload_Date());
+                    txtMajors.setText(getUserProfile.getMajors());
+                    txtTitle.setText(getUserProfile.getTitle());
+                    txtContent.setText(getUserProfile.getContent());
+                    txtLikeCount.setText(String.valueOf(Math.abs(getUserProfile.getArticle_like_count())));
+                    setOtherUserUid(getUserProfile.getUserUid());
+                    Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
                     ShowItem();
                 }
             }
@@ -214,6 +223,42 @@ public class ReadArticleActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void LoadImageFromFirebase() {
+        databaseReference.child("Users_Question_Articles").child(Article_ID).child("Images").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                if (dataSnapshot.exists()) {
+                    arrayList.clear();
+                    expansionHeader.setVisibility(View.VISIBLE);
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                        FirebaseDatabaseGetSet firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        arrayList.add(firebaseDatabaseGetSet);
+                        recyclerView.setAdapter(adapterImageViews);
+                    }
+                    adapterImageViews.setOnMainAdapterClickListner(new MainOnClickListener() {
+                        @Override
+                        public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                            Intent intent = new Intent(ReadArticleActivity.this, EnlargeImageActivity.class);
+                            intent.putExtra("Article_ID", Article_ID);
+                            intent.putExtra("Position", position);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    expansionHeader.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     public String getOtherUserUid() {
         return otherUserUid;
@@ -291,6 +336,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         hashMap.put("Majors", txtMajors.getText().toString());
         hashMap.put("User_Name", txtUserName.getText().toString());
         hashMap.put("userUid", otherUserUid);
+        hashMap.put("Upload_Date", txtUploadData.getText().toString());
+        hashMap.put("Content", txtContent.getText().toString());
+        hashMap.put("User_Image", getUserProfile.getUser_Image());
 
         databaseReference.child("Users_Keep_Articles").child(firebaseUser.getUid()).child(Article_ID).updateChildren(hashMap);
     }
