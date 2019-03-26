@@ -21,7 +21,10 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="25dp"
             android:backgroundTint="@color/ＭainOrange"
+            app:borderWidth="0dp"
             android:src="@drawable/help"
+            android:elevation="5dp"
+            app:fabSize="normal"
             />
 
     <LinearLayout

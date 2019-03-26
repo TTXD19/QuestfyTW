@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".AnswerReplyActivityRelated.ReadAnswersActivity">
 
+    <ProgressBar
+        android:id="@+id/read_answers_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/read_answers_toolBar"
         android:layout_width="match_parent"
@@ -52,12 +58,6 @@
 
             </android.support.v7.widget.RecyclerView>
 
-            <ProgressBar
-                android:id="@+id/read_answers_progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
-
 
 
 
@@ -69,7 +69,7 @@
     <RelativeLayout
         android:id="@+id/read_answers_relay_2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         >
 
@@ -77,10 +77,9 @@
             android:id="@+id/read_answers_imgReply"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/eye"
+            android:src="@drawable/read_answer_reply"
             android:layout_marginLeft="18dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_centerVertical="true"
             android:layout_marginStart="18dp"/>
 
         <TextView
@@ -89,7 +88,7 @@
             android:layout_height="wrap_content"
             android:text="@string/click_to_replay_an_answer"
             android:layout_toRightOf="@+id/read_answers_imgReply"
-            android:layout_marginTop="3dp"
+            android:layout_centerVertical="true"
             android:textSize="18sp"
             android:textColor="@color/LightMainOrange"
             android:layout_toEndOf="@+id/read_answers_imgReply"

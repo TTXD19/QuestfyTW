@@ -115,8 +115,9 @@ public class SignUpAcivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){
                                         databaseReference = FirebaseDatabase.getInstance().getReference();
+                                        firebaseAuth = FirebaseAuth.getInstance();
                                         firebaseUser = firebaseAuth.getCurrentUser();
-                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, checkSex(), loginType, getApplicationContext(), createDate);
+                                        signUpMethod.firebaseProfileSignUp(databaseReference, firebaseAuth.getUid(), email, ID, checkSex(), loginType, getApplicationContext(), createDate, firebaseUser.getUid());
                                         signUpMethod.setUpFirebaseProfile(firebaseUser, ID);
                                         firebaseAuth.signOut();
                                         progressDialog.dismiss();

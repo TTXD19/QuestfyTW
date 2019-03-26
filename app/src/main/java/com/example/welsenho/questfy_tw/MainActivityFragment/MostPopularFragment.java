@@ -34,6 +34,8 @@ import java.util.ArrayList;
 
 public class MostPopularFragment extends Fragment {
 
+    private int positionClick;
+
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private ArrayList<FirebaseDatabaseGetSet> orginalMostPopulatArrayList;
     private Context context;
@@ -83,6 +85,7 @@ public class MostPopularFragment extends Fragment {
                 String postID = arrayList.get(position).getArticle_ID();
                 Intent intent = new Intent(getContext(), ReadArticleActivity.class);
                 intent.putExtra("ArticleID", postID);
+                positionClick = position;
                 startActivity(intent);
             }
         });
@@ -90,6 +93,7 @@ public class MostPopularFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                positionClick = 0;
                 LoadData();
             }
         });
@@ -146,6 +150,7 @@ public class MostPopularFragment extends Fragment {
                             firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                             orginalMostPopulatArrayList.add(firebaseDatabaseGetSet);
                             recyclerView.setAdapter(adapter);
+                            recyclerView.scrollToPosition(positionClick);
                             progressBar.setVisibility(View.GONE);
                             mListener.mostPopularArticleFilter(orginalMostPopulatArrayList);
                             databaseReference.removeEventListener(this);

@@ -23,9 +23,9 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
 
     private TextView txtWrongPassword;
+    private TextView txtSignUp;
     private EditText editEmail;
     private EditText editPassword;
-    private Button btnSignUp;
     private Button btnSignIn;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -39,11 +39,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
 
-        btnSignUp = findViewById(R.id.btnSignUp);
-        btnSignIn = findViewById(R.id.btnSignIn);
-        editEmail = findViewById(R.id.editEmailLogin);
-        editPassword = findViewById(R.id.editPasswordLogin);
-        txtWrongPassword = findViewById(R.id.txtWrongPassword);
+        txtSignUp = findViewById(R.id.new_login_txtSignUp);
+        btnSignIn = findViewById(R.id.new_login_btnSignIn);
+        editEmail = findViewById(R.id.new_login_editInputEmail);
+        editPassword = findViewById(R.id.new_login_editInputPassword);
+        txtWrongPassword = findViewById(R.id.new_login_txtWrongPassword);
 
         progressDialog = new ProgressDialog(this);
         signUpMethod = new SignUpMethod();
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         }
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpAcivity.class);
@@ -84,8 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                 email = editEmail.getText().toString();
                 password = editPassword.getText().toString();
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), LoginActivity.this);
+                    signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), LoginActivity.this, progressDialog);
                 }else{
+                    txtWrongPassword.setText("Email and Password can not be empty");
                     txtWrongPassword.setVisibility(View.VISIBLE);
                     progressDialog.dismiss();
                 }

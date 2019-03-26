@@ -38,6 +38,7 @@ import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestAr
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainSubjectChooseFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MyOwnPostArticles;
+import com.example.welsenho.questfy_tw.MeetUpScheduleRelated.MeetUpScheduleFragment;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         MainActivityLatestArticleFragment.OnFragmentInteractionListener, UserProfileFragment.OnFragmentInteractionListener,
         MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
         FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener,
-        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener {
+        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
     private int currentFilterPage;
@@ -215,6 +216,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         dailyQuestionFragment.replace(R.id.main_activity_frameLayout, new MainDailyQuestionActivity(),"DailyQuestionFragment").commit();
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.do_you_know));
+                        floatingActionButton.hide();
+                        break;
+
+                    case R.id.Meet_up:
+                        FragmentTransaction meetUpFragment = fragmentManager.beginTransaction();
+                        meetUpFragment.replace(R.id.main_activity_frameLayout, new MeetUpScheduleFragment(),"MeetUpFragment").commit();
+                        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                        toolbar.setTitle(getString(R.string.meet_up_schedule));
                         floatingActionButton.hide();
                         break;
 
@@ -455,6 +464,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RealNameRegisterActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+                fragmentTransaction2.replace(R.id.main_activity_frameLayout, new UserProfileFragment(), "UserProfileFragemnt").commit();
+                toolbar.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.user_profile_background));
+                toolbar.setTitle(getString(R.string.personal_info));
+                floatingActionButton.hide();
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
     }

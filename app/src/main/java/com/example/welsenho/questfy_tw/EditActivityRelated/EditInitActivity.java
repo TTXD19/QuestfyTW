@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.github.florent37.expansionpanel.ExpansionHeader;
@@ -105,7 +106,9 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private boolean hasDate = false;
     private boolean hasTime = false;
     private boolean isMeet = false;
+    private boolean destoryByUser = true;
     private int countImages;
+    private SharedPreferences sharedPreferences;
 
     private Toolbar toolbar;
     private TextView txtChooseMajor;
@@ -190,7 +193,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             getMajors = getIntent().getStringArrayListExtra("getMajors");
             String major = getMajors.toString();
             txtChooseMajor.setText(major);
-            showCurrent();
+            showCurrentContent();
+            destoryByUser = true;
         }
 
         /**
@@ -223,16 +227,28 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
          * Handle each item click
          */
         ItemClick();
-
         InitGooglePlaceApi();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         databaseReference.child("Users_Question_Articles").child(articleUid).removeValue();
-        DeleteCurrent();
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        DeleteCurrent();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (destoryByUser){
+            DeleteCurrent();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -275,7 +291,6 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                 Toast.makeText(this, "Internet not connect", Toast.LENGTH_SHORT).show();
             }
         }
-        showCurrent();
     }
 
     /**
@@ -311,9 +326,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private void UploadFirebaseDatabase() {
         String title = editTitle.getText().toString();
         String content = editContent.getText().toString();
+        HashMap<String, Object> hashMap = new HashMap<>();
         if (!getMajors.isEmpty() && !title.isEmpty() && !content.isEmpty()) {
-
-            HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("User_Name", txtUserName.getText().toString());
             hashMap.put("Upload_Date", txtUploadDate.getText().toString());
             hashMap.put("Title", title);
@@ -322,29 +336,50 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             hashMap.put("Article_ID", articleUid);
             hashMap.put("userUid", firebaseAuth.getUid());
             hashMap.put("Article_like_count", 0);
-            if (firebaseUser.getPhotoUrl() != null){
+            if (firebaseUser.getPhotoUrl() != null) {
                 hashMap.put("User_Image", firebaseUser.getPhotoUrl().toString());
-            }else {
+            } else {
                 String default_Image = "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6";
                 hashMap.put("User_Image", default_Image);
             }
-            if (isMeet){
-                hashMap.put("MeetUpDate", txtDatePick.getText().toString());
-                hashMap.put("MeetUpTime", txtTimePick.getText().toString());
-            }
-            databaseReference.child("Users_Question_Articles").child(articleUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
-                        DeleteCurrent();
-                        Toast.makeText(EditInitActivity.this, "Upload success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(EditInitActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }else {
-                        buildDialog();
+            if (!isMeet) {
+                databaseReference.child("Users_Question_Articles").child(articleUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(EditInitActivity.this, "Upload success", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(EditInitActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            DeleteCurrent();
+                        }else {
+                            buildDialog();
+                        }
                     }
+                });
+            } else {
+                if (!txtPlaceName.getText().toString().equals(getString(R.string.meet_up_place)) && !txtTimePick.getText().toString().equals(getString(R.string.set_up_time)) && !txtDatePick.getText().toString().equals(getString(R.string.date))) {
+                    hashMap.put("MeetDate", txtDatePick.getText().toString());
+                    hashMap.put("MeetTime", txtTimePick.getText().toString());
+                    hashMap.put("MeetPlace", txtPlaceName.getText().toString());
+                    hashMap.put("MeetAddress", txtPlaceAddress.getText().toString());
+
+                    databaseReference.child("Users_Question_Articles").child(articleUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(EditInitActivity.this, "Upload success", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(EditInitActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                DeleteCurrent();
+                            }else {
+                                buildDialog();
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(this, "Meet up detail can not be empty", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
         } else {
             Toast.makeText(this, "Something is empty", Toast.LENGTH_SHORT).show();
         }
@@ -401,6 +436,12 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapterImageViews);
+                        adapterImageViews.setOnMainAdapterClickListner(new MainOnClickListener() {
+                            @Override
+                            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                                Toast.makeText(EditInitActivity.this, "not set up", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         txtImageView.setText(R.string.click_to_check);
                         Log.d("RecyclerViewTask", "Success");
                     }
@@ -418,24 +459,6 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     }
 
     /**
-     * To show what is save in storageReference
-     * Save when jump out from current activity
-     * specially related to ItemClick
-     */
-    private void showCurrent(){
-        editRelatedMethod.showCurrent(editTitle, editContent, EditInitActivity.this);
-        //Testing purpose must change it after
-        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
-        isMeet = sharedPreferences.getBoolean("meetUp", false);
-        if (isMeet) {
-            editRelatedMethod.showMeetUpDateTime(EditInitActivity.this, txtDatePick, txtTimePick);
-            swithMeetUp.setChecked(true);
-        }
-        articleUid = editRelatedMethod.getArticleUid();
-        countImages = editRelatedMethod.getCountImages();
-    }
-
-    /**
      * HANDLE EACH BUTTON AND TEXTVIEW CLICK
      * Also save current information
      */
@@ -443,23 +466,19 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         txtChooseMajor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isMeet) {
-                    saveMeetDateTime();
-                }
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                destoryByUser = false;
                 Intent intent = new Intent(EditInitActivity.this, EditQuestionRelateMajorChose.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                SaveCurrentContent();
+                finish();
             }
         });
 
         imgTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isMeet) {
-                    saveMeetDateTime();
-                }
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                SaveCurrentContent();
                 dispatchTakePictureIntent();
             }
         });
@@ -467,10 +486,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         imgChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isMeet) {
-                    saveMeetDateTime();
-                }
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                SaveCurrentContent();
                 selectPhotoFromMedia();
             }
         });
@@ -520,10 +536,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         imgPlcePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isMeet) {
-                    saveMeetDateTime();
-                }
-                editRelatedMethod.saveCurrent(editTitle, editContent, EditInitActivity.this, articleUid, countImages);
+                SaveCurrentContent();
                 GoogleSearchPlace();
             }
         });
@@ -534,7 +547,6 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         Picasso.get().load(firebaseUser.getPhotoUrl()).into(circleImageView);
         txtUploadDate.setText(editRelatedMethod.getUploadDate());
     }
-
 
     /**
      To retrieve the date or time set in the pickers, implement an appropriate callback interface.
@@ -547,7 +559,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         cal.set(Calendar.MONTH, monthOfYear);
         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         if (DateFormat.getDateInstance().format(cal.getTime()) != null){
-            txtDatePick.setText("Meet up on " + DateFormat.getDateInstance().format(cal.getTime()));
+            txtDatePick.setText(DateFormat.getDateInstance().format(cal.getTime()));
             hasDate = true;
         }
     }
@@ -568,21 +580,58 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         }
     }
 
-    /**
-     * For saving meet up date and time
-     */
-    private void saveMeetDateTime(){
-        if (hasTime) {
-            editRelatedMethod.saveMeetUpDateTime(EditInitActivity.this, txtDatePick, txtTimePick, isMeet);
+    private void SaveCurrentContent(){
+        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("EditTitle", editTitle.getText().toString());
+        editor.putString("EditContent", editContent.getText().toString());
+        editor.putString("EditArticleUid", articleUid);
+        editor.putInt("CounImages", countImages);
+        editor.putBoolean("MeetUp", isMeet);
+        if (isMeet){
+            editor.putString("EditMeetDate", txtDatePick.getText().toString());
+            editor.putString("EditMeetTime", txtTimePick.getText().toString());
+            editor.putString("EditMeetPlace", txtPlaceName.getText().toString());
+            editor.putString("EditMeetAddress", txtPlaceAddress.getText().toString());
+        }
+        editor.apply();
+    }
+
+    private void showCurrentContent(){
+        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editTitle.setText(sharedPreferences.getString("EditTitle", "Enter title"));
+        editContent.setText(sharedPreferences.getString("EditContent", "Enter question"));
+        articleUid = sharedPreferences.getString("EditArticleUid", null);
+        countImages = sharedPreferences.getInt("CounImages", 0);
+        isMeet = sharedPreferences.getBoolean("MeetUp", false);
+        if (isMeet){
+            swithMeetUp.setChecked(true);
+            txtDatePick.setText(sharedPreferences.getString("EditMeetDate", "Choose a date"));
+            txtTimePick.setText(sharedPreferences.getString("EditMeetTime", "Choose a time"));
+            txtPlaceName.setText(sharedPreferences.getString("EditMeetPlace", "Choose a place"));
+            txtPlaceAddress.setText(sharedPreferences.getString("EditMeetAddress", "Choose a address"));
+            imgDateTimePicker.setVisibility(View.VISIBLE);
+            imgPlcePicker.setVisibility(View.VISIBLE);
+            txtDatePick.setVisibility(View.VISIBLE);
+            txtTimePick.setVisibility(View.VISIBLE);
+            txtPlaceName.setVisibility(View.VISIBLE);
+            txtPlaceAddress.setVisibility(View.VISIBLE);
         }
     }
 
     public void DeleteCurrent(){
         SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("meetDate");
-        editor.remove("meetTime");
-        editor.remove("meetUp");
+        editor.remove("EditTitle");
+        editor.remove("EditContent");
+        editor.remove("EditArticleUid");
+        editor.remove("CounImages");
+        editor.remove("MeetUp");
+        editor.remove("EditMeetDate");
+        editor.remove("EditMeetTime");
+        editor.remove("EditMeetPlace");
+        editor.remove("EditMeetAddress");
         editor.apply();
     }
 

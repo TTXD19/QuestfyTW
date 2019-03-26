@@ -445,7 +445,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                     uploadPersonalAsk(editPopAskContent.getText().toString());
                     dialog.dismiss();
                 }else {
-                    Toast.makeText(OtherUserProfileActivity.this, "Question can not be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OtherUserProfileActivity.this, getString(R.string.question_can_not_be_emoty), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -468,6 +468,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         askBy.put("AskerUid", firebaseUser.getUid());
         askBy.put("AskerName", firebaseUser.getDisplayName());
         askBy.put("AskDate", AskDate);
+        askBy.put("AskQuestionContent", question);
         databaseReference.child("Personal_Ask_Question").child(otherUserUid).child("AskedBy").child(firebaseUser.getUid()).updateChildren(askBy);
 
         HashMap<String, Object> askTo = new HashMap<>();
@@ -475,6 +476,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         askTo.put("AnswererUid", otherUserUid);
         askTo.put("AnswererName", txtUserName.getText().toString());
         askTo.put("AskDate", AskDate);
+        askTo.put("AskQuestionContent", question);
         databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(otherUserUid).updateChildren(askTo);
     }
 

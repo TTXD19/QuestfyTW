@@ -60,7 +60,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReadArticleRelated.EnlargeImageActivity"></activity>
+        <activity android:name=".ReadArticleRelated.EnlargeImageActivity" />
+        <activity android:name=".FriendRelatedActivity.SearchAndAddFriendActivity"></activity>
     </application>
 
 </manifest>

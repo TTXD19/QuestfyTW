@@ -90,55 +90,6 @@ public class EditRelatedMethod {
         return timeStampFormat.format(myDate);
     }
 
-
-    public void saveCurrent(EditText editTitle, EditText editContent, Activity activity, String articleUid, int CountImages){
-        String title = editTitle.getText().toString();
-        String content = editContent.getText().toString();
-        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Title", title);
-        editor.putString("Content", content);
-        editor.putString("ArticleUid", articleUid);
-        editor.putInt("CountImage", CountImages);
-        editor.apply();
-    }
-
-    public void showCurrent(EditText editTitle, EditText editContent, Activity activity){
-        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        articleUid = sharedPreferences.getString("ArticleUid", null);
-        countImages = sharedPreferences.getInt("CountImage", 0);
-        editTitle.setText(sharedPreferences.getString("Title", "Title"));
-        editContent.setText(sharedPreferences.getString("Content", "Description"));
-    }
-
-    public void saveMeetUpDateTime(Activity activity, TextView txtDate, TextView txtTime, Boolean isMeet){
-        String date = txtDate.getText().toString();
-        String time = txtTime.getText().toString();
-        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("meetDate", date);
-        editor.putString("meetTime", time);
-        editor.putBoolean("meetUp", isMeet);
-        editor.apply();
-    }
-
-    public void showMeetUpDateTime(Activity activity, TextView txtDate, TextView txtTime){
-        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        txtDate.setVisibility(View.VISIBLE);
-        txtTime.setVisibility(View.VISIBLE);
-        txtDate.setText(sharedPreferences.getString("meetDate", "Set again"));
-        txtTime.setText(sharedPreferences.getString("meetTime", "Set again"));
-    }
-
-
-    public void DeleteCurrent(Activity activity){
-        SharedPreferences sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear().apply();
-    }
-
-
-
     public String getArticleUid() {
         return articleUid;
     }

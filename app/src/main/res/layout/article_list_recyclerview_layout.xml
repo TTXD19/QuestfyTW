@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sample article"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textColor="@color/FullBlack"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="User_Name"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/FullBlack"
         android:layout_toRightOf="@+id/list_article_recycLayout_circleUserImage"
         android:layout_toEndOf="@+id/list_article_recycLayout_circleUserImage"
@@ -92,7 +92,8 @@
         android:textSize="12sp"
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
 
     <ImageView
         android:layout_width="20dp"
@@ -102,7 +103,8 @@
         android:layout_toLeftOf="@id/list_article_recycLayout_txtViews"
         android:layout_toStartOf="@id/list_article_recycLayout_txtViews"
         android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"/>
 
 
 

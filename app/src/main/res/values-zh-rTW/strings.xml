@@ -33,6 +33,7 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_answer_reply">AnswerReplyActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">主頁</string>
     <string name="birthday">出生年月日（年/月/日）</string>
@@ -69,6 +70,34 @@
     <string name="ask">詢問 </string>
     <string name="ask_it">詢問</string>
     <string name="anything"> 任何問題</string>
+    <string name="don_t_have_an_account_apply_now">沒有帳號嗎 ？ 立即申請</string>
+    <string name="welcome">歡迎</string>
+    <string name="log_in_to_start_your">開始登入享受</string>
+    <string name="favorite_topics_discussion">共同話題的交談吧</string>
+    <string name="skip">跳過</string>
+    <string name="forget_password">忘記密碼 ？</string>
+    <string name="date">選擇日期</string>
+    <string name="set_up_time">選擇時間</string>
+    <string name="meet_up_place">選擇地點</string>
+    <string name="meet_up_address">地址</string>
+    <string name="place_name">Place Name</string>
+    <string name="question_title">問題名稱</string>
+    <string name="question_content">問題內容</string>
+    <string name="click_to_select_a_major_related">選擇問題相關科系</string>
+    <string name="request_meet_up">我想見面討論</string>
+    <string name="cancle_meet_up">取消見面討論</string>
+    <string name="attendants">參加人數</string>
+    <string name="meet_up_schedule">見面排程</string>
+    <string name="user_not_exist">使用者不存在</string>
+    <string name="search_friend">搜尋使用者</string>
+    <string name="question_can_not_be_emoty">問題不能空白</string>
+    <string name="keep">收藏</string>
+    <string name="followers">跟隨者</string>
+    <string name="answered">已回答數</string>
+    <string name="posts">發問次數</string>
+    <string name="report">Report</string>
+    <string name="click_to_add_friend">新增好友</string>
+    <string name="select_3_related_majors">選擇3個相關科系</string>
 
 
 </resources>

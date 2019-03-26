@@ -36,7 +36,6 @@ public class EnlargeImageActivity extends AppCompatActivity {
     private int position;
 
     private Toolbar toolbar;
-    private RecyclerView recyclerView;
     private ViewPager viewPager;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -74,7 +73,6 @@ public class EnlargeImageActivity extends AppCompatActivity {
     }
 
     private void InitItem(){
-        recyclerView = findViewById(R.id.enlarg_image_recyclerView);
         toolbar = findViewById(R.id.enlarg_image_toolBar);
         viewPager = findViewById(R.id.enlarge_image_viewPager);
         arrayList = new ArrayList<>();

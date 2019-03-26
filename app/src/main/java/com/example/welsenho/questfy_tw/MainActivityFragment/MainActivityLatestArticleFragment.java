@@ -33,6 +33,8 @@ import java.util.ArrayList;
 
 public class MainActivityLatestArticleFragment extends Fragment {
 
+    private int positionClick;
+
     private OnFragmentInteractionListener mListener;
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -81,6 +83,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                 String postID = arrayList.get(position).getArticle_ID();
                 Intent intent = new Intent(getContext(), ReadArticleActivity.class);
                 intent.putExtra("ArticleID", postID);
+                positionClick = position;
                 startActivity(intent);
             }
         });
@@ -88,6 +91,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                positionClick = 0;
                 LoadData();
             }
         });
@@ -144,6 +148,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setVisibility(View.VISIBLE);
                         recyclerView.setAdapter(adapter);
+                        recyclerView.scrollToPosition(positionClick);
                         progressBar.setVisibility(View.INVISIBLE);
                         mListener.latestArticleFilter(arrayList);
                         databaseReference.removeEventListener(this);

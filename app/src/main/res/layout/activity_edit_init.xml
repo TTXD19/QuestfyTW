@@ -79,21 +79,22 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/FullWhite"
-                android:hint="Title"
+                android:hint="@string/question_title"
                 android:scrollbars="none"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/edit_init_txt_chooseMajor"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
-                android:text="Click to select a major related"
+                android:text="@string/click_to_select_a_major_related"
                 android:textColor="@color/ＭainOrange"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:background="?selectableItemBackground"/>
 
             <Switch
                 android:id="@+id/edit_init_switch_meetUp"
@@ -117,7 +118,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="10dp"
-                    android:text="Date"
+                    android:text="@string/date"
                     android:textColor="@color/signInRetangleRed"
                     android:textSize="16sp"
                     android:visibility="gone"/>
@@ -127,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/edit_init_txt_DatePick"
-                    android:text="Set up time"
+                    android:text="@string/set_up_time"
                     android:textColor="@color/signInRetangleRed"
                     android:textSize="16sp"
                     android:layout_marginLeft="5dp"
@@ -142,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edit_init_txt_DatePick"
                     android:layout_alignLeft="@+id/edit_init_txt_DatePick"
-                    android:text="Meet up place"
+                    android:text="@string/meet_up_place"
                     android:textSize="16sp"
                     android:textColor="@color/signInRetangleRed"
                     android:layout_alignStart="@+id/edit_init_txt_DatePick"
@@ -156,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edit_init_txt_PlaceNamePick"
                     android:layout_alignLeft="@+id/edit_init_txt_DatePick"
-                    android:text="Meet up address"
+                    android:text="@string/meet_up_address"
                     android:textSize="14sp"
                     android:textColor="@color/signInRetangleRed"
                     android:layout_alignStart="@+id/edit_init_txt_DatePick"
@@ -166,17 +167,6 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Place Name"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/FullBlack"
-                android:visibility="gone"
-                />
 
             <EditText
                 android:id="@+id/edit_init_edit_Content"
@@ -186,7 +176,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/FullWhite"
-                android:hint="Description"
+                android:hint="@string/question_content"
                 android:textSize="24sp" />
 
         </LinearLayout>
@@ -299,7 +289,8 @@
             android:layout_marginRight="20dp"
             android:layout_toStartOf="@+id/edit_init_img_addImage"
             android:layout_toLeftOf="@+id/edit_init_img_addImage"
-            android:src="@drawable/photocamera_1"/>
+            android:src="@drawable/photocamera_1"
+            android:background="?selectableItemBackground"/>
 
         <ImageView
             android:id="@+id/edit_init_img_addImage"
@@ -310,7 +301,8 @@
             android:layout_marginRight="20dp"
             android:layout_toStartOf="@+id/edit_init_img_preview"
             android:layout_toLeftOf="@+id/edit_init_img_preview"
-            android:src="@drawable/picture" />
+            android:src="@drawable/picture"
+            android:background="?selectableItemBackground"/>
 
         <ImageView
             android:id="@+id/edit_init_img_preview"
@@ -321,7 +313,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:src="@drawable/eye" />
+            android:src="@drawable/eye"
+            android:background="?selectableItemBackground"/>
 
 
     </RelativeLayout>

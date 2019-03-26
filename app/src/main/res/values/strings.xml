@@ -70,6 +70,34 @@
     <string name="ask">Ask </string>
     <string name="ask_it">Ask it</string>
     <string name="anything"> anything</string>
+    <string name="don_t_have_an_account_apply_now">Don\'t have an account ? Apply now</string>
+    <string name="welcome">Welcome</string>
+    <string name="log_in_to_start_your">Log in to start your</string>
+    <string name="favorite_topics_discussion">favorite topics discussion !</string>
+    <string name="skip">Skip</string>
+    <string name="forget_password">Forget password ?</string>
+    <string name="date">Date</string>
+    <string name="set_up_time">Set up time</string>
+    <string name="meet_up_place">Meet up place</string>
+    <string name="meet_up_address">Meet up address</string>
+    <string name="place_name">Place Name</string>
+    <string name="question_title">Title</string>
+    <string name="question_content">Description</string>
+    <string name="click_to_select_a_major_related">Click to select a major related</string>
+    <string name="request_meet_up">Request meet up</string>
+    <string name="cancle_meet_up">Cancle Meet Up</string>
+    <string name="attendants">Attendants</string>
+    <string name="meet_up_schedule">Meet up schedule</string>
+    <string name="user_not_exist">User not exist</string>
+    <string name="search_friend">Search friend</string>
+    <string name="question_can_not_be_emoty">Question can not be empty</string>
+    <string name="keep">Keep</string>
+    <string name="followers">Followers</string>
+    <string name="answered">Answered</string>
+    <string name="posts">Posts</string>
+    <string name="report">Report</string>
+    <string name="click_to_add_friend">Click to add friend</string>
+    <string name="select_3_related_majors">Select 3 related majors</string>
 
 
 </resources>

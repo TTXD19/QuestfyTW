@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/meet_up_circleUserImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/user_default_image"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/meet_up_txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question Article"
+        android:textSize="16sp"
+        android:textColor="@color/FullBlack"
+        android:layout_marginLeft="5dp"
+        android:layout_alignTop="@+id/meet_up_circleUserImage"
+        android:layout_toRightOf="@+id/meet_up_circleUserImage"
+        android:layout_toEndOf="@+id/meet_up_circleUserImage"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:id="@+id/meet_up_txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Name"
+        android:layout_toRightOf="@+id/meet_up_circleUserImage"
+        android:layout_toEndOf="@+id/meet_up_circleUserImage"
+        android:layout_below="@+id/meet_up_txtTitle"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/CatergoryDarkGrayText"/>
+
+    <TextView
+        android:id="@+id/meet_up_txtPlaceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Name"
+        android:layout_alignLeft="@+id/meet_up_circleUserImage"
+        android:layout_alignStart="@+id/meet_up_circleUserImage"
+        android:layout_below="@+id/meet_up_circleUserImage"
+        android:textColor="@color/DateBlue"
+        android:textSize="16sp"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/meet_up_txtPlaceAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Address"
+        android:layout_alignLeft="@+id/meet_up_circleUserImage"
+        android:layout_alignStart="@+id/meet_up_circleUserImage"
+        android:layout_below="@+id/meet_up_txtPlaceName"
+        android:textSize="12sp"
+        android:textColor="@color/DateBlue"
+        />
+
+    <TextView
+        android:id="@+id/meet_up_txtDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018/5/18 18:30下午"
+        android:layout_alignLeft="@+id/meet_up_circleUserImage"
+        android:layout_alignStart="@+id/meet_up_circleUserImage"
+        android:layout_below="@+id/meet_up_txtPlaceAddress"
+        android:textSize="12sp"
+        android:textColor="@color/bsp_red"
+        android:layout_marginTop="2dp"
+        />
+
+    <Button
+        android:id="@+id/meet_up_btnCheckMap"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="查地圖"
+        android:textSize="12sp"
+        android:textColor="@color/FullWhite"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/meet_up_txtDateTime"
+        android:background="@drawable/meet_up_btn_background"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"/>
+
+</RelativeLayout>

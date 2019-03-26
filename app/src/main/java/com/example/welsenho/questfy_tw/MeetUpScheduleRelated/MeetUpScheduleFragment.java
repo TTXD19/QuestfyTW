@@ -1,4 +1,4 @@
-package com.example.welsenho.questfy_tw.FriendRelatedActivity;
+package com.example.welsenho.questfy_tw.MeetUpScheduleRelated;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,45 +12,41 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
-import com.example.welsenho.questfy_tw.FriendMessagingRelated.FriendMessagingActivity;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.R;
+import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
-public class FriendMessageFragment extends Fragment {
-
-    private OnFragmentInteractionListener mListener;
+public class MeetUpScheduleFragment extends Fragment {
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
-    private FirebaseDatabaseGetSet getSet;
-    private FriendMessageRecyclerAdapter adapter;
-
-    private Button btnAddFriend;
+    private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
+    private MeetUpScheduleRecyclerAdapter adapter;
 
     private View view;
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
-    public FriendMessageFragment() {
+    private OnFragmentInteractionListener mListener;
+
+    public MeetUpScheduleFragment() {
         // Required empty public constructor
     }
 
@@ -58,26 +54,20 @@ public class FriendMessageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_friend_message, container, false);
+        view = inflater.inflate(R.layout.fragment_meet_up_schedule, container, false);
         InitItem();
-        progressBar.setVisibility(View.VISIBLE);
         InitRecyclerView();
         InitFirebase();
-        getFirebaseData();
+        getData();
+        ItemClick();
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -113,73 +103,61 @@ public class FriendMessageFragment extends Fragment {
     }
 
     private void InitItem(){
-        recyclerView = view.findViewById(R.id.friendMessageRecyclerView);
-        progressBar = view.findViewById(R.id.friendMessageProgressBar);
-        btnAddFriend = view.findViewById(R.id.friendMessageBtnAddFriend);
-
-        btnAddFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SearchAndAddFriendActivity.class);
-                startActivity(intent);
-            }
-        });
+        recyclerView = view.findViewById(R.id.meet_up_recyclerView);
 
         arrayList = new ArrayList<>();
-        adapter = new FriendMessageRecyclerAdapter(arrayList, getContext());
-        adapter.setOnMainClickListener(new onMainFriendRequestClickListener() {
+        adapter = new MeetUpScheduleRecyclerAdapter(arrayList, getContext(), new MeetUpScheduleRecyclerAdapter.onArticleClick() {
             @Override
-            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                Intent intent = new Intent(getContext(), FriendMessagingActivity.class);
-                intent.putExtra("FriendUid", arrayList.get(position).getFriendUid());
-                intent.putExtra("FriendName", arrayList.get(position).getFriendName());
+            public void itemClikc(int positionArticle, ArrayList<FirebaseDatabaseGetSet> arrayListArticle) {
+                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                intent.putExtra("ArticleID", arrayListArticle.get(positionArticle).getArticle_ID());
                 startActivity(intent);
-            }
-
-            @Override
-            public void onCancelClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-
             }
         });
     }
 
+    private void InitRecyclerView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+    }
 
-    private void InitFirebase() {
+    private void InitFirebase(){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void InitRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-    }
-
-    private void getFirebaseData(){
-        databaseReference.child("UserFriendList").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+    private void getData(){
+        databaseReference.child("QuestionMeetUp").child("UserPersonalMeetUpData").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    recyclerView.setVisibility(View.VISIBLE);
                     arrayList.clear();
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(getSet);
+                        firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
-                        progressBar.setVisibility(View.GONE);
-                        databaseReference.removeEventListener(this);
                     }
-                }else {
-                    recyclerView.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void ItemClick(){
+        adapter.setOnClickListener(new MainOnClickListener() {
+            @Override
+            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + arrayList.get(position).getMeetPlace());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
             }
         });
     }

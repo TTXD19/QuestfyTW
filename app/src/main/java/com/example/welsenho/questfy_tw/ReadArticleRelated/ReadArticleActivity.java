@@ -2,13 +2,17 @@ package com.example.welsenho.questfy_tw.ReadArticleRelated;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,8 +58,15 @@ public class ReadArticleActivity extends AppCompatActivity {
     private TextView txtContent;
     private TextView txtCheckImages;
     private TextView txtLikeCount;
+    private TextView txtKeep;
     private TextView txtReadAnswers;
+    private TextView txtMeetdate;
+    private TextView txtMeetTime;
+    private TextView txtMeetPlace;
+    private TextView txtMeetAdress;
+    private TextView txtAttedants;
     private Toolbar toolbar;
+    private Button btnRequestMeet;
     private ShineButton shineButtonHeart;
     private ShineButton shineButtonLike;
     private ExpansionHeader expansionHeader;
@@ -89,8 +101,11 @@ public class ReadArticleActivity extends AppCompatActivity {
         getContentData();
         getLikeCount();
 
+
         queryLikeSearch();
         queryKeepSearch();
+        meetUpDetect();
+        answerReplyCount();
 
 
         /**
@@ -102,7 +117,6 @@ public class ReadArticleActivity extends AppCompatActivity {
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         recyclerView.setHasFixedSize(true);
-        //editRelatedMethod.LoadImageFromFirebase(databaseReference, Article_ID, arrayList, expansionHeader, recyclerView, adapterImageViews, txtCheckImages);
 
         LoadImageFromFirebase();
     }
@@ -113,6 +127,25 @@ public class ReadArticleActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.read_article_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.read_article_report:
+                Toast.makeText(this, "Report", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.read_article_share:
+                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void InitializeItem() {
         circleImageView = findViewById(R.id.read_article_circle_image_user);
@@ -123,6 +156,14 @@ public class ReadArticleActivity extends AppCompatActivity {
         txtUploadData = findViewById(R.id.read_article_txt_UploadDate);
         txtCheckImages = findViewById(R.id.read_article_txt_CheckimageView);
         txtLikeCount = findViewById(R.id.read_article_txtLikeCount);
+        txtKeep = findViewById(R.id.read_article_txtKeep);
+        txtReadAnswers = findViewById(R.id.read_article_txtReadAnswers);
+        txtMeetdate = findViewById(R.id.read_article_txt_Date);
+        txtMeetTime = findViewById(R.id.read_article_txt_Time);
+        txtMeetPlace = findViewById(R.id.read_article_txt_meetUpPlace);
+        txtMeetAdress = findViewById(R.id.read_article_txt_meetUpAddress);
+        txtAttedants = findViewById(R.id.read_article_txt_attendants);
+        btnRequestMeet = findViewById(R.id.read_article_btn_requestMeetUp);
         expansionHeader = findViewById(R.id.read_article_expan_header);
         toolbar = findViewById(R.id.read_article_toolbar);
         recyclerView = findViewById(R.id.read_article_recyclerView);
@@ -131,11 +172,39 @@ public class ReadArticleActivity extends AppCompatActivity {
         shineButtonHeart = findViewById(R.id.read_article_shineBtn_heart);
         shineButtonLike = findViewById(R.id.read_article_shineBtn_like);
 
+        progressBar.bringToFront();
         shineButtonHeart.init(this);
         shineButtonLike.init(this);
         likePress = false;
     }
 
+    private void answerReplyCount(){
+        databaseReference.child("ArticleAnswers").child(Article_ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String countAnswers;
+                if (dataSnapshot.exists()){
+                    long count = dataSnapshot.getChildrenCount();
+                    countAnswers = String.valueOf(count);
+                }else {
+                    countAnswers = String.valueOf(0);
+                }
+
+                if (Locale.getDefault().getDisplayLanguage().equals("en")) {
+                    String answer = "Read others " + countAnswers + " answers";
+                    txtReadAnswers.setText(answer);
+                }else {
+                    String answer = "查看其他" + countAnswers + "條分享的答案";
+                    txtReadAnswers.setText(answer);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     private void InitializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -153,6 +222,8 @@ public class ReadArticleActivity extends AppCompatActivity {
         txtLikeCount.setVisibility(View.INVISIBLE);
         shineButtonHeart.setVisibility(View.GONE);
         shineButtonLike.setVisibility(View.GONE);
+        btnRequestMeet.setVisibility(View.GONE);
+        txtKeep.setVisibility(View.GONE);
         circleImageView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -168,6 +239,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         shineButtonLike.setVisibility(View.VISIBLE);
         circleImageView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+        txtKeep.setVisibility(View.VISIBLE);
     }
 
     private void getContentData() {
@@ -183,6 +255,22 @@ public class ReadArticleActivity extends AppCompatActivity {
                     txtTitle.setText(getUserProfile.getTitle());
                     txtContent.setText(getUserProfile.getContent());
                     txtLikeCount.setText(String.valueOf(Math.abs(getUserProfile.getArticle_like_count())));
+                    if (getUserProfile.getMeetDate() != null) {
+                        txtMeetdate.setText(getUserProfile.getMeetDate());
+                        txtMeetTime.setText(getUserProfile.getMeetTime());
+                        txtMeetPlace.setText(getUserProfile.getMeetPlace());
+                        txtMeetAdress.setText(getUserProfile.getMeetAddress());
+                        txtAttedants.setVisibility(View.VISIBLE);
+                        btnRequestMeet.setVisibility(View.VISIBLE);
+                    }else {
+                        txtMeetdate.setVisibility(View.GONE);
+                        txtMeetTime.setVisibility(View.GONE);
+                        txtMeetPlace.setVisibility(View.GONE);
+                        txtMeetAdress.setVisibility(View.GONE);
+                        txtAttedants.setVisibility(View.GONE);
+                        txtAttedants.setVisibility(View.GONE);
+                        btnRequestMeet.setVisibility(View.GONE);
+                    }
                     setOtherUserUid(getUserProfile.getUserUid());
                     Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
                     ShowItem();
@@ -376,5 +464,85 @@ public class ReadArticleActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void cancleMeetUp(){
+        databaseReference.child("QuestionMeetUp").child("UserPersonalMeetUpData").child(firebaseUser.getUid()).child(Article_ID).removeValue();
+        databaseReference.child("QuestionMeetUp").child("QuestionArticleMeetUpData").child(Article_ID).child(firebaseUser.getUid()).removeValue();
+    }
+
+    private void meetUpDetect(){
+        databaseReference.child("QuestionMeetUp").child("UserPersonalMeetUpData").child(firebaseUser.getUid()).child(Article_ID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+
+                    btnRequestMeet.setText(getString(R.string.cancle_meet_up));
+                    btnRequestMeet.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.cancle_meet_up_btn_background));
+
+                    btnRequestMeet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cancleMeetUp();
+                        }
+                    });
+                }else {
+                    btnRequestMeet.setText(getString(R.string.request_meet_up));
+                    btnRequestMeet.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.meet_up_btn_background));
+                    btnRequestMeet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ClickReuqestMeetUp();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        databaseReference.child("QuestionMeetUp").child("QuestionArticleMeetUpData").child(Article_ID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    long meetUpCount = dataSnapshot.getChildrenCount();
+                    String count = getString(R.string.attendants) + " : " + String.valueOf(meetUpCount);
+                    txtAttedants.setText(count);
+                }else {
+                    String count = getString(R.string.attendants) + " : " + String.valueOf(0);
+                    txtAttedants.setText(count);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void ClickReuqestMeetUp(){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Article_ID", Article_ID);
+        hashMap.put("userUid", getUserProfile.getUserUid());
+        hashMap.put("Title", txtTitle.getText().toString());
+        hashMap.put("User_Name", txtUserName.getText().toString());
+        hashMap.put("User_Image", getUserProfile.getUser_Image());
+        hashMap.put("MeetPlace", txtMeetPlace.getText().toString());
+        hashMap.put("MeetAddress", txtMeetAdress.getText().toString());
+        hashMap.put("MeetDate", txtMeetdate.getText().toString());
+        hashMap.put("MeetTime", txtMeetTime.getText().toString());
+
+        databaseReference.child("QuestionMeetUp").child("UserPersonalMeetUpData").child(firebaseUser.getUid()).child(Article_ID).updateChildren(hashMap);
+
+        HashMap<String, Object> questionHashMap  = new HashMap<>();
+        questionHashMap.put("userUid", getUserProfile.getUserUid());
+        questionHashMap.put("User_Name", firebaseUser.getDisplayName());
+        questionHashMap.put("User_Image", getUserProfile.getUser_Image());
+
+        databaseReference.child("QuestionMeetUp").child("QuestionArticleMeetUpData").child(Article_ID).child(firebaseUser.getUid()).updateChildren(questionHashMap);
     }
 }

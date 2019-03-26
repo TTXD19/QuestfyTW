@@ -34,9 +34,11 @@ public class WelcomeScreenActivity extends AppCompatActivity {
                 if (internetConnectionDetect.isNetworkAvailable(getApplicationContext())) {
                     Intent intent = new Intent(WelcomeScreenActivity.this, LoginActivity.class);
                     startActivity(intent);
+                    finish();
                 }else {
                     Intent intent = new Intent(WelcomeScreenActivity.this, OutOfConnectionActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         }, 2000);

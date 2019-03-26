@@ -18,6 +18,10 @@ public class FirebaseDatabaseGetSet{
     private String userStatusMessage;
     private String userSpeciality;
     private String createDate;
+    private String MeetDate;
+    private String MeetTime;
+    private String MeetPlace;
+    private String MeetAddress;
     private int Article_like_count;
 
     //For Major choose
@@ -421,5 +425,37 @@ public class FirebaseDatabaseGetSet{
 
     public void setUser_image_uri(String user_image_uri) {
         User_image_uri = user_image_uri;
+    }
+
+    public String getMeetDate() {
+        return MeetDate;
+    }
+
+    public void setMeetDate(String meetDate) {
+        MeetDate = meetDate;
+    }
+
+    public String getMeetTime() {
+        return MeetTime;
+    }
+
+    public void setMeetTime(String meetTime) {
+        MeetTime = meetTime;
+    }
+
+    public String getMeetPlace() {
+        return MeetPlace;
+    }
+
+    public void setMeetPlace(String meetPlace) {
+        MeetPlace = meetPlace;
+    }
+
+    public String getMeetAddress() {
+        return MeetAddress;
+    }
+
+    public void setMeetAddress(String meetAddress) {
+        MeetAddress = meetAddress;
     }
 }

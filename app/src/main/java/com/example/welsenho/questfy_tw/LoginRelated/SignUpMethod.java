@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
@@ -27,7 +28,7 @@ public class SignUpMethod {
 
 
     public void firebaseProfileSignUp(DatabaseReference databaseReference, String Uid, final String email, String ID, String sex, String loginType,
-                                      final Context context, String createDate){
+                                      final Context context, String createDate, String userUid){
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("Email", email);
@@ -37,6 +38,7 @@ public class SignUpMethod {
         hashMap.put("createDate", createDate);
         hashMap.put("loginType", loginType);
         hashMap.put("CompleteInformationCheck", "False");
+        hashMap.put("userUid", userUid);
         databaseReference.child("Users_profile").child(Uid).updateChildren(hashMap);
     }
 
@@ -49,17 +51,20 @@ public class SignUpMethod {
         firebaseProfile.updateProfile(profileUpdate);
     }
 
-    public void signInMethod(FirebaseAuth mAuth, String email, String password, final Context context, final Activity activity){
+    public void signInMethod(FirebaseAuth mAuth, String email, String password, final Context context, final Activity activity, final ProgressDialog progressDialog){
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                      if (task.isSuccessful()){
                          Log.d("Login : ", "success");
+                         progressDialog.dismiss();
                          Intent intent = new Intent(context, MainActivity.class);
                          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                          context.startActivity(intent);
                          activity.finish();
                      }else {
+                         progressDialog.dismiss();
+                         Log.d("Login result", task.getResult().toString());
                          Log.d("Login : ", "not success");
                          final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                          builder.setMessage("Currently there is something wrong with the network. Please try again later.")
