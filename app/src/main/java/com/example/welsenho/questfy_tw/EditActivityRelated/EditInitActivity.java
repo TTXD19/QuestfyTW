@@ -99,7 +99,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private static final int REQUEST_IMAGE_SELECT = 2;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 3;
     private static final String TAG = "tag";
-    private static final String PLACE_API_KEY = "AIzaSyByDLGHKUl2OutFByrDy0FgPUGU1FywsOg";
+    private static final String PLACE_API_KEY = "Hidden API_KEY";
 
     private String getDownloadUri;
     private String articleUid;
