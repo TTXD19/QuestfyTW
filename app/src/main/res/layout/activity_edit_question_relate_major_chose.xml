@@ -16,6 +16,8 @@
         app:title="Choose majors"
         app:titleTextColor="@color/FullWhite">
 
+
+
     </android.support.v7.widget.Toolbar>
 
     <TextView
