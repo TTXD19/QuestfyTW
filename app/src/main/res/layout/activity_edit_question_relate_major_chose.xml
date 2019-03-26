@@ -17,8 +17,8 @@
         app:titleTextColor="@color/FullWhite">
 
 
-
     </android.support.v7.widget.Toolbar>
+
 
     <TextView
         android:id="@+id/edit_choose_major_textView1"
