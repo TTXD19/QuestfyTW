@@ -97,7 +97,9 @@
     <string name="posts">Posts</string>
     <string name="report">Report</string>
     <string name="click_to_add_friend">Click to add friend</string>
-    <string name="select_3_related_majors">Select 3 related majors</string>
+    <string name="select_3_related_majors">Select related majors</string>
+    <string name="post">Post</string>
+    <string name="question_preview">Question preview</string>
 
 
 </resources>

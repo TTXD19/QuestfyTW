@@ -22,5 +22,10 @@
         <item name="colorControlNormal">@color/FullWhite</item>
         //the rest of your codes...
     </style>
+    
+    <style name="EditInitToolBarTextApperance">
+        <item name="android:textColor">@color/FullWhite</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

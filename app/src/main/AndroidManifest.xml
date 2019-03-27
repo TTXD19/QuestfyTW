@@ -61,7 +61,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ReadArticleRelated.EnlargeImageActivity" />
-        <activity android:name=".FriendRelatedActivity.SearchAndAddFriendActivity"></activity>
+        <activity android:name=".FriendRelatedActivity.SearchAndAddFriendActivity" />
+        <activity android:name=".EditActivityRelated.EditPreviewActivity"></activity>
     </application>
 
 </manifest>

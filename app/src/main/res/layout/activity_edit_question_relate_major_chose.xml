@@ -13,25 +13,12 @@
         android:layout_height="wrap_content"
         android:background="@color/LightMainOrange"
         android:theme="@style/BaseTheme"
-        app:title="Choose majors"
+        app:title="@string/select_3_related_majors"
         app:titleTextColor="@color/FullWhite">
 
 
     </android.support.v7.widget.Toolbar>
 
-
-    <TextView
-        android:id="@+id/edit_choose_major_textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/select_3_related_majors"
-        android:textSize="30sp"
-        android:textColor="@color/FullBlack"
-        android:textStyle="bold"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_below="@+id/edit_choose_major_toolbar"
-        android:layout_marginStart="12dp" />
 
     <ProgressBar
         android:id="@+id/edit_choose_major_progressBar"
@@ -40,21 +27,28 @@
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/edit_choose_major_confirm_recyclerView"
+    <me.gujun.android.taggroup.TagGroup
+        android:id="@+id/edit_choose_major_chipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_choose_major_textView1">
+        android:layout_below="@+id/edit_choose_major_toolbar"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:atg_textSize="18sp"
+        app:atg_textColor="@color/CatergoryDarkGrayText"
+        app:atg_borderColor="@color/ＭainOrange"
+        android:layout_marginTop="10dp"
+        >
 
 
 
-    </android.support.v7.widget.RecyclerView>
+    </me.gujun.android.taggroup.TagGroup>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/edit_choose_major_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_choose_major_confirm_recyclerView"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/edit_choose_major_chipGroup"
         android:layout_marginTop="15dp"
         android:layout_above="@+id/edit_choose_major_btn_Done">
 
@@ -75,6 +69,7 @@
         android:textAllCaps="false"
         android:textSize="24sp"
         android:layout_marginTop="10dp"
+        android:elevation="10dp"
         />
 
 </RelativeLayout>

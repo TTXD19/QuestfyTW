@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
+import android.support.design.chip.ChipGroup;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,13 +30,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.robertlevonyan.views.chip.Chip;
 
 import java.util.ArrayList;
+
+import me.gujun.android.taggroup.TagGroup;
 
 public class EditQuestionRelateMajorChose extends AppCompatActivity{
 
     private RecyclerView recyclerView;
-    private RecyclerView recyclerViewConfirmMajor;
     private ProgressBar progressBar;
     private Button btnDone;
     private Toolbar toolbar;
@@ -48,6 +51,8 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
     private FirebaseAuth firebaseAuth;
     private EditQuestionRelateRecyclerViewAdapter adapter;
     private EditInitMajorChooseConfirmRecyclerAdapter confirmRecyclerAdapter;
+    private TagGroup tagGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +61,9 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
 
         toolbar = findViewById(R.id.edit_choose_major_toolbar);
         recyclerView = findViewById(R.id.edit_choose_major_recyclerView);
-        recyclerViewConfirmMajor = findViewById(R.id.edit_choose_major_confirm_recyclerView);
         progressBar = findViewById(R.id.edit_choose_major_progressBar);
         btnDone = findViewById(R.id.edit_choose_major_btn_Done);
+        tagGroup = findViewById(R.id.edit_choose_major_chipGroup);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
@@ -69,9 +74,19 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
         adapter = new EditQuestionRelateRecyclerViewAdapter(arrayList, this, new EditQuestionRelateRecyclerViewAdapter.majorSelectListener() {
             @Override
             public void select(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                getMajors.add(arrayList.get(position).getMajor());
-                confirmRecyclerAdapter = new EditInitMajorChooseConfirmRecyclerAdapter(getMajors);
-                recyclerViewConfirmMajor.setAdapter(confirmRecyclerAdapter);
+                if (!getMajors.contains(arrayList.get(position).getMajor())) {
+                    getMajors.add(arrayList.get(position).getMajor());
+                    tagGroup.setTags(getMajors);
+                    confirmRecyclerAdapter = new EditInitMajorChooseConfirmRecyclerAdapter(getMajors);
+                }
+            }
+        });
+
+        tagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+            @Override
+            public void onTagClick(String tag) {
+                getMajors.remove(tag);
+                tagGroup.setTags(getMajors);
             }
         });
 
@@ -79,10 +94,6 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewConfirmMajor.setLayoutManager(horizontalLayoutManager);
-        recyclerViewConfirmMajor.setHasFixedSize(true);
 
         getData();
         btnDone.setOnClickListener(new View.OnClickListener() {
@@ -110,10 +121,19 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
 
             @Override
             public boolean onQueryTextChange(String s) {
+                filterList(s);
                 return false;
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(EditQuestionRelateMajorChose.this, EditInitActivity.class);
+        startActivity(intent);
+        finish();
+        super.onBackPressed();
     }
 
     private void getData(){
@@ -141,5 +161,29 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
 
             }
         });
+    }
+
+    private void filterList(String inputext){
+        ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
+        if (!filterList.isEmpty()){
+            filterList.clear();
+        }
+
+        for (FirebaseDatabaseGetSet getSet:arrayList){
+            if (getSet.getMajor().contains(inputext)){
+                filterList.add(getSet);
+                adapter = new EditQuestionRelateRecyclerViewAdapter(filterList, getApplicationContext(), new EditQuestionRelateRecyclerViewAdapter.majorSelectListener() {
+                    @Override
+                    public void select(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                        if (!getMajors.contains(arrayList.get(position).getMajor())) {
+                            getMajors.add(arrayList.get(position).getMajor());
+                            tagGroup.setTags(getMajors);
+                            confirmRecyclerAdapter = new EditInitMajorChooseConfirmRecyclerAdapter(getMajors);
+                        }
+                    }
+                });
+                recyclerView.setAdapter(adapter);
+            }
+        }
     }
 }

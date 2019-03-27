@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditActivityRelated.EditPreviewActivity">
+
+    <ProgressBar
+        android:id="@+id/edit_preview_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/edit_preview_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/LightMainOrange"
+        app:title="@string/question_preview"
+        app:titleTextColor="@color/FullWhite"
+        android:theme="@style/BaseTheme">
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/read_article_LinearBot"
+        android:layout_below="@+id/edit_preview_toolbar">
+
+        <RelativeLayout
+            android:id="@+id/edit_preview_relaytiveTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/edit_preview_relaytiveTopUserInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/edit_preview_circle_image_user"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/user_default_image" />
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/edit_preview_circle_image_user"
+                    android:layout_toEndOf="@+id/edit_preview_circle_image_user"
+                    android:layout_toRightOf="@+id/edit_preview_circle_image_user"
+                    android:text="Bred Pete"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_UploadDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/edit_preview_circle_image_user"
+                    android:layout_toEndOf="@+id/edit_preview_circle_image_user"
+                    android:layout_toRightOf="@+id/edit_preview_circle_image_user"
+                    android:text="Upload Date"
+                    android:textColor="@color/DateBlue"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_preview_relaytiveTopUserInfo"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Title"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Majors realted"
+                    android:textColor="@color/ＭainOrange"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/edit_preview_txt_title"/>
+
+
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="討論日期"
+                    android:textSize="16sp"
+                    android:textColor="@color/FullBlack"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/edit_preview_txt_major"/>
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="討論時間"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/edit_preview_txt_Date"/>
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_meetUpPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="討論地方"
+                    android:textSize="16sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/FullBlack"
+                    android:layout_below="@+id/edit_preview_txt_Time"/>
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_meetUpAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="討論地址"
+                    android:textColor="@color/CatergoryDarkGrayText"
+                    android:layout_below="@+id/edit_preview_txt_meetUpPlace"/>
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Content"
+                    android:textColor="@color/FullBlack"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="10dp"
+                    android:textIsSelectable="true"
+                    android:layout_below="@+id/edit_preview_txt_meetUpAddress"/>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/edit_preview_LinearBot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <com.github.florent37.expansionpanel.ExpansionHeader
+            android:id="@+id/edit_preview_expan_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            app:expansion_headerIndicator="@id/edit_preview_imgHeader"
+            app:expansion_layout="@id/edit_preview_expansionLayout"
+            app:expansion_toggleOnClick="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:id="@+id/edit_preview_imgHeader"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:rotation="180"
+                    android:src="@drawable/down_arrow" />
+
+                <TextView
+                    android:id="@+id/edit_preview_txt_CheckimageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/edit_preview_imgHeader"
+                    android:layout_toRightOf="@+id/edit_preview_imgHeader"
+                    android:text="@string/click_to_check"
+                    android:textColor="@color/ＭainOrange"
+                    android:textSize="18sp"
+                    android:layout_marginStart="10dp" />
+
+            </RelativeLayout>
+
+
+        </com.github.florent37.expansionpanel.ExpansionHeader>
+
+        <com.github.florent37.expansionpanel.ExpansionLayout
+            android:id="@+id/edit_preview_expansionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/edit_preview_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+            <!-- CONTENT -->
+
+
+        </com.github.florent37.expansionpanel.ExpansionLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

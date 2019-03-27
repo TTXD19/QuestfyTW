@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +29,8 @@ import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +50,7 @@ import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
+import com.example.welsenho.questfy_tw.ReadArticleRelated.EnlargeImageActivity;
 import com.github.florent37.expansionpanel.ExpansionHeader;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -99,7 +103,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private static final int REQUEST_IMAGE_SELECT = 2;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 3;
     private static final String TAG = "tag";
-    private static final String PLACE_API_KEY = "Hidden API_KEY";
+    private static final String PLACE_API_KEY = "AIzaSyByDLGHKUl2OutFByrDy0FgPUGU1FywsOg";
 
     private String getDownloadUri;
     private String articleUid;
@@ -212,6 +216,15 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
          */
         arrayList = new ArrayList<>();
         adapterImageViews = new EditInitRelateRecyclerViewAdapterImageViews(arrayList);
+        adapterImageViews.setOnMainAdapterClickListner(new MainOnClickListener() {
+            @Override
+            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(EditInitActivity.this, EnlargeImageActivity.class);
+                intent.putExtra("Article_ID", articleUid);
+                intent.putExtra("Position", position);
+                startActivity(intent);
+            }
+        });
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         recyclerView.setHasFixedSize(true);
@@ -254,6 +267,10 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_init_activity_next, menu);
+        MenuItem menuItem = menu.findItem(R.id.EditInitItemNext);
+        SpannableString title = new SpannableString(menuItem.getTitle());
+        title.setSpan(new TextAppearanceSpan(this, R.style.EditInitToolBarTextApperance), 0, title.length(), 0);
+        menuItem.setTitle(title);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -491,6 +508,16 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
+        imgPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SaveCurrentContent();
+                SaveCurrentContentForPreview();
+                Intent intent = new Intent(EditInitActivity.this, EditPreviewActivity.class);
+                startActivity(intent);
+            }
+        });
+
         /**
          * For choosing Date & Time
          */
@@ -586,6 +613,36 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         editor.putString("EditTitle", editTitle.getText().toString());
         editor.putString("EditContent", editContent.getText().toString());
         editor.putString("EditArticleUid", articleUid);
+        editor.putInt("CounImages", countImages);
+        editor.putBoolean("MeetUp", isMeet);
+        if (isMeet){
+            editor.putString("EditMeetDate", txtDatePick.getText().toString());
+            editor.putString("EditMeetTime", txtTimePick.getText().toString());
+            editor.putString("EditMeetPlace", txtPlaceName.getText().toString());
+            editor.putString("EditMeetAddress", txtPlaceAddress.getText().toString());
+        }
+        editor.apply();
+    }
+
+    private void SaveCurrentContentForPreview(){
+        SharedPreferences preferences;
+        preferences = this.getSharedPreferences("Preview", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (editTitle.getText().toString().isEmpty()){
+            editor.putString("EditTitle", getString(R.string.question_title));
+        }else {
+            editor.putString("EditTitle", editTitle.getText().toString());
+        }
+        if (editContent.getText().toString().isEmpty()){
+            editor.putString("EditContent", getString(R.string.question_content));
+        }else {
+            editor.putString("EditContent", editContent.getText().toString());
+        }
+        editor.putString("EditMajor", txtChooseMajor.getText().toString());
+        editor.putString("EditArticleUid", articleUid);
+        editor.putString("EditUserName", txtUserName.getText().toString());
+        editor.putString("EditUploadDate", txtUploadDate.getText().toString());
+        editor.putString("UserImageUri", firebaseUser.getPhotoUrl().toString());
         editor.putInt("CounImages", countImages);
         editor.putBoolean("MeetUp", isMeet);
         if (isMeet){

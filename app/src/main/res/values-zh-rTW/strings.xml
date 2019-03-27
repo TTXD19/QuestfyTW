@@ -97,7 +97,9 @@
     <string name="posts">發問次數</string>
     <string name="report">Report</string>
     <string name="click_to_add_friend">新增好友</string>
-    <string name="select_3_related_majors">選擇3個相關科系</string>
+    <string name="select_3_related_majors">選擇相關科系</string>
+    <string name="post">發表</string>
+    <string name="question_preview">問題預覽</string>
 
 
 </resources>

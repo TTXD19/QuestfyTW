@@ -45,7 +45,7 @@
         android:text="Place Name"
         android:layout_alignLeft="@+id/meet_up_circleUserImage"
         android:layout_alignStart="@+id/meet_up_circleUserImage"
-        android:layout_below="@+id/meet_up_circleUserImage"
+        android:layout_below="@+id/meet_up_txtUserName"
         android:textColor="@color/DateBlue"
         android:textSize="16sp"
         android:layout_marginTop="2dp"/>
