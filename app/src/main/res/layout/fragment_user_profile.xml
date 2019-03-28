@@ -5,26 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/user_profile_background"
-    tools:context=".MainUserActivity.UserProfileFragment">
+    tools:context=".MainUserActivity.UserProfileFragment"
+    android:paddingTop="20dp">
 
-
-    <android.support.v7.widget.CardView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
-        android:layout_marginLeft="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="50dp">
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        >
 
-        <android.support.v4.widget.NestedScrollView
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="20dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_changeImage"
@@ -32,9 +34,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="18dp"
+                    android:background="?android:attr/selectableItemBackground"
                     android:text="更改頭像"
-                    android:textColor="@color/DateBlue"
-                    android:background="?android:attr/selectableItemBackground"/>
+                    android:textColor="@color/DateBlue" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/user_profile_fm_circleImage_userImage"
@@ -49,10 +51,10 @@
                     android:id="@+id/user_profile_fm_progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_alignTop="@+id/user_profile_fm_circleImage_userImage"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_userName"
@@ -75,7 +77,7 @@
                     android:layout_marginTop="18dp"
                     android:text="Create Date"
                     android:textColor="@color/DateBlue"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_schoolName"
@@ -86,7 +88,7 @@
                     android:layout_marginTop="16dp"
                     android:text="----------------------------------"
                     android:textColor="@color/LightMainOrange"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_schoolMajor"
@@ -115,14 +117,14 @@
                     android:id="@+id/user_profile_fm_imgBtn_editSpeciality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/edit_pencil"
-                    android:background="@color/FullWhite"
                     android:layout_alignTop="@+id/user_profile_fm_txt_specialityDisplay"
-                    android:layout_toRightOf="@+id/user_profile_fm_txt_specialityDisplay"
-                    android:layout_toEndOf="@+id/user_profile_fm_txt_specialityDisplay"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp" />
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/user_profile_fm_txt_specialityDisplay"
+                    android:layout_toRightOf="@+id/user_profile_fm_txt_specialityDisplay"
+                    android:background="@color/FullWhite"
+                    android:src="@drawable/edit_pencil" />
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_speciality"
@@ -131,11 +133,11 @@
                     android:layout_below="@+id/user_profile_fm_txt_specialityDisplay"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="商業管理，會計，統計學，管理學"
                     android:textColor="@color/FullBlack"
-                    android:textSize="18sp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"/>
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/user_profile_fm_btn_emailCertificate"
@@ -159,43 +161,44 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/user_profile_fm_txt_speciality"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
                     android:text="@string/status_message"
                     android:textColor="@color/FullBlack"
-                    android:layout_marginTop="15dp"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:layout_centerHorizontal="true"/>
+                    android:textStyle="bold" />
 
 
                 <ImageButton
                     android:id="@+id/user_profile_fm_imgBtn_editStatusMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/edit_pencil"
-                    android:background="@color/FullWhite"
                     android:layout_alignTop="@+id/user_profile_fm_txt_customMessageDisplay"
-                    android:layout_toRightOf="@+id/user_profile_fm_txt_customMessageDisplay"
-                    android:layout_toEndOf="@+id/user_profile_fm_txt_customMessageDisplay"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"/>
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/user_profile_fm_txt_customMessageDisplay"
+                    android:layout_toRightOf="@+id/user_profile_fm_txt_customMessageDisplay"
+                    android:background="@color/FullWhite"
+                    android:src="@drawable/edit_pencil" />
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_customMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/user_profile_fm_txt_customMessageDisplay"
-                    android:text="-------------------"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:textSize="18sp"/>
+                    android:text="-------------------"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
-        </android.support.v4.widget.NestedScrollView>
 
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
+
+    </android.support.v4.widget.NestedScrollView>
 
 
 </RelativeLayout>

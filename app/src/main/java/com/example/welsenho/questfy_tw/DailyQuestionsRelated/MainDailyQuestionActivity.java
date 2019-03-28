@@ -41,7 +41,6 @@ public class MainDailyQuestionActivity extends Fragment {
 
     private View view;
     private RecyclerView recyclerView;
-    private ScrollView scrollView;
 
 
     private MainDailyQuestionRecyclerAdapter adapter;
@@ -127,7 +126,6 @@ public class MainDailyQuestionActivity extends Fragment {
 
     private void InitItem(){
         recyclerView = view.findViewById(R.id.main_daily_recyclerView);
-        scrollView = view.findViewById(R.id.main_daily_scrollView);
         recyclerView.setFocusable(false);
         arrayList = new ArrayList<>();
         adapter = new MainDailyQuestionRecyclerAdapter(arrayList, getContext());

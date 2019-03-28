@@ -194,6 +194,13 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void onItemClick(){
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImage();
+            }
+        });
+
         imageButtonSpeciality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
