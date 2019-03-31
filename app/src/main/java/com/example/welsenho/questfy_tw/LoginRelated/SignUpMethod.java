@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
+import com.example.welsenho.questfy_tw.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,7 +54,7 @@ public class SignUpMethod {
         firebaseProfile.updateProfile(profileUpdate);
     }
 
-    public void signInMethod(FirebaseAuth mAuth, String email, String password, final Context context, final Activity activity, final ProgressDialog progressDialog){
+    public void signInMethod(FirebaseAuth mAuth, String email, String password, final Context context, final Activity activity, final ProgressDialog progressDialog, final TextView textView){
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -64,16 +67,13 @@ public class SignUpMethod {
                          activity.finish();
                      }else {
                          progressDialog.dismiss();
-                         Log.d("Login result", task.getResult().toString());
-                         Log.d("Login : ", "not success");
-                         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                         builder.setMessage("Currently there is something wrong with the network. Please try again later.")
-                         .setTitle("Oops !!!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 dialog.dismiss();
-                             }
-                         }).create();
+                         Log.d("PASSWORD", task.getException().getMessage());
+                         textView.setVisibility(View.VISIBLE);
+                         if (task.getException().getMessage().equals("The password is invalid or the user does not have a password.")) {
+                             textView.setText(context.getString(R.string.wrong_password_or_account));
+                         }else if (task.getException().getMessage().equals("There is no user record corresponding to this identifier. The user may have been deleted.")){
+                             textView.setText(context.getString(R.string.account_not_exist));
+                         }
                      }
             }
         });

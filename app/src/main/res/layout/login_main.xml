@@ -132,11 +132,13 @@
                 android:id="@+id/new_login_txtWrongPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="帳號密碼錯誤 ) :"
+                android:text="@string/wrong_password_or_account"
                 android:layout_marginLeft="30dp"
                 android:textColor="#FF0000"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_below="@+id/new_login_txtInputPassword"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
                 android:visibility="gone"/>
 
             <TextView
@@ -201,6 +203,12 @@
                     android:layout_marginEnd="5dp"
                     android:textAllCaps="false"/>
 
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/new_login_facebookLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
 
                 <Button
                     android:id="@+id/new_login_btnGoogle"
@@ -213,6 +221,14 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:textAllCaps="false"/>
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/new_login_googleLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                </com.google.android.gms.common.SignInButton>
 
             </LinearLayout>
 

@@ -22,6 +22,9 @@ public class FirebaseDatabaseGetSet{
     private String MeetTime;
     private String MeetPlace;
     private String MeetAddress;
+    private String isMeet;
+    private long uploadTimeStamp;
+    private int AnswerCount;
     private int Article_like_count;
 
     //For Major choose
@@ -457,5 +460,29 @@ public class FirebaseDatabaseGetSet{
 
     public void setMeetAddress(String meetAddress) {
         MeetAddress = meetAddress;
+    }
+
+    public int getAnswerCount() {
+        return AnswerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        AnswerCount = answerCount;
+    }
+
+    public String getIsMeet() {
+        return isMeet;
+    }
+
+    public void setIsMeet(String isMeet) {
+        this.isMeet = isMeet;
+    }
+
+    public long getUploadTimeStamp() {
+        return uploadTimeStamp;
+    }
+
+    public void setUploadTimeStamp(long uploadTimeStamp) {
+        this.uploadTimeStamp = uploadTimeStamp;
     }
 }

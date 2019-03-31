@@ -5,27 +5,33 @@
     <item
         android:id="@+id/main_activity_tab_home"
         android:title="@string/home"
+        android:icon="@drawable/meet_up_style_1"
         />
-
-    <item
-        android:id="@+id/main_related_question_fragment"
-        android:title="@string/do_you_know"/>
-
-    <item
-        android:id="@+id/Meet_up"
-        android:title="@string/meet_up_schedule"/>
-
-    <item
-        android:id="@+id/User_profile"
-        android:title="@string/user_profile"/>
 
     <item
         android:id="@+id/Main_Friend_Fragment"
         android:title="@string/friends"
+        android:icon="@drawable/meet_up_style_2"
         />
 
     <item
+        android:id="@+id/main_related_question_fragment"
+        android:title="@string/do_you_know"
+        android:icon="@drawable/star_style_1"/>
+
+    <item
+        android:id="@+id/Meet_up"
+        android:title="@string/meet_up_schedule"
+        android:icon="@drawable/time_clock"/>
+
+    <item
+        android:id="@+id/User_profile"
+        android:title="@string/user_profile"
+        android:icon="@drawable/person_inforamtion"/>
+
+    <item
         android:id="@+id/Sign_out"
-        android:title="@string/sign_out"/>
+        android:title="@string/sign_out"
+        android:icon="@drawable/run_style_1"/>
 
 </menu>

@@ -50,6 +50,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
 
     private String randomID;
     private String Article_ID;
+    private String Article_Title;
     private Boolean isNetworkAvaliable;
 
     @Override
@@ -59,6 +60,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
 
 
         Article_ID = getIntent().getStringExtra("Article_ID");
+        Article_Title = getIntent().getStringExtra("Article_Title");
         ItemInit();
         FirebaseInit();
         LoadBasicInfo();
@@ -94,6 +96,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
                         progressDialog.dismiss();
                         Intent intent = new Intent(AnswerReplyActivity.this, ReadAnswersActivity.class);
                         intent.putExtra("Article_ID", Article_ID);
+                        intent.putExtra("Article_Title", Article_Title);
                         startActivity(intent);
                         finish();
                     }else {

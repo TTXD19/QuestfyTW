@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
 import com.sackcentury.shinebuttonlib.ShineButton;
@@ -23,6 +24,7 @@ public class keepArticleRecyclerViewAdapter extends RecyclerView.Adapter<keepArt
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private MainOnClickListener onClickListener;
+    private EditRelatedMethod editRelatedMethod;
 
     public keepArticleRecyclerViewAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
         this.arrayList = arrayList;
@@ -45,10 +47,10 @@ public class keepArticleRecyclerViewAdapter extends RecyclerView.Adapter<keepArt
     @Override
     public void onBindViewHolder(@NonNull keepArticlesViewHolder keepArticlesViewHolder, int i) {
         firebaseDatabaseGetSet = arrayList.get(i);
-
+        editRelatedMethod = new EditRelatedMethod();
         keepArticlesViewHolder.txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
         keepArticlesViewHolder.txtTitle.setText(firebaseDatabaseGetSet.getTitle());
-        keepArticlesViewHolder.txtUploadDate.setText(firebaseDatabaseGetSet.getUpload_Date());
+        keepArticlesViewHolder.txtUploadDate.setText(editRelatedMethod.getFormattedDate(context, Math.abs(firebaseDatabaseGetSet.getUploadTimeStamp())));
         keepArticlesViewHolder.txtContent.setText(firebaseDatabaseGetSet.getContent());
         keepArticlesViewHolder.txtCourseName.setText(firebaseDatabaseGetSet.getMajors());
         if (firebaseDatabaseGetSet.getUser_Image() != null) {

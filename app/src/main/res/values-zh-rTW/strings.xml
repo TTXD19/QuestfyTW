@@ -100,6 +100,10 @@
     <string name="select_3_related_majors">選擇相關科系</string>
     <string name="post">發表</string>
     <string name="question_preview">問題預覽</string>
+    <string name="wrong_password_or_account">密碼錯誤或帳號錯誤 : (</string>
+    <string name="account_not_exist">無此帳號喔 : (</string>
+    <string name="today">今天 </string>
+    <string name="yesterday">昨天 </string>
 
 
 </resources>

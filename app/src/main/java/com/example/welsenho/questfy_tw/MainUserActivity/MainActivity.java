@@ -1,5 +1,7 @@
 package com.example.welsenho.questfy_tw.MainUserActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -8,12 +10,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
+    private String completeInfo = "False";
     private int currentFilterPage;
 
     private TextView txtID;
@@ -126,8 +131,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
         }
 
-        ItmeClick();
-
         /**
          * Lets inflate the very first fragment
          * Here , we are inflating the TabFragment as the first Fragment
@@ -145,13 +148,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         actionBarDrawerToggle.syncState();
         navigationClick();
 
-        mainActivityButtonClick();
-
         /**
          * init each arrayList for searchView
          */
         initializeArrayList();
         checkCompleteInfo();
+        ItmeClick();
     }
 
     @Override
@@ -177,14 +179,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                     }
                 }*/
                 if (getSupportFragmentManager().findFragmentByTag("MainFriendFragment") == null) {
-                    Toast.makeText(MainActivity.this, "null", Toast.LENGTH_SHORT).show();
                     if (latestArrayList != null) {
                         LatestSearchFilter(s, latestArrayList);
                     }
                     if (mostPopularArrayList != null) {
                         MostPopularFilter(s, mostPopularArrayList);
-                    }else {
-                        Toast.makeText(MainActivity.this, "no null", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
@@ -256,16 +255,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             }
         });
 
-    }
-
-    public void mainActivityButtonClick() {
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, EditInitActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -426,14 +415,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         databaseReference.child("Users_profile").child(firebaseAuth.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
-                String completeInfo = firebaseDatabaseGetSet.getCompleteInformationCheck();
-                if (completeInfo.equals("False")) {
-                    btnCompleteUserInfo.setVisibility(View.VISIBLE);
-                    txtCheckCompleteInfo.setVisibility(View.VISIBLE);
-                }else {
-                    txtSchoolName.setVisibility(View.VISIBLE);
-                    txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
+                if (dataSnapshot.exists()) {
+                    FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
+                    completeInfo = firebaseDatabaseGetSet.getCompleteInformationCheck();
+                    if (completeInfo.equals("False")) {
+                        btnCompleteUserInfo.setVisibility(View.VISIBLE);
+                        txtCheckCompleteInfo.setVisibility(View.VISIBLE);
+                    } else {
+                        completeInfo = "success";
+                        txtSchoolName.setVisibility(View.VISIBLE);
+                        txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
+                    }
                 }
             }
 
@@ -459,6 +451,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     }
 
     private void ItmeClick(){
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (completeInfo.equals("success")) {
+                    Intent intent = new Intent(MainActivity.this, EditInitActivity.class);
+                    startActivity(intent);
+                }else {
+                    showUserPostDialog();
+                }
+            }
+        });
+
         btnCompleteUserInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -489,5 +493,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         MostPopularFilter(subject, mostPopularArrayList);
         MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
         mainActivityTabFragment.changePage();
+    }
+
+    private void showUserPostDialog(){
+        FireMissilesDialogFragment dialogFragment = new FireMissilesDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "TAG");
+    }
+
+    public static class FireMissilesDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("User information not complete").setMessage("Complete your user information to enjoy more function")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
     }
 }

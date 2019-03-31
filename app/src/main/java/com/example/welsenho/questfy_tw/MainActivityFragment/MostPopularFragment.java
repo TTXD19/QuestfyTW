@@ -153,7 +153,6 @@ public class MostPopularFragment extends Fragment {
                             recyclerView.scrollToPosition(positionClick);
                             progressBar.setVisibility(View.GONE);
                             mListener.mostPopularArticleFilter(orginalMostPopulatArrayList);
-                            databaseReference.removeEventListener(this);
                             swipeRefreshLayout.setRefreshing(false);
                         }
                     }

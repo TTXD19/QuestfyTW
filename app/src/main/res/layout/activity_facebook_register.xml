@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginRelated.FacebookRegister">
+
+    <RelativeLayout
+        android:id="@+id/facebook_register_relaySignUp1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:text="@string/creat_account"
+            android:textColor="@color/ＭainOrange"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/facebook_register_scrollRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/facebook_register_relaySignUp1">
+
+        <LinearLayout
+            android:id="@+id/facebook_register_relaySignUp2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/facebook_register_editIDRegis"
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/id"
+                    android:textSize="24sp"
+                    android:maxLength="26"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <RadioGroup
+                android:id="@+id/facebook_register_radioGpSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/facebook_register_radioBtMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/male"
+                    android:textSize="32sp" />
+
+                <RadioButton
+                    android:id="@+id/facebook_register_radioBtFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/female"
+                    android:textSize="32sp" />
+
+            </RadioGroup>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/facebook_register_checkPrivacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/privacy_agreement"
+                    android:textSize="24sp" />
+
+                <CheckBox
+                    android:id="@+id/facebook_register_checkTermService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/facebook_register_checkPrivacy"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/term_of_service"
+                    android:textSize="24sp" />
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/facebook_register_btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/register_rectangle"
+                android:elevation="10dp"
+                android:text="@string/register"
+                android:textColor="@color/FullWhite"
+                android:textSize="32sp"/>
+
+            <TextView
+                android:id="@+id/facebook_register_txtMissing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="15sp"
+                android:textColor="@color/register"
+                android:textAlignment="textEnd"
+                android:gravity="end"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

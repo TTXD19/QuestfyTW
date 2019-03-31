@@ -60,7 +60,6 @@
         android:text="TAG"
         android:textSize="16sp"
         android:textColor="@color/ＭainOrange"
-        android:textStyle="bold"
         android:layout_below="@+id/list_article_recycLayout_circleUserImage"
         android:layout_alignLeft="@+id/list_article_recycLayout_circleUserImage"
         android:layout_alignStart="@+id/list_article_recycLayout_circleUserImage"
@@ -88,7 +87,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="10000000"
-        android:textColor="@color/FullBlack"
+        android:textColor="@color/CatergoryDarkGrayText"
         android:textSize="12sp"
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
@@ -96,6 +95,7 @@
         android:layout_marginTop="5dp"/>
 
     <ImageView
+        android:id="@+id/list_article_recycLayout_imgLike"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/thumb_up"
@@ -105,6 +105,54 @@
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtAnswerCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100"
+        android:textSize="12sp"
+        android:textColor="@color/CatergoryDarkGrayText"
+        android:layout_toLeftOf="@+id/list_article_recycLayout_imgLike"
+        android:layout_alignBottom="@id/list_article_recycLayout_txtViews"
+        android:layout_toStartOf="@+id/list_article_recycLayout_imgLike"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"/>
+
+    <ImageView
+        android:id="@+id/list_article_recycLayout_imgAnswer"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/article_reply_answer"
+        android:layout_toLeftOf="@+id/list_article_recycLayout_txtAnswerCount"
+        android:layout_alignBottom="@id/list_article_recycLayout_txtViews"
+        android:layout_toStartOf="@+id/list_article_recycLayout_txtAnswerCount"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/list_article_recycLayout_txtWantMeetUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我想見面討論"
+        android:textColor="@color/CatergoryDarkGrayText"
+        android:layout_toLeftOf="@+id/list_article_recycLayout_imgAnswer"
+        android:layout_alignBottom="@id/list_article_recycLayout_txtViews"
+        android:layout_toStartOf="@+id/list_article_recycLayout_imgAnswer"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"/>
+
+    <ImageView
+        android:id="@+id/list_article_recycLayout_imgWantMeetUp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/meet_up_style_2"
+        android:layout_toLeftOf="@+id/list_article_recycLayout_txtWantMeetUp"
+        android:layout_alignBottom="@id/list_article_recycLayout_txtViews"
+        android:layout_toStartOf="@+id/list_article_recycLayout_txtWantMeetUp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"/>
 
 
 

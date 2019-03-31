@@ -308,11 +308,11 @@ public class UserProfileFragment extends Fragment {
     private void LoadUserProfile(){
 
         if (firebaseUser.getPhotoUrl() != null) {
-            Picasso.get().load(firebaseUser.getPhotoUrl()).resize(128, 128).into(circleImageView);
+            Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
 
         }else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6")
-                    .resize(128, 128).into(circleImageView);
+                    .fit().into(circleImageView);
         }
         txtUserName.setText(firebaseUser.getDisplayName());
         if (firebaseUser.isEmailVerified()) {

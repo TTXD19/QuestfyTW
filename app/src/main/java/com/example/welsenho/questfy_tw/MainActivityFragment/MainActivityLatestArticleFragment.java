@@ -137,7 +137,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
     }
 
     private void LoadData(){
-        databaseReference.child("Users_Question_Articles").orderByChild("Upload_Date").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -151,7 +151,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         recyclerView.scrollToPosition(positionClick);
                         progressBar.setVisibility(View.INVISIBLE);
                         mListener.latestArticleFilter(arrayList);
-                        databaseReference.removeEventListener(this);
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }

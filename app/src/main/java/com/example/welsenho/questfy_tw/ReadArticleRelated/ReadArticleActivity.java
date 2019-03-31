@@ -111,7 +111,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         /**
          * Initialize Image RecyclerView
          */
-        editRelatedMethod = new EditRelatedMethod();
+
         arrayList = new ArrayList<>();
         adapterImageViews = new EditInitRelateRecyclerViewAdapterImageViews(arrayList);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -147,6 +147,12 @@ public class ReadArticleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        answerReplyCount();
+        super.onResume();
+    }
+
     private void InitializeItem() {
         circleImageView = findViewById(R.id.read_article_circle_image_user);
         txtUserName = findViewById(R.id.read_article_txt_userName);
@@ -172,6 +178,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         shineButtonHeart = findViewById(R.id.read_article_shineBtn_heart);
         shineButtonLike = findViewById(R.id.read_article_shineBtn_like);
 
+        editRelatedMethod = new EditRelatedMethod();
         progressBar.bringToFront();
         shineButtonHeart.init(this);
         shineButtonLike.init(this);
@@ -211,6 +218,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabas = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabas.getReference();
+
     }
 
     private void HideItem() {
@@ -250,11 +258,10 @@ public class ReadArticleActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     getUserProfile = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     txtUserName.setText(getUserProfile.getUser_Name());
-                    txtUploadData.setText(getUserProfile.getUpload_Date());
+                    txtUploadData.setText(editRelatedMethod.getFormattedDate(getApplicationContext(), Math.abs(getUserProfile.getUploadTimeStamp())));
                     txtMajors.setText(getUserProfile.getMajors());
                     txtTitle.setText(getUserProfile.getTitle());
                     txtContent.setText(getUserProfile.getContent());
-                    txtLikeCount.setText(String.valueOf(Math.abs(getUserProfile.getArticle_like_count())));
                     if (getUserProfile.getMeetDate() != null) {
                         txtMeetdate.setText(getUserProfile.getMeetDate());
                         txtMeetTime.setText(getUserProfile.getMeetTime());
@@ -367,15 +374,18 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     private void getLikeCount() {
-        databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").child(Article_ID).child("User_like_count").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     likeCount = dataSnapshot.getChildrenCount();
+                    //getNumChildren is quicker than firebase function 2019/3/29
+                    txtLikeCount.setText(String.valueOf(likeCount));
                 }else {
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("Article_like_count", 0);
                     databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
+                    txtLikeCount.setText(String.valueOf(0));
                 }
             }
 
@@ -427,6 +437,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         hashMap.put("Upload_Date", txtUploadData.getText().toString());
         hashMap.put("Content", txtContent.getText().toString());
         hashMap.put("User_Image", getUserProfile.getUser_Image());
+        hashMap.put("uploadTimeStamp", getUserProfile.getUploadTimeStamp());
 
         databaseReference.child("Users_Keep_Articles").child(firebaseUser.getUid()).child(Article_ID).updateChildren(hashMap);
     }

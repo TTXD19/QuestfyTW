@@ -79,7 +79,9 @@ public class ReadAnswersActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ReadAnswersActivity.this, AnswerReplyActivity.class);
                 intent.putExtra("Article_ID", Article_ID);
+                intent.putExtra("Article_Title", Article_Title);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -131,4 +133,6 @@ public class ReadAnswersActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

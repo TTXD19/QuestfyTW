@@ -3,16 +3,20 @@ package com.example.welsenho.questfy_tw.MainActivityFragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,6 +25,7 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private Context context;
     private MainOnClickListener mainOnClickListener;
+    private EditRelatedMethod editRelatedMethod;
 
     public list_article_recyclerView_adapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
         this.arrayList = arrayList;
@@ -37,13 +42,26 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        editRelatedMethod = new EditRelatedMethod();
         FirebaseDatabaseGetSet getSet = arrayList.get(i);
             viewHolder.txtUserName.setText(getSet.getUser_Name());
             viewHolder.txtTitle.setText(getSet.getTitle());
-            viewHolder.txtUploadDate.setText(getSet.getUpload_Date());
+            viewHolder.txtUploadDate.setText(editRelatedMethod.getFormattedDate(context, Math.abs(getSet.getUploadTimeStamp())));
             viewHolder.txtMajors.setText(getSet.getMajors());
             viewHolder.txtArticlePreview.setText(getSet.getContent());
             viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
+            if (getSet.getIsMeet().equals("Meet")){
+                viewHolder.txtMeetUp.setVisibility(View.VISIBLE);
+                viewHolder.imgMeetUp.setVisibility(View.VISIBLE);
+            }else{
+                viewHolder.txtMeetUp.setVisibility(View.GONE);
+                viewHolder.imgMeetUp.setVisibility(View.GONE);
+            }
+            if (getSet.getAnswerCount() != 0) {
+                viewHolder.txtAnserCount.setText(String.valueOf(getSet.getAnswerCount()));
+            }else {
+                viewHolder.txtAnserCount.setText(String.valueOf(0));
+            }
             Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
     }
 
@@ -70,6 +88,9 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
         private TextView txtMajors;
         private TextView txtArticlePreview;
         private TextView txtArticleCount;
+        private TextView txtAnserCount;
+        private TextView txtMeetUp;
+        private ImageView imgMeetUp;
         private CircleImageView circleImageViewUserImage;
 
         public ViewHolder(@NonNull View itemView, final MainAdapterOnClickListener mOnClickListener) {
@@ -81,6 +102,9 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
             txtUserName  = itemView.findViewById(R.id.list_article_recycLayout_txtUserName);
             txtArticlePreview = itemView.findViewById(R.id.list_article_recycLayout_txtArticlePreview);
             txtArticleCount = itemView.findViewById(R.id.list_article_recycLayout_txtViews);
+            txtAnserCount = itemView.findViewById(R.id.list_article_recycLayout_txtAnswerCount);
+            txtMeetUp = itemView.findViewById(R.id.list_article_recycLayout_txtWantMeetUp);
+            imgMeetUp = itemView.findViewById(R.id.list_article_recycLayout_imgWantMeetUp);
             circleImageViewUserImage = itemView.findViewById(R.id.list_article_recycLayout_circleUserImage);
 
 

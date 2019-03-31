@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id" translatable="false">465622173976561</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb465622173976561</string>
+
     <string name="app_name">Questfy-TW</string>
     <string name="or">or</string>
     <string name="e_mail">E-mail</string>
@@ -100,6 +103,10 @@
     <string name="select_3_related_majors">Select related majors</string>
     <string name="post">Post</string>
     <string name="question_preview">Question preview</string>
+    <string name="wrong_password_or_account">Wrong password or account : (</string>
+    <string name="account_not_exist">Account does not exist : (</string>
+    <string name="today">Today </string>
+    <string name="yesterday">Yesterday </string>
 
 
 </resources>

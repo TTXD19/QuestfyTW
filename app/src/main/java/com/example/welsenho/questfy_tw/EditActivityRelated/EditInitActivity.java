@@ -195,8 +195,10 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         if (getIntent().getStringArrayListExtra("getMajors") != null) {
             getMajors.clear();
             getMajors = getIntent().getStringArrayListExtra("getMajors");
-            String major = getMajors.toString();
-            txtChooseMajor.setText(major);
+            if (!getMajors.isEmpty()) {
+                String major = getMajors.toString();
+                txtChooseMajor.setText(major);
+            }
             showCurrentContent();
             destoryByUser = true;
         }
@@ -343,6 +345,9 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private void UploadFirebaseDatabase() {
         String title = editTitle.getText().toString();
         String content = editContent.getText().toString();
+        long timeStamp = System.currentTimeMillis();
+        timeStamp *= -1;
+        String meet = "NoMeet";
         HashMap<String, Object> hashMap = new HashMap<>();
         if (!getMajors.isEmpty() && !title.isEmpty() && !content.isEmpty()) {
             hashMap.put("User_Name", txtUserName.getText().toString());
@@ -353,6 +358,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             hashMap.put("Article_ID", articleUid);
             hashMap.put("userUid", firebaseAuth.getUid());
             hashMap.put("Article_like_count", 0);
+            hashMap.put("uploadTimeStamp", timeStamp);
             if (firebaseUser.getPhotoUrl() != null) {
                 hashMap.put("User_Image", firebaseUser.getPhotoUrl().toString());
             } else {
@@ -360,6 +366,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                 hashMap.put("User_Image", default_Image);
             }
             if (!isMeet) {
+                hashMap.put("isMeet", meet);
                 databaseReference.child("Users_Question_Articles").child(articleUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -375,6 +382,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                 });
             } else {
                 if (!txtPlaceName.getText().toString().equals(getString(R.string.meet_up_place)) && !txtTimePick.getText().toString().equals(getString(R.string.set_up_time)) && !txtDatePick.getText().toString().equals(getString(R.string.date))) {
+                    meet = "Meet";
+                    hashMap.put("isMeet", meet);
                     hashMap.put("MeetDate", txtDatePick.getText().toString());
                     hashMap.put("MeetTime", txtTimePick.getText().toString());
                     hashMap.put("MeetPlace", txtPlaceName.getText().toString());

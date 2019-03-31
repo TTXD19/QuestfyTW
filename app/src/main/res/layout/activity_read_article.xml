@@ -73,9 +73,9 @@
 
                 <com.sackcentury.shinebuttonlib.ShineButton
                     android:id="@+id/read_article_shineBtn_heart"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerInParent="true"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
                     android:src="@android:color/darker_gray"
                     app:btn_color="@android:color/darker_gray"
                     app:btn_fill_color="#FF6666"
@@ -89,7 +89,10 @@
                     app:small_shine_color="#CC9999"
                     app:shine_count="8"
                     app:siShape="@raw/heart"
-                    />
+                    android:layout_marginStart="20dp"
+                    android:layout_toRightOf="@+id/read_article_txt_UploadDate"
+                    android:layout_toEndOf="@+id/read_article_txt_UploadDate"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/read_article_txtKeep"
@@ -98,17 +101,17 @@
                     android:text="@string/keep"
                     android:layout_toRightOf="@+id/read_article_shineBtn_heart"
                     android:layout_toEndOf="@+id/read_article_shineBtn_heart"
-                    android:layout_centerInParent="true"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:textSize="16sp"
-                    android:textColor="@color/FullBlack"/>
+                    android:textColor="@color/FullBlack"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerVertical="true"/>
 
                 <com.sackcentury.shinebuttonlib.ShineButton
                     android:id="@+id/read_article_shineBtn_like"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerInParent="true"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@android:color/darker_gray"
                     app:btn_color="@android:color/darker_gray"
                     app:btn_fill_color="@color/LightMainOrange"
@@ -125,7 +128,9 @@
                     android:layout_toRightOf="@+id/read_article_txtKeep"
                     android:layout_toEndOf="@+id/read_article_txtKeep"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginStart="15dp"/>
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/read_article_txtLikeCount"
@@ -136,9 +141,10 @@
                     android:textSize="16sp"
                     android:layout_toRightOf="@+id/read_article_shineBtn_like"
                     android:layout_toEndOf="@+id/read_article_shineBtn_like"
-                    android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"/>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerVertical="true"/>
 
             </RelativeLayout>
 
@@ -352,7 +358,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/LightGrayBackground">
+        android:background="?selectableItemBackground">
 
         <TextView
             android:id="@+id/read_article_txtReadAnswers"
