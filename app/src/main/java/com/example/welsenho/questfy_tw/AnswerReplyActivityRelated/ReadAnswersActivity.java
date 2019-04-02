@@ -1,6 +1,8 @@
 package com.example.welsenho.questfy_tw.AnswerReplyActivityRelated;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -73,20 +76,22 @@ public class ReadAnswersActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void ItemClick(){
+    private void ItemClick() {
         relayReplyAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ReadAnswersActivity.this, AnswerReplyActivity.class);
-                intent.putExtra("Article_ID", Article_ID);
-                intent.putExtra("Article_Title", Article_Title);
-                startActivity(intent);
-                finish();
+                if (firebaseUser != null) {
+                    Intent intent = new Intent(ReadAnswersActivity.this, AnswerReplyActivity.class);
+                    intent.putExtra("Article_ID", Article_ID);
+                    intent.putExtra("Article_Title", Article_Title);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
 
-    private void IninItem(){
+    private void IninItem() {
         txtAnswerTitle = findViewById(R.id.read_answers_txtTitle);
         relayReplyAnswer = findViewById(R.id.read_answers_relay_2);
         recyclerView = findViewById(R.id.read_answers_recyclerView);
@@ -104,25 +109,26 @@ public class ReadAnswersActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void InitFirebase(){
+    private void InitFirebase() {
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void LoadDateFromFirebase(){
+    private void LoadDateFromFirebase() {
         databaseReference.child("ArticleAnswers").child(Article_ID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     arrayList.clear();
-                    for (DataSnapshot DS : dataSnapshot.getChildren()){
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
                         progressBar.setVisibility(View.GONE);
                     }
-                }else {
+                } else {
                     progressBar.setVisibility(View.GONE);
                 }
             }

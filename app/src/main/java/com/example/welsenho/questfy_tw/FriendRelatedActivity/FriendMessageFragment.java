@@ -2,6 +2,7 @@ package com.example.welsenho.questfy_tw.FriendRelatedActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.FriendMessagingRelated.FriendMessagingActivity;
+import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,7 +71,12 @@ public class FriendMessageFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         InitRecyclerView();
         InitFirebase();
-        getFirebaseData();
+        if (firebaseUser != null) {
+            getFirebaseData();
+        }else {
+            progressBar.setVisibility(View.GONE);
+            btnAddFriend.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -112,7 +119,7 @@ public class FriendMessageFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void InitItem(){
+    private void InitItem() {
         recyclerView = view.findViewById(R.id.friendMessageRecyclerView);
         progressBar = view.findViewById(R.id.friendMessageProgressBar);
         btnAddFriend = view.findViewById(R.id.friendMessageBtnAddFriend);
@@ -157,21 +164,21 @@ public class FriendMessageFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
     }
 
-    private void getFirebaseData(){
+    private void getFirebaseData() {
         databaseReference.child("UserFriendList").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     arrayList.clear();
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(getSet);
                         recyclerView.setAdapter(adapter);
                         progressBar.setVisibility(View.GONE);
                         databaseReference.removeEventListener(this);
                     }
-                }else {
+                } else {
                     recyclerView.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
                 }

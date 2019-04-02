@@ -1,7 +1,9 @@
 package com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.MainActivityFragment.list_article_recyclerView_adapter;
+import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -92,12 +95,16 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         InitItem();
         InitFirebaseItem();
         getOtherUserInfo();
-        detectFriend();
-        detectFollowing();
+        if (firebaseUser != null) {
+            detectFriend();
+            detectFollowing();
+            onItemClick();
+        }else {
+            guestClick();
+        }
         getFollowersCount();
         getUserArticlesData();
         setRecyclerView();
-        onItemClick();
     }
 
 
@@ -478,6 +485,31 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         askTo.put("AskDate", AskDate);
         askTo.put("AskQuestionContent", question);
         databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(otherUserUid).updateChildren(askTo);
+    }
+
+    private void guestClick(){
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(OtherUserProfileActivity.this, "Null user", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(OtherUserProfileActivity.this, "Null user", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        btnSendMessageQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(OtherUserProfileActivity.this, "Null user", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 

@@ -130,17 +130,11 @@ public class UserProfileFragment extends Fragment {
         editRelatedMethod = new EditRelatedMethod();
         dialog = new Dialog(getContext());
 
-        txtChangeImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeImage();
-            }
-        });
-
-        onItemClick();
-
-        LoadUserProfile();
-        getFirebaseData();
+        if (firebaseUser != null) {
+            onItemClick();
+            LoadUserProfile();
+            getFirebaseData();
+        }
 
 
         return view;
@@ -212,6 +206,13 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showPopUpMessage(getString(R.string.status_message));
+            }
+        });
+
+        txtChangeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImage();
             }
         });
     }

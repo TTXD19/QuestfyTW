@@ -30,6 +30,11 @@
         android:icon="@drawable/person_inforamtion"/>
 
     <item
+        android:id="@+id/setting"
+        android:title="@string/setting"
+        android:icon="@drawable/setting_icon_style1"/>
+
+    <item
         android:id="@+id/Sign_out"
         android:title="@string/sign_out"
         android:icon="@drawable/run_style_1"/>

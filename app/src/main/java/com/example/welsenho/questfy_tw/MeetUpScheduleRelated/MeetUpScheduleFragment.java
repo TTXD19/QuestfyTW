@@ -73,7 +73,9 @@ public class MeetUpScheduleFragment extends Fragment {
         InitItem();
         InitRecyclerView();
         InitFirebase();
-        getData();
+        if (firebaseUser != null) {
+            getData();
+        }
         ItemClick();
         return view;
     }

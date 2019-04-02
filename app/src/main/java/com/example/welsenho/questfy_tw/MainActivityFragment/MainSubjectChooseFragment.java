@@ -68,9 +68,11 @@ public class MainSubjectChooseFragment extends Fragment {
         InitRecyclerView(recyclerViewCurrent);
         InitRecyclerView(recyclerViewHistory);
         InitFirebase();
+        if (firebaseUser != null) {
+            getFirebaseHistorySearch();
+            onItemClick();
+        }
         getFirebaseData();
-        getFirebaseHistorySearch();
-        onItemClick();
         return view;
     }
 

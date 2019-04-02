@@ -57,12 +57,11 @@
         android:id="@+id/txt_nav_header_userSchoolName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="------------"
+        android:text="School name"
         android:textColor="@color/FullWhite"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/txt_nav_header_userVerified"
         android:textSize="18sp"
-        android:visibility="gone"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"/>
 
@@ -72,7 +71,7 @@
         android:layout_height="wrap_content"
         android:text="@string/information_not_complete"
         android:textColor="@color/FullWhite"
-        android:layout_below="@+id/txt_nav_header_userVerified"
+        android:layout_below="@+id/txt_nav_header_userSchoolName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:visibility="gone"/>
@@ -93,6 +92,51 @@
         android:layout_marginBottom="10dp"
         android:textAllCaps="false"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/txt_nav_header_guestUserGreet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_visitor"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/img_nav_header_user"
+        android:layout_marginTop="20dp"
+        android:textSize="24sp"
+        android:textColor="@color/FullWhite"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/txt_nav_header_guestUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_in_to_enjoy_more_service"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txt_nav_header_guestUserGreet"
+        android:layout_marginTop="5dp"
+        android:textSize="18sp"
+        android:textColor="@color/FullWhite"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btn_nav_header_guestUserInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/sign_in"
+        android:textSize="12sp"
+        android:background="@drawable/main_nav_header_btn_send_email_verify"
+        android:layout_below="@+id/txt_nav_header_guestUser"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/LightMainOrange"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        />
+
+
 
 
 

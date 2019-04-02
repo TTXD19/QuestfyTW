@@ -116,6 +116,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
         databaseReference.child("ArticleAnswers").child(Article_ID).child(randomID).removeValue();
         Intent intent = new Intent(AnswerReplyActivity.this, ReadAnswersActivity.class);
         intent.putExtra("Article_ID", Article_ID);
+        intent.putExtra("Article_Title", Article_Title);
         startActivity(intent);
         finish();
     }

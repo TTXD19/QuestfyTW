@@ -64,9 +64,13 @@ public class MyOwnPostArticles extends Fragment {
         view = inflater.inflate(R.layout.fragment_my_own_post_articles, container, false);
         InitItem();
         InitFirebase();
-        setRecyclerView();
-        LoadData();
-        onItemClick();
+        if (firebaseUser != null) {
+            setRecyclerView();
+            LoadData();
+            onItemClick();
+        }else {
+            progressBar.setVisibility(View.GONE);
+        }
         return view;
     }
 

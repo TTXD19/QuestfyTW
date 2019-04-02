@@ -1,8 +1,11 @@
 package com.example.welsenho.questfy_tw.MainUserActivity;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -45,6 +48,7 @@ import com.example.welsenho.questfy_tw.MainActivityFragment.MyOwnPostArticles;
 import com.example.welsenho.questfy_tw.MeetUpScheduleRelated.MeetUpScheduleFragment;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
+import com.example.welsenho.questfy_tw.SettingPageRelated.SettingPageFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         MainActivityLatestArticleFragment.OnFragmentInteractionListener, UserProfileFragment.OnFragmentInteractionListener,
         MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
         FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener,
-        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener {
+        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener, SettingPageFragment.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
     private String completeInfo = "False";
@@ -73,8 +77,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private TextView txtCheckVerified;
     private TextView txtCheckCompleteInfo;
     private TextView txtSchoolName;
+    private TextView txtGuestUser;
+    private TextView txtGuestUserGreet;
     private CircleImageView circleImageView;
     private Button btnCompleteUserInfo;
+    private Button btnLogin;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private FragmentTransaction fragmentTransaction;
@@ -106,29 +113,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
         //---------------------------------------------------- SET UP HEADER INFORMATION
         headerView = navigationView.getHeaderView(0);
+        txtGuestUser = headerView.findViewById(R.id.txt_nav_header_guestUser);
         txtID = headerView.findViewById(R.id.txt_nav_header_userID);
         txtEmail = headerView.findViewById(R.id.txt_nav_header_userEmail);
         txtCheckVerified = headerView.findViewById(R.id.txt_nav_header_userVerified);
         txtCheckCompleteInfo = headerView.findViewById(R.id.txt_nav_header_userInfoComplete);
         txtSchoolName = headerView.findViewById(R.id.txt_nav_header_userSchoolName);
+        txtGuestUserGreet = headerView.findViewById(R.id.txt_nav_header_guestUserGreet);
         btnCompleteUserInfo = headerView.findViewById(R.id.btn_nav_header_completeUserInfo);
+        btnLogin = headerView.findViewById(R.id.btn_nav_header_guestUserInfo);
         circleImageView = headerView.findViewById(R.id.img_nav_header_user);
         //----------------------------------------------------
-
-        InitFirebase();
 
         mainActivityMethods = new MainActivityMethods();
         signUpMethod = new SignUpMethod();
 
-        txtID.setText(firebaseUser.getDisplayName());
-        txtEmail.setText(firebaseUser.getEmail());
-        if (firebaseUser.isEmailVerified()) {
-            txtCheckVerified.setText(R.string.verified);
-            btnCompleteUserInfo.setVisibility(View.GONE);
-        }
-
-        if (!firebaseUser.getPhotoUrl().toString().isEmpty()){
-            Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
+        InitFirebase();
+        if (firebaseUser != null) {
+            InitUserPofile();
+        }else {
+            InitGuestUser();
         }
 
         /**
@@ -152,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
          * init each arrayList for searchView
          */
         initializeArrayList();
-        checkCompleteInfo();
         ItmeClick();
     }
 
@@ -242,6 +245,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         floatingActionButton.hide();
                         break;
 
+                    case R.id.setting:
+                        FragmentTransaction settingFragment = fragmentManager.beginTransaction();
+                        settingFragment.replace(R.id.main_activity_frameLayout, new SettingPageFragment(), "MainSettingFragment").commit();
+                        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                        toolbar.setTitle(getString(R.string.setting));
+                        floatingActionButton.hide();
+                        break;
+
                     case R.id.Sign_out:
                         firebaseAuth.signOut();
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -310,6 +321,74 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         mostPopularArrayList = orginalMostPopulatArrayList;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (firebaseUser != null) {
+            InitUserPofile();
+        }
+    }
+
+    private void InitUserPofile(){
+        txtID.setText(firebaseUser.getDisplayName());
+        txtEmail.setText(firebaseUser.getEmail());
+
+        if (firebaseUser.isEmailVerified()) {
+            txtCheckVerified.setText(R.string.verified);
+        }else {
+            txtCheckVerified.setText(R.string.not_verified);
+        }
+
+        if (firebaseUser.getPhotoUrl() != null){
+            Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
+        }
+
+        databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("CompleteInformationCheck").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.getValue().equals("success")) {
+                        btnCompleteUserInfo.setVisibility(View.GONE);
+                    } else {
+                        btnCompleteUserInfo.setVisibility(View.VISIBLE);
+                    }
+                    completeInfo = dataSnapshot.getValue().toString();
+                    saveCompleteInfo(completeInfo);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("schoolName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    txtSchoolName.setText(dataSnapshot.getValue().toString());
+                }else {
+                    txtSchoolName.setText("School not set");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void InitGuestUser(){
+        txtGuestUser.setVisibility(View.VISIBLE);
+        txtGuestUserGreet.setVisibility(View.VISIBLE);
+        btnLogin.setVisibility(View.VISIBLE);
+        txtID.setVisibility(View.GONE);
+        txtEmail.setVisibility(View.GONE);
+        txtCheckVerified.setVisibility(View.GONE);
+        txtSchoolName.setVisibility(View.GONE);
+        btnCompleteUserInfo.setVisibility(View.GONE);
+    }
 
     /**
      * searchFilter methods working process
@@ -410,33 +489,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void checkCompleteInfo() {
-
-        databaseReference.child("Users_profile").child(firebaseAuth.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    FirebaseDatabaseGetSet firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
-                    completeInfo = firebaseDatabaseGetSet.getCompleteInformationCheck();
-                    if (completeInfo.equals("False")) {
-                        btnCompleteUserInfo.setVisibility(View.VISIBLE);
-                        txtCheckCompleteInfo.setVisibility(View.VISIBLE);
-                    } else {
-                        completeInfo = "success";
-                        txtSchoolName.setVisibility(View.VISIBLE);
-                        txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
     private void sendEmainVerificationProcess() {
         txtCheckVerified.setText(R.string.not_verified);
 
@@ -496,22 +548,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     }
 
     private void showUserPostDialog(){
-        FireMissilesDialogFragment dialogFragment = new FireMissilesDialogFragment();
-        dialogFragment.show(getSupportFragmentManager(), "TAG");
+        UserInfoNotComplete dialogFragment = new UserInfoNotComplete();
+        dialogFragment.show(getSupportFragmentManager(), "UserInfoNotComplete");
     }
 
-    public static class FireMissilesDialogFragment extends DialogFragment {
+    private void saveCompleteInfo(String userCompleteInfo){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.keyUserCompleteInfo), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userCompleteInfo", userCompleteInfo);
+        editor.apply();
+    }
+
+    public static class UserInfoNotComplete extends DialogFragment {
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("User information not complete").setMessage("Complete your user information to enjoy more function")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.user_info_not_complete).setMessage(R.string.complete_user_info_enjoy)
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
+                            Intent intent = new Intent(getContext(), RealNameRegisterActivity.class);
+                            startActivity(intent);
                         }
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
                         }

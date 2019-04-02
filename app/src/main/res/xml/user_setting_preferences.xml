@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <PreferenceCategory
+        android:key="general"
+        android:title="@string/general"
+        >
+
+        <Preference
+            android:key="appVersion"
+            android:summary="1.0.0"
+            android:title="@string/app_version"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/account_information">
+
+        <Preference
+            android:key="registerEmail"
+            android:title="@string/register_email"
+            android:summary="example@gmail.com"/>
+
+        <Preference
+            android:key="resetPassword"
+            android:title="@string/reset_password"
+            android:summary="@string/reset_password_info"/>
+
+        <Preference
+            android:key="logout"
+            android:title="@string/log_out"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/abount_questfy">
+
+        <Preference
+            android:key="whatIsQuestfy"
+            android:title="@string/what_is_questfy"/>
+
+        <Preference
+            android:key="facebookFanPage"
+            android:title="@string/questfy_fan_page"/>
+
+        <Preference
+            android:key="inviteFriend"
+            android:title="@string/invite_friend"/>
+
+
+        <Preference
+            android:key="privacyPolicy"
+            android:title="@string/privacy_policy"/>
+
+        <Preference
+            android:key="termOfUses"
+            android:title="@string/term_of_use"/>
+
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

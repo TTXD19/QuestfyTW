@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView txtWrongPassword;
     private TextView txtSignUp;
+    private TextView txtSkip;
     private EditText editEmail;
     private EditText editPassword;
     private Button btnSignIn;
@@ -138,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void InitItem(){
         txtSignUp = findViewById(R.id.new_login_txtSignUp);
+        txtSkip = findViewById(R.id.new_login_txtSkip);
         btnSignIn = findViewById(R.id.new_login_btnSignIn);
         editEmail = findViewById(R.id.new_login_editInputEmail);
         editPassword = findViewById(R.id.new_login_editInputPassword);
@@ -153,6 +155,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void ItemClikc(){
+
+        txtSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,18 +325,22 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     private String CheckAccountStatus(String provider){
-        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("CheckUserCompleteInfo",Context.MODE_PRIVATE);
         accountStatus = sharedPreferences.getString(provider, "NotRegister");
         return accountStatus;
     }
 
+    //For saving user completeInfo checking data & check user provider is registered or not
     private void SaveAccountStatus(String provider){
-        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("CheckUserCompleteInfo",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(provider, "Registered");
         editor.apply();
     }
+
+
 
 
 }

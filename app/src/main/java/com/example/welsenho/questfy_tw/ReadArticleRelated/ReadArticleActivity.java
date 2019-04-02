@@ -1,6 +1,8 @@
 package com.example.welsenho.questfy_tw.ReadArticleRelated;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import com.example.welsenho.questfy_tw.EditActivityRelated.EditInitRelateRecycle
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
+import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.github.florent37.expansionpanel.ExpansionHeader;
@@ -98,14 +101,16 @@ public class ReadArticleActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         InitializeFirebase();
-        getContentData();
         getLikeCount();
-
-
-        queryLikeSearch();
-        queryKeepSearch();
-        meetUpDetect();
-        answerReplyCount();
+        getContentData();
+        if (firebaseUser != null) {
+            queryLikeSearch();
+            queryKeepSearch();
+            meetUpDetect();
+            answerReplyCount();
+        }else {
+            guestClick();
+        }
 
 
         /**
@@ -503,7 +508,11 @@ public class ReadArticleActivity extends AppCompatActivity {
                     btnRequestMeet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ClickReuqestMeetUp();
+                            if (checkUserCompleteInfo().equals("success")) {
+                                ClickReuqestMeetUp();
+                            }else {
+                                showUserPostDialog();
+                            }
                         }
                     });
                 }
@@ -555,5 +564,37 @@ public class ReadArticleActivity extends AppCompatActivity {
         questionHashMap.put("User_Image", getUserProfile.getUser_Image());
 
         databaseReference.child("QuestionMeetUp").child("QuestionArticleMeetUpData").child(Article_ID).child(firebaseUser.getUid()).updateChildren(questionHashMap);
+    }
+
+    private String checkUserCompleteInfo(){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.keyUserCompleteInfo), Context.MODE_PRIVATE);
+        return sharedPreferences.getString("userCompleteInfo", "False");
+    }
+
+    private void showUserPostDialog(){
+        MainActivity.UserInfoNotComplete dialogFragment = new MainActivity.UserInfoNotComplete();
+        dialogFragment.show(getSupportFragmentManager(), "UserInfoNotComplete");
+    }
+
+    private void guestClick(){
+        shineButtonLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shineButtonLike.setChecked(false);
+                /**
+                 * Write code to handle not null firebaseUser
+                 */
+            }
+        });
+
+        shineButtonHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shineButtonHeart.setChecked(false);
+                /**
+                 * Write code to handle not null firebaseUser
+                 */
+            }
+        });
     }
 }

@@ -104,6 +104,25 @@
     <string name="account_not_exist">無此帳號喔 : (</string>
     <string name="today">今天 </string>
     <string name="yesterday">昨天 </string>
+    <string name="user_info_not_complete">使用者資訊未完成</string>
+    <string name="complete_user_info_enjoy">現在立即填寫使用者資訊以啟用更多服務吧 : )</string>
+    <string name="setting">設定</string>
+
+    <string name="general">一般</string>
+    <string name="app_version">應用程式版本</string>
+    <string name="account_information">帳號資訊</string>
+    <string name="register_email">Email註冊</string>
+    <string name="reset_password">重設密碼</string>
+    <string name="reset_password_info">點擊重設，我們會寄一封重設郵件至您的註冊信箱</string>
+    <string name="log_out">登出</string>
+    <string name="abount_questfy">關於Questfy</string>
+    <string name="what_is_questfy">Questfy 是什麼 ?</string>
+    <string name="questfy_fan_page">Questfy臉書專頁</string>
+    <string name="invite_friend">邀請朋友</string>
+    <string name="privacy_policy">隱私權政策</string>
+    <string name="term_of_use">使用者協議</string>
+    <string name="hello_visitor">您好，訪客</string>
+    <string name="log_in_to_enjoy_more_service">登入享有更多服務吧</string>
 
 
 </resources>

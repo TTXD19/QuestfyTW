@@ -65,8 +65,12 @@ public class KeepArticlesFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_keep_articles, container, false);
         InitItem();
-        InitRecyclerView();
-        getFirebaseData();
+        if (firebaseUser != null) {
+            InitRecyclerView();
+            getFirebaseData();
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
         return view;
     }
 

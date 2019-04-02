@@ -64,7 +64,11 @@ public class FriendRequestFragment extends Fragment {
         InitItem();
         InitRecyclerView();
         InitFirebase();
-        getRequestFriendList();
+        if (firebaseUser != null) {
+            getRequestFriendList();
+        }else {
+            progressBar.setVisibility(View.GONE);
+        }
         return view;
     }
 

@@ -107,6 +107,29 @@
     <string name="account_not_exist">Account does not exist : (</string>
     <string name="today">Today </string>
     <string name="yesterday">Yesterday </string>
+    <string name="user_info_not_complete">User information not complete</string>
+    <string name="complete_user_info_enjoy">Complete your user information to enjoy more function</string>
+    <string name="setting">Setting</string>
+
+    <string name="general">General</string>
+    <string name="app_version">appVersion</string>
+    <string name="account_information">Account information</string>
+    <string name="register_email">Register email</string>
+    <string name="reset_password">Reset password</string>
+    <string name="reset_password_info">Click to reset password, we will send an password reset link to your registered email</string>
+    <string name="log_out">Log out</string>
+    <string name="abount_questfy">About Questfy</string>
+    <string name="what_is_questfy">What is Questfy ?</string>
+    <string name="questfy_fan_page">Questfy\'s facebook fan page</string>
+    <string name="invite_friend">Invite Friend</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="term_of_use">Term of use</string>
+
+
+    <!-- SharedPreference file key -->
+    <string name="keyUserCompleteInfo" translatable="false">userCompleteInfo</string>
+    <string name="hello_visitor">Hello visitor</string>
+    <string name="log_in_to_enjoy_more_service">Log in to enjoy more service</string>
 
 
 </resources>

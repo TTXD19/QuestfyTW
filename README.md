@@ -11,6 +11,10 @@ Questfy-TW 0.0.5 2019/3/26 (redesign course choosing layout and added report & s
 
 Questfy-TW 0.0.5 2019/3/28(Add EditInit's preview function)&(Fix recyclerView laggy issuse)
 
-uestfy-TW 0.0.5 2019/3/31(Implemented facebook & google login)
+Questfy-TW 0.0.5 2019/3/31(Implemented facebook & google login)
+
+Questfy-TW 0.0.5 2019/4/2(Implemented Setting page and guest user setting)
+
+
 
 
