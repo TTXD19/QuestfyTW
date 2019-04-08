@@ -110,6 +110,7 @@
     <string name="user_info_not_complete">User information not complete</string>
     <string name="complete_user_info_enjoy">Complete your user information to enjoy more function</string>
     <string name="setting">Setting</string>
+    <string name="person_ans_question">Private Q&amp;A</string>
 
     <string name="general">General</string>
     <string name="app_version">appVersion</string>
@@ -124,12 +125,15 @@
     <string name="invite_friend">Invite Friend</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="term_of_use">Term of use</string>
+    <string name="reply_an_answer">Reply an answer</string>
+    <string name="reply">Reply</string>
 
 
     <!-- SharedPreference file key -->
     <string name="keyUserCompleteInfo" translatable="false">userCompleteInfo</string>
     <string name="hello_visitor">Hello visitor</string>
     <string name="log_in_to_enjoy_more_service">Log in to enjoy more service</string>
+    <string name="reply_only_allow_one_image">Reply only allow one image</string>
 
 
 </resources>

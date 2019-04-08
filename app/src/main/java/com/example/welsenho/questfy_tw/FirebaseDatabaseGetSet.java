@@ -76,6 +76,17 @@ public class FirebaseDatabaseGetSet{
     private String dailyQuestionContent;
     private String dailyQuestionComment;
 
+    //For personal AskQuestion
+    private String AnswerName;
+    private String AnswerUid;
+    private String AskDate;
+    private String AskQuestionContent;
+    private String AskerName;
+    private String AskerUid;
+    private String QuestionTumbnail;
+    private String AskQuesitonUid;
+
+
 
     //GetSet for firebase
     public String getMajor() {
@@ -484,5 +495,69 @@ public class FirebaseDatabaseGetSet{
 
     public void setUploadTimeStamp(long uploadTimeStamp) {
         this.uploadTimeStamp = uploadTimeStamp;
+    }
+
+    public String getAnswerName() {
+        return AnswerName;
+    }
+
+    public void setAnswerName(String answerName) {
+        AnswerName = answerName;
+    }
+
+    public String getAnswerUid() {
+        return AnswerUid;
+    }
+
+    public void setAnswerUid(String answerUid) {
+        AnswerUid = answerUid;
+    }
+
+    public String getAskDate() {
+        return AskDate;
+    }
+
+    public void setAskDate(String askDate) {
+        AskDate = askDate;
+    }
+
+    public String getAskQuestionContent() {
+        return AskQuestionContent;
+    }
+
+    public void setAskQuestionContent(String askQuestionContent) {
+        AskQuestionContent = askQuestionContent;
+    }
+
+    public String getAskerName() {
+        return AskerName;
+    }
+
+    public void setAskerName(String askerName) {
+        AskerName = askerName;
+    }
+
+    public String getAskerUid() {
+        return AskerUid;
+    }
+
+    public void setAskerUid(String askerUid) {
+        AskerUid = askerUid;
+    }
+
+    public String getQuestionTumbnail() {
+        return QuestionTumbnail;
+    }
+
+    public void setQuestionTumbnail(String questionTumbnail) {
+        QuestionTumbnail = questionTumbnail;
+    }
+
+    public String getAskQuesitonUid() {
+        return AskQuesitonUid;
+    }
+
+    public void setAskQuesitonUid(String askQuesitonUid) {
+        AskQuesitonUid = askQuesitonUid;
     }
 }

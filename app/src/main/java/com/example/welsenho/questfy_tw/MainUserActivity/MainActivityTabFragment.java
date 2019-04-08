@@ -56,7 +56,7 @@ public class MainActivityTabFragment extends Fragment{
 
             @Override
             public void onPageSelected(int i) {
-                mListener.getTabCurrentPage(i);
+
             }
 
             @Override

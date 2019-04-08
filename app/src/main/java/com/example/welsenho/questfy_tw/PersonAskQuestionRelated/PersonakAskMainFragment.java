@@ -1,43 +1,50 @@
-package com.example.welsenho.questfy_tw.SettingPageRelated;
+package com.example.welsenho.questfy_tw.PersonAskQuestionRelated;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.TableLayout;
 
+import com.example.welsenho.questfy_tw.FriendRelatedActivity.MainFriendTabAdapter;
 import com.example.welsenho.questfy_tw.R;
 
-
-public class SettingPageFragment extends Fragment {
+public class PersonakAskMainFragment extends Fragment {
 
     private View view;
-    private FrameLayout frameLayout;
-    private OnFragmentInteractionListener mListener;
 
-    public SettingPageFragment() {
+    private OnFragmentInteractionListener mListener;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    public PersonakAskMainFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_setting_page, container, false);
-        frameLayout = view.findViewById(R.id.setting_page_framelayout);
-        getFragmentManager().beginTransaction().replace(R.id.setting_page_framelayout, new SettingPagePopulateFragment()).commit();
+        view = inflater.inflate(R.layout.fragment_personak_ask_main, container, false);
+        tabLayout = view.findViewById(R.id.main_personal_ask_fragment_tabLayout);
+        viewPager = view.findViewById(R.id.main_personal_ask_fragment_viewPager);
+        viewPager.setAdapter(new MainPersonalAskTabAdapter(getChildFragmentManager()));
+        tabLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                tabLayout.setupWithViewPager(viewPager);
+            }
+        });
         return view;
     }
 
@@ -56,12 +63,6 @@ public class SettingPageFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
     }
 
     public interface OnFragmentInteractionListener {

@@ -471,20 +471,15 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         String AskDate = editRelatedMethod.getUploadDate();
 
         HashMap<String, Object> askBy = new HashMap<>();
-        askBy.put("personalQuestion", randomAskUid);
+        askBy.put("AnswerUid", otherUserUid);
+        askBy.put("AnswerName", firebaseDatabaseGetSet.getID());
         askBy.put("AskerUid", firebaseUser.getUid());
         askBy.put("AskerName", firebaseUser.getDisplayName());
         askBy.put("AskDate", AskDate);
         askBy.put("AskQuestionContent", question);
-        databaseReference.child("Personal_Ask_Question").child(otherUserUid).child("AskedBy").child(firebaseUser.getUid()).updateChildren(askBy);
-
-        HashMap<String, Object> askTo = new HashMap<>();
-        askTo.put("personalQuestion", randomAskUid);
-        askTo.put("AnswererUid", otherUserUid);
-        askTo.put("AnswererName", txtUserName.getText().toString());
-        askTo.put("AskDate", AskDate);
-        askTo.put("AskQuestionContent", question);
-        databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(otherUserUid).updateChildren(askTo);
+        askBy.put("AskQuesitonUid", randomAskUid);
+        databaseReference.child("Personal_Ask_Question").child(otherUserUid).child("AskedBy").child(randomAskUid).updateChildren(askBy);
+        databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(randomAskUid).updateChildren(askBy);
     }
 
     private void guestClick(){

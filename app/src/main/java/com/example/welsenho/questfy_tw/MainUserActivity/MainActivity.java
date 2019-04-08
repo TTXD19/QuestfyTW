@@ -46,6 +46,9 @@ import com.example.welsenho.questfy_tw.MainActivityFragment.MainSubjectChooseFra
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MyOwnPostArticles;
 import com.example.welsenho.questfy_tw.MeetUpScheduleRelated.MeetUpScheduleFragment;
+import com.example.welsenho.questfy_tw.PersonAskQuestionRelated.PersonAskByFragment;
+import com.example.welsenho.questfy_tw.PersonAskQuestionRelated.PersonakAskMainFragment;
+import com.example.welsenho.questfy_tw.PersonAskQuestionRelated.PersonalAskToFragment;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
 import com.example.welsenho.questfy_tw.SettingPageRelated.SettingPageFragment;
@@ -66,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         MainActivityLatestArticleFragment.OnFragmentInteractionListener, UserProfileFragment.OnFragmentInteractionListener,
         MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
         FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener,
-        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener, SettingPageFragment.OnFragmentInteractionListener {
+        KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener, SettingPageFragment.OnFragmentInteractionListener,
+        PersonakAskMainFragment.OnFragmentInteractionListener, PersonalAskToFragment.OnFragmentInteractionListener, PersonAskByFragment.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
     private String completeInfo = "False";
@@ -152,6 +156,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         actionBarDrawerToggle.syncState();
         navigationClick();
 
+        //Default Init fragment fragment
+        FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
+        fragmentTransaction1.replace(R.id.main_activity_frameLayout, new MainActivityTabFragment(), "MainHomeFragment").commit();
+        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+        toolbar.setTitle("Questfy");
+        floatingActionButton.show();
+        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
+
         /**
          * init each arrayList for searchView
          */
@@ -171,18 +183,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
             @Override
             public boolean onQueryTextChange(String s) {
-                /*Log.d("TAG", "queryChange");
-                if (currentFilterPage == 1) {
+                MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment)getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
+                if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()) {
                     if (latestArrayList != null) {
-                        searchFilter(s, latestArrayList);
-                    }
-                } else if (currentFilterPage == 2) {
-                    if (mostPopularArrayList != null) {
-                        searchFilter(s, mostPopularArrayList);
-                    }
-                }*/
-                if (getSupportFragmentManager().findFragmentByTag("MainFriendFragment") == null) {
-                    if (latestArrayList != null) {
+                        Log.d("ArrayCheckNull", String.valueOf(latestArrayList.size()));
                         LatestSearchFilter(s, latestArrayList);
                     }
                     if (mostPopularArrayList != null) {
@@ -211,6 +215,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle("Questfy");
                         floatingActionButton.show();
+                        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
+                        break;
+
+                    case R.id.Main_personal_ask:
+                        FragmentTransaction personal_ask_fragment = fragmentManager.beginTransaction();
+                        personal_ask_fragment.replace(R.id.main_activity_frameLayout, new PersonakAskMainFragment(), "MainPersonalAsk").commit();
+                        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
+                        toolbar.setTitle(R.string.person_ans_question);
+                        floatingActionButton.hide();
+                        Log.d("MainPersonalAsk", getSupportFragmentManager().getFragments().toString());
                         break;
 
                     case R.id.main_related_question_fragment:
@@ -219,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.do_you_know));
                         floatingActionButton.hide();
+                        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
                         break;
 
                     case R.id.Meet_up:
@@ -227,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.meet_up_schedule));
                         floatingActionButton.hide();
+                        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
                         break;
 
                     case R.id.User_profile:
@@ -235,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         toolbar.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.user_profile_background));
                         toolbar.setTitle(getString(R.string.personal_info));
                         floatingActionButton.hide();
+                        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
                         break;
 
                     case R.id.Main_Friend_Fragment:
@@ -243,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.friends));
                         floatingActionButton.hide();
+                        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
                         break;
 
                     case R.id.setting:
@@ -251,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.ＭainOrange));
                         toolbar.setTitle(getString(R.string.setting));
                         floatingActionButton.hide();
+                        Log.d("CurrentFragment", getSupportFragmentManager().getFragments().toString());
                         break;
 
                     case R.id.Sign_out:
@@ -442,9 +461,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         }
 
         MainActivityLatestArticleFragment latestArticleFragment;
+        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
 
-
-        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(1);
 
         for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
             if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
@@ -452,6 +470,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                 if (!filterList.isEmpty()) {
                     latestArticleFragment.returnFilterList(filterList);
                 }
+            } else {
+                /**
+                 * Do something when article is not exist
+                 */
             }
         }
     }
@@ -463,9 +485,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         }
 
         MostPopularFragment mostPopularFragment;
-
-
-        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(2);
+        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
 
         for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
             if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
@@ -473,6 +493,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                 if (!filterList.isEmpty()) {
                     mostPopularFragment.returnFilterList(filterList);
                 }
+            }else {
+                /**
+                 * Do something when article is not exist
+                 */
             }
         }
     }

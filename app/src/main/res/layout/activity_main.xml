@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:background="@color/ＭainOrange"
         app:title="Questfy"
-        app:titleTextColor="@color/FullWhite"/>
+        app:titleTextColor="@color/FullWhite"
+        android:theme="@style/BaseTheme"/>
 
     <FrameLayout
         android:layout_width="match_parent"

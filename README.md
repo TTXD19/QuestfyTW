@@ -14,6 +14,11 @@ Questfy-TW 0.0.5 2019/3/28(Add EditInit's preview function)&(Fix recyclerView la
 Questfy-TW 0.0.5 2019/3/31(Implemented facebook & google login)
 
 Questfy-TW 0.0.5 2019/4/2(Implemented Setting page and guest user setting)
+                          (Android navi item select then select back to mainTabActivity cause crashed bug fixed)
+
+Questfy-TW 0.0.5 2019/4/9(Implemented Personal asking hadling activity and function progress 80%, estimate finish date 4/10)
+
+
 
 
 

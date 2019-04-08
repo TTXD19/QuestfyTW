@@ -84,7 +84,9 @@
         <activity android:name=".ReadArticleRelated.EnlargeImageActivity" />
         <activity android:name=".FriendRelatedActivity.SearchAndAddFriendActivity" />
         <activity android:name=".EditActivityRelated.EditPreviewActivity" />
-        <activity android:name=".LoginRelated.FacebookRegister"></activity>
+        <activity android:name=".LoginRelated.FacebookRegister" />
+        <activity android:name=".PersonAskQuestionRelated.PersonalAskQuestReplyActivity" />
+        <activity android:name=".PersonAskQuestionRelated.PersonalAskReplyingActivity"></activity>
     </application>
 
 </manifest>

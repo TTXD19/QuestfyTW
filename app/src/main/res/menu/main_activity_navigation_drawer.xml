@@ -9,6 +9,12 @@
         />
 
     <item
+        android:id="@+id/Main_personal_ask"
+        android:title="@string/person_ans_question"
+        android:icon="@drawable/personal_ask_style1"/>
+
+
+    <item
         android:id="@+id/Main_Friend_Fragment"
         android:title="@string/friends"
         android:icon="@drawable/meet_up_style_2"

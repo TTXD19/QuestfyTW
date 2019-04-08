@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PersonAskQuestionRelated.PersonalAskReplyingActivity"
+    android:background="@color/FullWhite">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/person_ask_replying_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/LightMainOrange"
+        app:title="@string/reply_an_answer"
+        app:titleTextColor="@color/FullWhite">
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/person_ask_replying_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/person_ask_replying_toolBar"
+        android:layout_above="@+id/person_ask_replying_relay_2">
+
+        <RelativeLayout
+            android:id="@+id/person_ask_replying_relay_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <TextView
+                android:id="@+id/person_ask_replying_txtUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="20dp"
+                android:text="User_Name"
+                android:textColor="@color/FullBlack"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/person_ask_replying_txtUpdateDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/person_ask_replying_txtUserName"
+                android:layout_marginLeft="12dp"
+                android:text="2018 Aug, 18"
+                android:textColor="@color/DateBlue"
+                android:textSize="12sp"
+                android:layout_marginStart="12dp" />
+
+            <EditText
+                android:id="@+id/person_ask_replying_editAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/click_to_replay_an_answer"
+                android:layout_below="@+id/person_ask_replying_txtUpdateDate"
+                android:background="@color/FullWhite"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textColor="@color/FullBlack"
+                />
+
+            <ImageView
+                android:id="@+id/person_ask_replying_imgPreview"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/person_ask_replying_editAnswer"/>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/person_ask_replying_relay_2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/person_ask_replying_linearLayout"
+        >
+
+        <ImageView
+            android:id="@+id/person_ask_replying_imgBtnAddPicture"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/picture"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reply_only_allow_one_image"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/person_ask_replying_imgBtnAddPicture"
+            android:layout_toEndOf="@+id/person_ask_replying_imgBtnAddPicture"
+            android:layout_marginLeft="12dp"
+            android:textColor="@color/CatergoryDarkGrayText"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/person_ask_replying_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:weightSum="2"
+        android:elevation="10dp">
+
+        <Button
+            android:id="@+id/person_ask_replying_btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/FullWhite"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="@color/signInRetangleRed"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/person_ask_replying_btnReply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/FullWhite"
+            android:text="@string/reply"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="@color/ＭainOrange"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

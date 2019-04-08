@@ -106,6 +106,7 @@
     <string name="yesterday">昨天 </string>
     <string name="user_info_not_complete">使用者資訊未完成</string>
     <string name="complete_user_info_enjoy">現在立即填寫使用者資訊以啟用更多服務吧 : )</string>
+    <string name="person_ans_question">個人問答</string>
     <string name="setting">設定</string>
 
     <string name="general">一般</string>
@@ -123,6 +124,9 @@
     <string name="term_of_use">使用者協議</string>
     <string name="hello_visitor">您好，訪客</string>
     <string name="log_in_to_enjoy_more_service">登入享有更多服務吧</string>
+    <string name="reply_an_answer">回覆答案</string>
+    <string name="reply">回覆</string>
+    <string name="reply_only_allow_one_image">一則回覆只能增加一張圖片</string>
 
 
 </resources>
