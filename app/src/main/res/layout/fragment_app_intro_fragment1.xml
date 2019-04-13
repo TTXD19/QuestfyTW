@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AppIntroRelated.AppIntroFragment1"
+    android:background="@color/FullWhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/AppIntro_fragment1_txtWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="歡迎來到Questfy社群"
+            android:layout_centerHorizontal="true"
+            android:textSize="32sp"
+            android:textColor="@color/LightMainOrange"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="60dp"
+            />
+
+        <ImageView
+            android:id="@+id/AppIntro_fragment1_imagPreview"
+            android:layout_width="250dp"
+            android:layout_height="500dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:elevation="20dp"
+            android:layout_below="@+id/AppIntro_fragment1_txtWelcome"
+            android:layout_marginTop="10dp"
+            />
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

@@ -23,7 +23,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
-            android:textSize="24sp"/>
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/pesonal_ask_recycler_txtQuestionContent"
@@ -33,8 +33,8 @@
             android:layout_marginRight="25dp"
             android:text="Question content"
             android:layout_below="@+id/pesonal_ask_recycler_txtUserFrom"
-            android:textSize="22sp"
-            android:textColor="@color/FullBlack"/>
+            android:textSize="18sp"
+            android:textColor="@color/CatergoryDarkGrayText"/>
         
         <ImageView
             android:id="@+id/pesonal_ask_recycler_imgQuestionImage"

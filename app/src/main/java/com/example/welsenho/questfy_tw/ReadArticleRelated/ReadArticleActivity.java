@@ -74,11 +74,15 @@ public class ReadArticleActivity extends AppCompatActivity {
     private ShineButton shineButtonLike;
     private ExpansionHeader expansionHeader;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerUserData;
     private ProgressBar progressBar;
     private EditInitRelateRecyclerViewAdapterImageViews adapterImageViews;
+    private ReadArticleUserAttendantRecyclerAdapter adapterAttendantUser;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private FirebaseDatabaseGetSet getUserProfile;
+    private FirebaseDatabaseGetSet getAttendantData;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private ArrayList<FirebaseDatabaseGetSet> arrayUserData;
     private EditRelatedMethod editRelatedMethod;
     private RelativeLayout relayReadAnsers;
 
@@ -118,12 +122,27 @@ public class ReadArticleActivity extends AppCompatActivity {
          */
 
         arrayList = new ArrayList<>();
+        arrayUserData = new ArrayList<>();
         adapterImageViews = new EditInitRelateRecyclerViewAdapterImageViews(arrayList);
+        adapterAttendantUser = new ReadArticleUserAttendantRecyclerAdapter(arrayUserData, getApplicationContext(), new ReadArticleUserAttendantRecyclerAdapter.ClickUser() {
+            @Override
+            public void getUserUid(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                String userUid = arrayList.get(position).getUserUid();
+                Intent intent = new Intent(ReadArticleActivity.this, OtherUserProfileActivity.class);
+                intent.putExtra("otherUserUid", userUid);
+                startActivity(intent);
+            }
+        });
+
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         recyclerView.setHasFixedSize(true);
 
+        recyclerUserData.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerUserData.setHasFixedSize(true);
+
         LoadImageFromFirebase();
+        getAttendantUserData();
     }
 
     @Override
@@ -178,6 +197,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         expansionHeader = findViewById(R.id.read_article_expan_header);
         toolbar = findViewById(R.id.read_article_toolbar);
         recyclerView = findViewById(R.id.read_article_recyclerView);
+        recyclerUserData = findViewById(R.id.read_article_recyclerView_userAttendant);
         relayReadAnsers = findViewById(R.id.read_article_relaytive_ClcikToSeeAnswer);
         progressBar = findViewById(R.id.read_article_progressBar);
         shineButtonHeart = findViewById(R.id.read_article_shineBtn_heart);
@@ -188,6 +208,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         shineButtonHeart.init(this);
         shineButtonLike.init(this);
         likePress = false;
+
     }
 
     private void answerReplyCount(){
@@ -559,9 +580,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         databaseReference.child("QuestionMeetUp").child("UserPersonalMeetUpData").child(firebaseUser.getUid()).child(Article_ID).updateChildren(hashMap);
 
         HashMap<String, Object> questionHashMap  = new HashMap<>();
-        questionHashMap.put("userUid", getUserProfile.getUserUid());
+        questionHashMap.put("userUid", firebaseUser.getUid());
         questionHashMap.put("User_Name", firebaseUser.getDisplayName());
-        questionHashMap.put("User_Image", getUserProfile.getUser_Image());
+        questionHashMap.put("User_Image", firebaseUser.getPhotoUrl().toString());
 
         databaseReference.child("QuestionMeetUp").child("QuestionArticleMeetUpData").child(Article_ID).child(firebaseUser.getUid()).updateChildren(questionHashMap);
     }
@@ -594,6 +615,27 @@ public class ReadArticleActivity extends AppCompatActivity {
                 /**
                  * Write code to handle not null firebaseUser
                  */
+            }
+        });
+    }
+
+    private void getAttendantUserData(){
+        databaseReference.child("QuestionMeetUp").child("QuestionArticleMeetUpData").child(Article_ID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    arrayUserData.clear();
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        getAttendantData = DS.getValue(FirebaseDatabaseGetSet.class);
+                        arrayUserData.add(getAttendantData);
+                        recyclerUserData.setAdapter(adapterAttendantUser);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

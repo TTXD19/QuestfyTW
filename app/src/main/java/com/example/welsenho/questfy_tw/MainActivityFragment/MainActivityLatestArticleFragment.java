@@ -2,15 +2,14 @@ package com.example.welsenho.questfy_tw.MainActivityFragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,31 +18,39 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
-import com.example.welsenho.questfy_tw.MainUserActivity.MainActivityTabFragment;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainActivityLatestArticleFragment extends Fragment {
 
+    private static final int ITEM_LOAD_COUNT = 5;
+
     private int positionClick;
+    private int totalCount = 0;
+    private int lastVisibleItem;
+    private Boolean isLoading = false;
+    private Boolean isMaxData = false;
+    private String lastNode = "";
+    private String lastKey = "";
+    private NewArticleListRecyclerAdapter newArticleListRecyclerAdapter;
+    private ArrayList<FirebaseDatabaseGetSet> testArrayList;
 
     private OnFragmentInteractionListener mListener;
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
-    private Context context;
-    private list_article_recyclerView_adapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayoutManager layoutManager;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -67,34 +74,15 @@ public class MainActivityLatestArticleFragment extends Fragment {
         progressBar = view.findViewById(R.id.latest_article_progressBar);
         swipeRefreshLayout = view.findViewById(R.id.latest_article_swipeRefresh);
 
-        progressBar.setVisibility(View.VISIBLE);
-        arrayList = new ArrayList<>();
-        adapter = new list_article_recyclerView_adapter(arrayList, getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-        adapter.setOnMainClickListener(new MainOnClickListener() {
-            @Override
-            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                String postID = arrayList.get(position).getArticle_ID();
-                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
-                intent.putExtra("ArticleID", postID);
-                positionClick = position;
-                startActivity(intent);
-            }
-        });
-        LoadData();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                positionClick = 0;
-                LoadData();
-            }
-        });
+        //Testing code
+        InitItem();
+        getLastKeyFromFirebase();
+        setRecyclerView();
+        getFirstData();
+        testRecyclerView();
         return view;
     }
 
@@ -118,7 +106,29 @@ public class MainActivityLatestArticleFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LoadData();
+    }
+
+    private void InitItem(){
+        progressBar.setVisibility(View.VISIBLE);
+        arrayList = new ArrayList<>();
+        testArrayList = new ArrayList<>();
+        newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.getItemID() {
+            @Override
+            public void getItemID(int position) {
+                String postID = arrayList.get(position).getArticle_ID();
+                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                intent.putExtra("ArticleID", postID);
+                positionClick = position;
+                startActivity(intent);
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getFirstData();
+            }
+        });
     }
 
     /**
@@ -136,23 +146,40 @@ public class MainActivityLatestArticleFragment extends Fragment {
         void latestArticleFilter(ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 
-    private void LoadData(){
-        databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").addListenerForSingleValueEvent(new ValueEventListener() {
+    /**
+     * For returning filtered data from main activity and rebuild the recyclerview data again
+     * @param returnList
+     */
+    public void returnFilterList(final ArrayList<FirebaseDatabaseGetSet> returnList){
+        if (returnList != null){
+            recyclerView.setVisibility(View.VISIBLE);
+            list_article_recyclerView_adapter filterAdapter = new list_article_recyclerView_adapter(returnList, getContext());
+            filterAdapter.setOnMainClickListener(new MainOnClickListener() {
+                @Override
+                public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                    String postID = arrayList.get(position).getArticle_ID();
+                    Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                    intent.putExtra("ArticleID", postID);
+                    startActivity(intent);
+                }
+            });
+            recyclerView.setAdapter(filterAdapter);
+            Log.d("FILTERLISTSIZEtitle", returnList.get(0).getTitle());
+        }
+    }
+
+    public void hideRecyclerView(){
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    private void getLastKeyFromFirebase(){
+        Query getLastKey = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToLast(1);
+        getLastKey.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    arrayList.clear();
-                    progressBar.setVisibility(View.VISIBLE);
-                    for (DataSnapshot DS : dataSnapshot.getChildren()){
-                        firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(firebaseDatabaseGetSet);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.scrollToPosition(positionClick);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        mListener.latestArticleFilter(arrayList);
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+                for (DataSnapshot DS:dataSnapshot.getChildren()){
+                    lastKey = DS.getKey();
+                    Log.d("LASTITEMKEY", lastKey);
                 }
             }
 
@@ -163,22 +190,128 @@ public class MainActivityLatestArticleFragment extends Fragment {
         });
     }
 
-    /**
-     * For returning filtered data from main activity and rebuild the recyclerview data again
-     * @param returnList
-     */
-    public void returnFilterList(ArrayList<FirebaseDatabaseGetSet> returnList){
-            recyclerView.setVisibility(View.VISIBLE);
-            adapter = new list_article_recyclerView_adapter(returnList, getContext());
-            adapter.setOnMainClickListener(new MainOnClickListener() {
-                @Override
-                public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                    String postID = arrayList.get(position).getArticle_ID();
-                    Intent intent = new Intent(getContext(), ReadArticleActivity.class);
-                    intent.putExtra("ArticleID", postID);
-                    startActivity(intent);
+    public void getFirstData(){
+        databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                testArrayList.clear();
+                if (dataSnapshot.hasChildren()){
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        testArrayList.add(getSet);
+                        arrayList.add(getSet);
+                        mListener.latestArticleFilter(arrayList);
+                    }
+                    /**
+                     * Handle arrayList filter & load first data
+                     */
+                    newArticleListRecyclerAdapter.setGetArrayListForClick(arrayList);
+                    newArticleListRecyclerAdapter.addAll(testArrayList);
+                    lastNode =  newArticleListRecyclerAdapter.getLastItemId();
+                    recyclerView.setAdapter(newArticleListRecyclerAdapter);
+                    progressBar.setVisibility(View.GONE);
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    /**
+                     * Check whether is the max data or not
+                     */
+                    if (lastKey.equals(lastNode)){
+                        isLoading = true;
+                        isMaxData = true;
+                    }
+
                 }
-            });
-            recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getMoreData(){
+        databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").startAt(lastNode).limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    if (!isMaxData) {
+                        if (dataSnapshot.hasChildren()) {
+                            testArrayList.clear();
+                            arrayList.remove(arrayList.size() - 1);
+                            for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                                FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                                testArrayList.add(getSet);
+                                arrayList.add(getSet);
+                            }
+
+                            /**
+                             * Load more data after 100 past
+                             */
+                            newArticleListRecyclerAdapter.setGetArrayListForClick(arrayList);
+                            testArrayList.remove(0);
+                            newArticleListRecyclerAdapter.addAll(testArrayList);
+                            lastNode = newArticleListRecyclerAdapter.getLastItemId();
+                            mListener.latestArticleFilter(arrayList);
+                            progressBar.setVisibility(View.GONE);
+
+                            /**
+                             * Check whether is the max data or not
+                             */
+                            if (lastKey.equals(lastNode)) {
+                                isLoading = true;
+                                isMaxData = true;
+                            }
+                        }else {
+                            Log.d("CURRENTLASTNODE", "MAXNOTDATA");
+                        }
+                    } else {
+                        Log.d("CURRENTLASTNODE", "MAXDATA");
+                    }
+                }else {
+                    Log.d("CURRENTLASTNODE", "STOPLOADING");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void testRecyclerView(){
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)){
+                    Log.d("SCROLLING", "TRUE");
+                    if (!isMaxData) {
+                        int totalItem = layoutManager.getItemCount();
+                        Log.d("CURRENTLASTNODE", String.valueOf(totalItem));
+                        progressBar.setVisibility(View.VISIBLE);
+                        getMoreData();
+                    }else {
+                        Log.d("SCROLLING", "MAXDATA");
+                    }
+                }else {
+                    Log.d("SCROLLING", "FALSE");
+                }
+            }
+        });
+    }
+
+    private void setRecyclerView(){
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public void setOriginalRecyclerView(){
+        recyclerView.setAdapter(newArticleListRecyclerAdapter);
+        Toast.makeText(getContext(), "original", Toast.LENGTH_SHORT).show();
     }
 }

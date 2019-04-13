@@ -6,11 +6,13 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    android:background="@color/FullWhite">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/FullWhite">
 
         <TextView
             android:id="@+id/personal_ask_quest_reply_recycler_txtUserFrom"
@@ -32,7 +34,8 @@
             android:text="Question content"
             android:layout_below="@+id/personal_ask_quest_reply_recycler_txtUserFrom"
             android:textSize="22sp"
-            android:textColor="@color/FullBlack"/>
+            android:textColor="@color/CatergoryDarkGrayText"
+            android:textIsSelectable="true"/>
 
         <ImageView
             android:id="@+id/personal_ask_quest_reply_recycler_imgQuestionImage"

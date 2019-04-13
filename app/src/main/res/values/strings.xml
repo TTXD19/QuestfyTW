@@ -127,9 +127,12 @@
     <string name="term_of_use">Term of use</string>
     <string name="reply_an_answer">Reply an answer</string>
     <string name="reply">Reply</string>
+    <string name="delete_photo">Delete photo</string>
+    <string name="click_to_delete_photo">Click yes to delete this photo</string>
 
 
     <!-- SharedPreference file key -->
+    <string name="appIntro" translatable="false">appIntro</string>
     <string name="keyUserCompleteInfo" translatable="false">userCompleteInfo</string>
     <string name="hello_visitor">Hello visitor</string>
     <string name="log_in_to_enjoy_more_service">Log in to enjoy more service</string>

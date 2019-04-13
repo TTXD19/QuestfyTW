@@ -127,6 +127,8 @@
     <string name="reply_an_answer">回覆答案</string>
     <string name="reply">回覆</string>
     <string name="reply_only_allow_one_image">一則回覆只能增加一張圖片</string>
+    <string name="delete_photo">照片刪除</string>
+    <string name="click_to_delete_photo">點擊確認已刪除這張照片</string>
 
 
 </resources>

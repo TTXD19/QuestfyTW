@@ -39,6 +39,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
     private String questionUid;
     private String imageUri;
     private String imageDate;
+    private String questioType;
     private EditRelatedMethod editRelatedMethod;
 
     private TextView txtUserName;
@@ -63,7 +64,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personal_ask_replying);
 
         questionUid = getIntent().getStringExtra("questionUid");
-
+        questioType = getIntent().getStringExtra("questioType");
         InitFirebase();
         InitItem();
         ItemClick();
@@ -120,13 +121,13 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (imageUri != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(PersonalAskReplyingActivity.this);
-                    builder.setTitle("Delete photo").setMessage("Click yes to delete this photo").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.delete_photo).setMessage(R.string.click_to_delete_photo).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ClickToDeletePhoto();
                             dialog.dismiss();
                         }
-                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -166,12 +167,16 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
             long uploadTimeStamp = System.currentTimeMillis();
             uploadTimeStamp *= -1;
             hashMap.put("uploadTimeStamp", uploadTimeStamp);
+            if (imageUri != null){
+                hashMap.put("QuestionTumbnail", imageUri);
+            }
             databaseReference.child("Personal_Ask_Question_Reply").child(questionUid).child(randomUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
                         Intent intent = new Intent(PersonalAskReplyingActivity.this, PersonalAskQuestReplyActivity.class);
                         intent.putExtra("questionUid", questionUid);
+                        intent.putExtra("questioType", questioType);
                         startActivity(intent);
                         finish();
                     }
@@ -198,7 +203,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
         EditRelatedMethod editRelatedMethod = new EditRelatedMethod();
         String date = editRelatedMethod.getDate();
         imageDate = date;
-        storageReference = storageReference.child("Personal_Ask_Request_Images").child(firebaseUser.getUid()).child(date);
+        storageReference = storageReference.child("Personal_Ask_Request_Images").child(questionUid).child(firebaseUser.getUid()).child(date);
         storageReference.putFile(photoUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -212,7 +217,6 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(PersonalAskReplyingActivity.this, task.getResult().toString(), Toast.LENGTH_SHORT).show();
                     imageUri = task.getResult().toString();
                     Picasso.get().load(task.getResult()).fit().into(imgPreview);
                     progressDialog.dismiss();
@@ -227,7 +231,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
     private void ClickToDeletePhoto(){
         imageUri = null;
         imgPreview.setImageResource(0);
-        storageReference = storageReference.child("Personal_Ask_Request_Images").child(firebaseUser.getUid()).child(imageDate);
         storageReference.delete();
+        imageDate = null;
     }
 }

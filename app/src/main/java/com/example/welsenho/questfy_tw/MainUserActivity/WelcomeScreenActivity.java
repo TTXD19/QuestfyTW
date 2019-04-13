@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.example.welsenho.questfy_tw.AppIntroRelated.AppIntroActivity;
 import com.example.welsenho.questfy_tw.InternetConnectionDetect;
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.R;
@@ -32,7 +33,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (internetConnectionDetect.isNetworkAvailable(getApplicationContext())) {
-                    Intent intent = new Intent(WelcomeScreenActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(WelcomeScreenActivity.this, AppIntroActivity.class);
                     startActivity(intent);
                     finish();
                 }else {

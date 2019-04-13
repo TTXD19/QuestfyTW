@@ -1,7 +1,6 @@
-package com.example.welsenho.questfy_tw.PersonAskQuestionRelated;
+package com.example.welsenho.questfy_tw.MainActivityFragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,8 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
@@ -27,48 +24,42 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PersonAskByFragment extends Fragment {
+
+public class UserFollowingInfoFragment extends Fragment {
 
     private View view;
+    private RecyclerView recyclerView;
+    private UserFollowingRecyclerAdapter adapter;
+
+    private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
 
     private OnFragmentInteractionListener mListener;
-    private RecyclerView recyclerView;
-    private ArrayList<FirebaseDatabaseGetSet> arrayList;
-    private PersonalAskRecyclerAdapter adapter;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
-    public PersonAskByFragment() {
+    public UserFollowingInfoFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_person_ask_by, container, false);
+        view = inflater.inflate(R.layout.fragment_user_following_info, container, false);
         InitItem();
         InitRecyclerView();
         InitFirebase();
-        if (firebaseUser == null){
-            showDefaultPage();
-        }else {
-            getData();
-        }
+        getUserFollowingData();
         return view;
-    }
-
-    private void showDefaultPage() {
-        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -88,40 +79,16 @@ public class PersonAskByFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
     private void InitItem(){
-        recyclerView = view.findViewById(R.id.personal_ask_by_recyclerView);
-        arrayList = new ArrayList<>();
-        adapter = new PersonalAskRecyclerAdapter(arrayList, getContext(), new PersonalAskRecyclerAdapter.getQuestionUid() {
-            @Override
-            public void QuestionClick(int position) {
-                String questionUid = arrayList.get(position).getAskQuesitonUid();
-                Intent intent = new Intent(getContext(), PersonalAskQuestReplyActivity.class);
-                intent.putExtra("questionUid", questionUid);
-                intent.putExtra("questioType", "AskBy");
-                startActivity(intent);
-            }
-        });
-    }
+        recyclerView = view.findViewById(R.id.user_following_info_recyclerView);
 
-    private void InitRecyclerView(){
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        arrayList = new ArrayList<>();
+        adapter = new UserFollowingRecyclerAdapter(arrayList, getContext());
     }
 
     private void InitFirebase(){
@@ -131,16 +98,17 @@ public class PersonAskByFragment extends Fragment {
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void getData(){
-        databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskedBy").addListenerForSingleValueEvent(new ValueEventListener() {
+    private void getUserFollowingData(){
+        databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(getSet);
-                        recyclerView.setAdapter(adapter);
+                        firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        arrayList.add(firebaseDatabaseGetSet);
                     }
+
+                    recyclerView.setAdapter(adapter);
                 }
             }
 
@@ -149,5 +117,11 @@ public class PersonAskByFragment extends Fragment {
 
             }
         });
+    }
+
+    private void InitRecyclerView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.setHasFixedSize(true);
     }
 }

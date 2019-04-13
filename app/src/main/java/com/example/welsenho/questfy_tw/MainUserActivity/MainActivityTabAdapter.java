@@ -10,6 +10,7 @@ import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestAr
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainSubjectChooseFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MyOwnPostArticles;
+import com.example.welsenho.questfy_tw.MainActivityFragment.UserFollowingInfoFragment;
 import com.example.welsenho.questfy_tw.R;
 
 public class MainActivityTabAdapter extends FragmentPagerAdapter{
@@ -29,13 +30,14 @@ public class MainActivityTabAdapter extends FragmentPagerAdapter{
             case 2: return new MostPopularFragment();
             case 3: return new KeepArticlesFragment();
             case 4: return new MyOwnPostArticles();
+            case 5: return new UserFollowingInfoFragment();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 
     @Nullable
@@ -44,15 +46,17 @@ public class MainActivityTabAdapter extends FragmentPagerAdapter{
         if (language.equals("中文")) {
             switch (position) {
                 case 0:
-                    return "相關科系";
+                    return "問題分類";
                 case 1:
-                    return "最新文章";
+                    return "最新問題";
                 case 2:
-                    return "熱門文章";
+                    return "熱門問題";
                 case 3:
-                    return "收藏文章";
+                    return "已收藏問題";
                 case 4:
                     return "我發表的問題";
+                case 5:
+                    return "已跟隨的使用者";
             }
         }else {
             switch (position) {
@@ -66,6 +70,8 @@ public class MainActivityTabAdapter extends FragmentPagerAdapter{
                     return "Keep Articles";
                 case 4:
                     return "My Questions";
+                case 5:
+                    return "Following Users";
             }
         }
         return null;

@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.welsenho.questfy_tw"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -72,6 +72,15 @@ dependencies {
     //robertlevonyan/materialChipView : https://github.com/robertlevonyan/materialChipView
     implementation 'com.robertlevonyan.view:MaterialChipView:1.2.5'
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
+
+    //App intro : https://github.com/AppIntro/AppIntro
+    implementation 'com.github.AppIntro:AppIntro:4.2.3'
+
+    //Android Paging Libray
+    implementation "android.arch.paging:runtime:1.0.1"
+
+    //Firebase Pagination Library
+    implementation 'com.shreyaspatil:FirebaseRecyclerPagination:1.0.1'
 
 
 }

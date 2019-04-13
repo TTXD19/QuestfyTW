@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class PersonalAskQuestReplyActivity extends AppCompatActivity {
 
     private String questionUid;
+    private String questioType;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private PersonalAskQuestReplyRecyclerAdapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
@@ -53,6 +54,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personal_ask_quest_reply);
 
         questionUid = getIntent().getStringExtra("questionUid");
+        questioType = getIntent().getStringExtra("questioType");
         InitFirebase();
         InitItem();
         ItemClick();
@@ -101,6 +103,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PersonalAskQuestReplyActivity.this, PersonalAskReplyingActivity.class);
                 intent.putExtra("questionUid", questionUid);
+                intent.putExtra("questioType", questioType);
                 startActivity(intent);
                 finish();
             }
@@ -115,23 +118,45 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
     }
 
     private void InitQuestion(){
-        databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskedBy").child(questionUid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
-                    txtUser.setText(firebaseDatabaseGetSet.getAskerName());
-                    txtContent.setText(firebaseDatabaseGetSet.getAskQuestionContent());
-                    txtUploadData.setText(firebaseDatabaseGetSet.getAskDate());
-                    Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(imgContent);
+        if (questioType.equals("AskBy")) {
+            databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskedBy").child(questionUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
+                        String title = "來自" + firebaseDatabaseGetSet.getAskerName() + "的提問";
+                        txtUser.setText(title);
+                        txtContent.setText(firebaseDatabaseGetSet.getAskQuestionContent());
+                        txtUploadData.setText(firebaseDatabaseGetSet.getAskDate());
+                        Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(imgContent);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }else {
+            databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(questionUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
+                        String title = "對" + firebaseDatabaseGetSet.getAnswerName() + "的提問";
+                        txtUser.setText(title);
+                        txtContent.setText(firebaseDatabaseGetSet.getAskQuestionContent());
+                        txtUploadData.setText(firebaseDatabaseGetSet.getAskDate());
+                        Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(imgContent);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     private void getMessahgeCount(){
@@ -141,6 +166,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
                 if (!dataSnapshot.getChildren().equals(0)){
                     String messageCount = String.valueOf(dataSnapshot.getChildrenCount()) + "則答案回覆";
                     txtMessagesCount.setText(messageCount);
+                    databaseReference.removeEventListener(this);
                 }
             }
 
@@ -157,11 +183,11 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     arrayList.clear();
-
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
+                        databaseReference.removeEventListener(this);
                     }
                 }
             }

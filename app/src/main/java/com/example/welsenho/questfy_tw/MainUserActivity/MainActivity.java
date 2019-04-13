@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +46,7 @@ import com.example.welsenho.questfy_tw.MainActivityFragment.MainActivityLatestAr
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainSubjectChooseFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MyOwnPostArticles;
+import com.example.welsenho.questfy_tw.MainActivityFragment.UserFollowingInfoFragment;
 import com.example.welsenho.questfy_tw.MeetUpScheduleRelated.MeetUpScheduleFragment;
 import com.example.welsenho.questfy_tw.PersonAskQuestionRelated.PersonAskByFragment;
 import com.example.welsenho.questfy_tw.PersonAskQuestionRelated.PersonakAskMainFragment;
@@ -58,6 +60,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -70,10 +73,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         MostPopularFragment.OnFragmentInteractionListener, MainFriendFragment.OnFragmentInteractionListener, FriendMessageFragment.OnFragmentInteractionListener,
         FriendRequestFragment.OnFragmentInteractionListener, MainSubjectChooseFragment.OnFragmentInteractionListener, MainDailyQuestionActivity.OnFragmentInteractionListener,
         KeepArticlesFragment.OnFragmentInteractionListener, MyOwnPostArticles.OnFragmentInteractionListener, MeetUpScheduleFragment.OnFragmentInteractionListener, SettingPageFragment.OnFragmentInteractionListener,
-        PersonakAskMainFragment.OnFragmentInteractionListener, PersonalAskToFragment.OnFragmentInteractionListener, PersonAskByFragment.OnFragmentInteractionListener {
+        PersonakAskMainFragment.OnFragmentInteractionListener, PersonalAskToFragment.OnFragmentInteractionListener, PersonAskByFragment.OnFragmentInteractionListener, UserFollowingInfoFragment.OnFragmentInteractionListener {
 
     private Boolean doubeTapExit = false;
     private String completeInfo = "False";
+    private MenuItem menuItem;
     private int currentFilterPage;
 
     private TextView txtID;
@@ -103,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
     private ArrayList<FirebaseDatabaseGetSet> latestArrayList;
     private ArrayList<FirebaseDatabaseGetSet> mostPopularArrayList;
+    private ArrayList<FirebaseDatabaseGetSet> onlineSearchFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_serarch_view, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        menuItem = menu.findItem(R.id.action_search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -194,6 +200,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                     }
                 }
                 return false;
+            }
+        });
+
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                MainActivityLatestArticleFragment latestArticleFragment;
+                latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
+                latestArticleFragment.setOriginalRecyclerView();
+                return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -328,6 +349,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     @Override
     public void getTabCurrentPage(int page) {
         currentFilterPage = page;
+        /**
+         * When user swipe to page save & myOwnPost hide searchView
+         */
+        if (menuItem != null) {
+            if (page == 3 || page == 4 || page == 5) {
+                menuItem.setVisible(false);
+            } else {
+                menuItem.setVisible(true);
+            }
+        }
     }
 
     @Override
@@ -463,17 +494,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         MainActivityLatestArticleFragment latestArticleFragment;
         latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
 
-
         for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
             if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
                 filterList.add(firebaseDatabaseGetSet);
-                if (!filterList.isEmpty()) {
-                    latestArticleFragment.returnFilterList(filterList);
+                latestArticleFragment.returnFilterList(filterList);
+                Log.d("FILTERLISTSIZE", String.valueOf(filterList.size()) + filterList.get(0).getTitle());
+            }else {
+                if (filterList.size() == 0){
+                    latestArticleFragment.hideRecyclerView();
                 }
-            } else {
-                /**
-                 * Do something when article is not exist
-                 */
             }
         }
     }
@@ -565,10 +594,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         if (subject.equals("全部")){
             subject = "";
         }
+        /*
         LatestSearchFilter(subject, latestArrayList);
         MostPopularFilter(subject, mostPopularArrayList);
-        MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
-        mainActivityTabFragment.changePage();
+        */
+        MainActivityLatestArticleFragment latestArticleFragment;
+        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
+
+        if (!subject.equals("")) {
+            searchMainCourse(subject, latestArticleFragment);
+        }else {
+            MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
+            mainActivityTabFragment.changePage();
+
+            latestArticleFragment.getFirstData();
+        }
     }
 
     private void showUserPostDialog(){
@@ -604,5 +644,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             // Create the AlertDialog object and return it
             return builder.create();
         }
+    }
+
+    private void searchMainCourse(String course, final MainActivityLatestArticleFragment latestArticleFragment){
+        onlineSearchFilter = new ArrayList<>();
+        Query query = databaseReference.child("Users_Question_Articles").orderByChild("Majors").startAt("[" + course).endAt("[" + course+ "\uf8ff");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    onlineSearchFilter.clear();
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        FirebaseDatabaseGetSet firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        onlineSearchFilter.add(firebaseDatabaseGetSet);
+                    }
+
+                    latestArticleFragment.returnFilterList(onlineSearchFilter);
+
+                    MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
+                    mainActivityTabFragment.changePage();
+                    Toast.makeText(MainActivity.this, "data exist", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this, "data not exist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

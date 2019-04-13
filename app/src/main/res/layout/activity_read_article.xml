@@ -209,9 +209,11 @@
                         />
 
                     <android.support.v7.widget.RecyclerView
+                        android:id="@+id/read_article_recyclerView_userAttendant"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/read_article_txt_attendants">
+                        android:layout_below="@+id/read_article_txt_attendants"
+                        android:layout_marginTop="2dp">
 
 
 

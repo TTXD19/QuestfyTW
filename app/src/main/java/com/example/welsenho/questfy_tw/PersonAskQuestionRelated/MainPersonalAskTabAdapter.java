@@ -30,8 +30,8 @@ public class MainPersonalAskTabAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position){
-            case 0:return "Ask by";
-            case 1:return "Ask to";
+            case 0:return "對我的提問";
+            case 1:return "我的提問";
         }
         return null;
     }

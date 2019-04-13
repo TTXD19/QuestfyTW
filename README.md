@@ -18,6 +18,11 @@ Questfy-TW 0.0.5 2019/4/2(Implemented Setting page and guest user setting)
 
 Questfy-TW 0.0.5 2019/4/9(Implemented Personal asking hadling activity and function progress 80%, estimate finish date 4/10)
 
+Questfy-TW 0.0.5 2019/4/13(Fix recyclerView if there are too many items problem)
+                            (Add “Meet up users circle icon & name” in readArticle activity)
+                            (Implement user following info fragment to mainActivity)
+                            (Insert app first time used intro activity note: onProgress)
+
 
 
 

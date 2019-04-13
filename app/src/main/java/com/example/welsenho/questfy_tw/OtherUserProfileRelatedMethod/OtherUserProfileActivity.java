@@ -1,12 +1,17 @@
 package com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -15,10 +20,13 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +35,10 @@ import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import com.example.welsenho.questfy_tw.MainActivityFragment.list_article_recyclerView_adapter;
 import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
+import com.example.welsenho.questfy_tw.PersonAskQuestionRelated.PersonalAskReplyingActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +49,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,8 +62,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherUserProfileActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_SELECT = 0;
+
     private String otherUserUid;
     private String SelfUid;
+    private String AskQuesitonUid;
+    private String uploadTimeStamp;
+    private String imageUri;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet getSet;
     private list_article_recyclerView_adapter adapter;
@@ -67,6 +85,8 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private TextView txtPopAsk;
     private TextView txtPopCancel;
     private TextView txtPopCount;
+    private ImageView imgPopAddImage;
+    private ImageView imgPopPreview;
     private EditText editPopAskContent;
     private CircleImageView circleImageView;
     private Button btnFollow;
@@ -76,6 +96,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private Dialog dialog;
+    private ProgressBar progressBar;
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private OtherUserProfileRelatedMethods otherUserProfileRelatedMethods;
@@ -85,6 +106,8 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
 
 
     @Override
@@ -105,10 +128,21 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         getFollowersCount();
         getUserArticlesData();
         setRecyclerView();
+        //storageReference = storageReference.child("Personal_Ask_Request_Images").child("-Lc1TYPxoWV4kZ7gZXTY").child(firebaseUser.getUid()).child("1554819725049");
+        //storageReference.delete();
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_IMAGE_SELECT){
+            if (resultCode == RESULT_OK){
+                progressBar.setVisibility(View.VISIBLE);
+                Uri uri = data.getData();
+                UploadPhotoToFirebase(uri);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private void InitItem(){
         txtUserName = findViewById(R.id.otherUser_profile_txtUserName);
@@ -142,6 +176,8 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = firebaseDatabase.getReference();
         SelfUid = firebaseAuth.getUid();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
     }
 
     private void getOtherUserInfo(){
@@ -433,8 +469,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         txtPopCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
         txtPopAsk = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtSave);
         txtPopCancel = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCancel);
+        imgPopAddImage = dialog.findViewById(R.id.pop_up_userProfile_customMessage_addPicture);
+        imgPopPreview = dialog.findViewById(R.id.pop_up_userProfile_customMessage_imgPreview);
         editPopAskContent = dialog.findViewById(R.id.pop_up_userProfile_customMessage_editMessage);
+        progressBar = dialog.findViewById(R.id.pop_up_userProfile_customMessage_progressBar);
 
+        uploadTimeStamp = String.valueOf(System.currentTimeMillis());
+        AskQuesitonUid = databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).push().getKey();
         String title  = getString(R.string.ask) + txtUserName.getText().toString() + getString(R.string.anything);
         txtPopTitle.setText(title);
         txtPopAsk.setText(getString(R.string.ask_it));
@@ -457,10 +498,28 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        imgPopAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_IMAGE_SELECT);
+            }
+        });
+
         txtPopCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        imgPopPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imageUri != null){
+                    deletePhotoPop();
+                }
             }
         });
     }
@@ -478,6 +537,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         askBy.put("AskDate", AskDate);
         askBy.put("AskQuestionContent", question);
         askBy.put("AskQuesitonUid", randomAskUid);
+        if (imageUri != null){
+            askBy.put("QuestionTumbnail", imageUri);
+        }
         databaseReference.child("Personal_Ask_Question").child(otherUserUid).child("AskedBy").child(randomAskUid).updateChildren(askBy);
         databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(randomAskUid).updateChildren(askBy);
     }
@@ -505,6 +567,50 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void UploadPhotoToFirebase(Uri uri){
+        storageReference = storageReference.child("Personal_Ask_Request_Images").child(AskQuesitonUid).child(firebaseUser.getUid()).child(uploadTimeStamp);
+        storageReference.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()){
+                    throw task.getException();
+                }else {
+                    return storageReference.getDownloadUrl();
+                }
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Picasso.get().load(task.getResult()).fit().into(imgPopPreview);
+                imageUri = task.getResult().toString();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void ClickToDeletePhoto(){
+        imageUri = null;
+        imgPopPreview.setImageResource(0);
+        storageReference.delete();
+    }
+
+    private void deletePhotoPop(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(OtherUserProfileActivity.this);
+        builder.setTitle(R.string.delete_photo).setMessage(R.string.click_to_delete_photo).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ClickToDeletePhoto();
+                dialog.dismiss();
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create();
+        builder.show();
     }
 
 

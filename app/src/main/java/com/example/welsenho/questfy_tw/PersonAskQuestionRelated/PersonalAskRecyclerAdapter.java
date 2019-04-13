@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,11 +22,15 @@ public class PersonalAskRecyclerAdapter extends RecyclerView.Adapter<PersonalAsk
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private Context context;
     private getQuestionUid clickListener;
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
 
     public PersonalAskRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, getQuestionUid clickListener){
         this.arrayList = arrayList;
         this.context = context;
         this.clickListener = clickListener;
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
     }
 
     @NonNull
@@ -38,11 +44,20 @@ public class PersonalAskRecyclerAdapter extends RecyclerView.Adapter<PersonalAsk
     @Override
     public void onBindViewHolder(@NonNull PersonalAskViewHolder personalAskViewHolder, int i) {
         FirebaseDatabaseGetSet firebaseDatabaseGetSet = arrayList.get(i);
-        String questionUser = "Question from " + firebaseDatabaseGetSet.getAskerName();
-        personalAskViewHolder.txtAskUserName.setText(questionUser);
+        if (firebaseDatabaseGetSet.getAskerUid().equals(firebaseUser.getUid())){
+            String questionUser = "向" + firebaseDatabaseGetSet.getAnswerName() + "提問的問題";
+            personalAskViewHolder.txtAskUserName.setText(questionUser);
+        }else {
+            String questionUser = "來自" + firebaseDatabaseGetSet.getAskerName() + "的提問";
+            personalAskViewHolder.txtAskUserName.setText(questionUser);
+        }
         personalAskViewHolder.txtAskTitle.setText(firebaseDatabaseGetSet.getAskQuestionContent());
         personalAskViewHolder.txtAskDate.setText(firebaseDatabaseGetSet.getAskDate());
-        Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(personalAskViewHolder.imgAsk);
+        if (firebaseDatabaseGetSet.getQuestionTumbnail() != null) {
+            Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(personalAskViewHolder.imgAsk);
+        }else {
+            personalAskViewHolder.imgAsk.setVisibility(View.GONE);
+        }
     }
 
     @Override

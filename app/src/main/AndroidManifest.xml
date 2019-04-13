@@ -14,9 +14,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/questfy_logo_style_1"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/questfy_logo_style_1_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -86,7 +86,9 @@
         <activity android:name=".EditActivityRelated.EditPreviewActivity" />
         <activity android:name=".LoginRelated.FacebookRegister" />
         <activity android:name=".PersonAskQuestionRelated.PersonalAskQuestReplyActivity" />
-        <activity android:name=".PersonAskQuestionRelated.PersonalAskReplyingActivity"></activity>
+        <activity android:name=".PersonAskQuestionRelated.PersonalAskReplyingActivity" />
+        <activity android:name=".AppIntroRelated.AppIntroActivity"
+            android:label="@string/appIntro" />
     </application>
 
 </manifest>
