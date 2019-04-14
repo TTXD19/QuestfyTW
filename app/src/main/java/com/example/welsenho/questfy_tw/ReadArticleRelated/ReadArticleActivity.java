@@ -1,6 +1,8 @@
 package com.example.welsenho.questfy_tw.ReadArticleRelated;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -51,6 +53,8 @@ public class ReadArticleActivity extends AppCompatActivity {
     private Boolean likePress;
     private String Article_ID;
     private String otherUserUid;
+    private String reportReason;
+    private String[] reportReasons = new String[9];
     private long likeCount;
 
     private CircleImageView circleImageView;
@@ -78,7 +82,6 @@ public class ReadArticleActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private EditInitRelateRecyclerViewAdapterImageViews adapterImageViews;
     private ReadArticleUserAttendantRecyclerAdapter adapterAttendantUser;
-    private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private FirebaseDatabaseGetSet getUserProfile;
     private FirebaseDatabaseGetSet getAttendantData;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
@@ -162,7 +165,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case R.id.read_article_report:
-                Toast.makeText(this, "Report", Toast.LENGTH_SHORT).show();
+                if (firebaseUser != null) {
+                    createReportDialog();
+                }
                 break;
             case R.id.read_article_share:
                 Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
@@ -638,5 +643,53 @@ public class ReadArticleActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void createReportDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ReadArticleActivity.this);
+        createReportReasons();
+        builder.setTitle(R.string.report_user).setSingleChoiceItems(reportReasons, reportReasons.length, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reportReason = reportReasons[which];
+            }
+        }).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reportArticle(reportReason);
+                dialog.dismiss();
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create();
+
+        builder.show();
+    }
+
+    private void createReportReasons(){
+        reportReasons[0] = "使用者圖片不當";
+        reportReasons[1] = "使用者ID不當";
+        reportReasons[2] = "使用者約定無故未到";
+        reportReasons[3] = "惡意訊息傳送、宣傳";
+        reportReasons[4] = "惡意留言、故意謾罵其他人";
+        reportReasons[5] = "個人訊息充滿商業宣傳之行為";
+        reportReasons[6] = "意圖不當與他人見面之行為";
+        reportReasons[7] = "惡意洗版";
+        reportReasons[8] = "其他不當或違規項目";
+    }
+
+    private void reportArticle(String reportCause){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Report_UserUid", firebaseUser.getUid());
+        hashMap.put("Report_User_Name", firebaseUser.getDisplayName());
+        hashMap.put("getReport_Article", getUserProfile.getTitle());
+        hashMap.put("getReport_ArticleID", getUserProfile.getArticle_ID());
+        hashMap.put("Report_Reason", reportCause);
+
+        String randomID = databaseReference.child("Report_articles_section").child(getUserProfile.getArticle_ID()).child(firebaseUser.getUid()).push().getKey();
+        databaseReference.child("Report_articles_section").child(getUserProfile.getArticle_ID()).child(firebaseUser.getUid()).child(randomID).updateChildren(hashMap);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.welsenho.questfy_tw.MainActivityFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -88,7 +90,15 @@ public class UserFollowingInfoFragment extends Fragment {
         recyclerView = view.findViewById(R.id.user_following_info_recyclerView);
 
         arrayList = new ArrayList<>();
-        adapter = new UserFollowingRecyclerAdapter(arrayList, getContext());
+        adapter = new UserFollowingRecyclerAdapter(arrayList, getContext(), new UserFollowingRecyclerAdapter.UserItemClick() {
+            @Override
+            public void getPosition(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                String userUid = arrayList.get(position).getUserUid();
+                Intent intent = new Intent(getContext(), OtherUserProfileActivity.class);
+                intent.putExtra("otherUserUid", userUid);
+                startActivity(intent);
+            }
+        });
     }
 
     private void InitFirebase(){

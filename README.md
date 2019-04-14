@@ -23,6 +23,12 @@ Questfy-TW 0.0.5 2019/4/13(Fix recyclerView if there are too many items problem)
                             (Implement user following info fragment to mainActivity)
                             (Insert app first time used intro activity note: onProgress)
 
+Questfy-TW 0.0.5 2019/4/13(Add Report function)
+                            (Add check folling user framgment)
+                            ()
+                            ()
+
+
 
 
 

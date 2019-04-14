@@ -20,7 +20,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +72,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private String AskQuesitonUid;
     private String uploadTimeStamp;
     private String imageUri;
+    private String seldUserSchoolName;
+    private String reportReason;
+    private String[] reportReasons = new String[9];
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet getSet;
     private list_article_recyclerView_adapter adapter;
@@ -97,6 +103,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private Dialog dialog;
     private ProgressBar progressBar;
+    private Toolbar toolbar;
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private OtherUserProfileRelatedMethods otherUserProfileRelatedMethods;
@@ -118,6 +125,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         InitItem();
         InitFirebaseItem();
         getOtherUserInfo();
+        getSelfUserInfo();
         if (firebaseUser != null) {
             detectFriend();
             detectFollowing();
@@ -128,8 +136,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         getFollowersCount();
         getUserArticlesData();
         setRecyclerView();
-        //storageReference = storageReference.child("Personal_Ask_Request_Images").child("-Lc1TYPxoWV4kZ7gZXTY").child(firebaseUser.getUid()).child("1554819725049");
-        //storageReference.delete();
     }
 
     @Override
@@ -142,6 +148,25 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.read_article_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId){
+            case R.id.read_article_report:
+                if (firebaseUser != null){
+                    createReportDialog();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void InitItem(){
@@ -159,6 +184,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         btnSendMessageQuestion = findViewById(R.id.otherUser_profile_btnSendMessageQuestion);
         recyclerView = findViewById(R.id.otherUser_profile_recyclerView);
         coordinatorLayout = findViewById(R.id.otherUser_profile_coordinatorLayout);
+        toolbar = findViewById(R.id.otherUser_profile_toolBar);
         otherUserUid = getIntent().getStringExtra("otherUserUid");
         otherUserProfileRelatedMethods = new OtherUserProfileRelatedMethods();
         editRelatedMethod = new EditRelatedMethod();
@@ -168,6 +194,8 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         recyclerView.setFocusable(false);
 
         dialog = new Dialog(this);
+
+        setSupportActionBar(toolbar);
     }
 
     private void InitFirebaseItem(){
@@ -188,6 +216,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()){
                     firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     txtUserName.setText(firebaseDatabaseGetSet.getID());
+                    getSupportActionBar().setTitle(firebaseDatabaseGetSet.getID() + "'s profile");
                     if (firebaseDatabaseGetSet.getSchoolName() != null){
                         txtUniversityName.setText(firebaseDatabaseGetSet.getSchoolName());
                         txtCorseName.setText(firebaseDatabaseGetSet.getCourseName());
@@ -206,6 +235,24 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                         txtStatusMessage.setText("Not set yet");
                     }
                     Picasso.get().load(firebaseDatabaseGetSet.getUser_image_uri()).fit().into(circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getSelfUserInfo() {
+        databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("schoolName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    seldUserSchoolName = dataSnapshot.getValue().toString();
+                }else {
+                    seldUserSchoolName = "為註冊";
                 }
             }
 
@@ -386,10 +433,18 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         HashMap<String, Object> followBy = new HashMap<>();
         followBy.put("userUid", firebaseUser.getUid());
         followBy.put("User_Name", firebaseUser.getDisplayName());
+        followBy.put("schoolName", seldUserSchoolName);
+        followBy.put("User_image_uri", firebaseUser.getPhotoUrl().toString());
 
         HashMap<String, Object> following = new HashMap<>();
         following.put("userUid", otherUserUid);
         following.put("User_Name", txtUserName.getText().toString());
+        if (firebaseDatabaseGetSet.getSchoolName() != null || !firebaseDatabaseGetSet.getSchoolName().isEmpty()) {
+            following.put("schoolName", firebaseDatabaseGetSet.getSchoolName());
+        }else {
+            following.put("schoolName", "未註冊");
+        }
+        following.put("User_image_uri", firebaseDatabaseGetSet.getUser_image_uri());
 
         databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").child(otherUserUid).updateChildren(following);
         databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).updateChildren(followBy);
@@ -423,6 +478,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).removeValue();
+                            databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").child(otherUserUid).removeValue();
                         }
                     });
                 }else {
@@ -611,6 +667,64 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         }).create();
         builder.show();
+    }
+
+    private void reportUser(String reportCause){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Report_User_Name", firebaseUser.getDisplayName());
+        hashMap.put("Report_UserUid", firebaseUser.getUid());
+        hashMap.put("gotReport_User_Namw", firebaseDatabaseGetSet.getID());
+        hashMap.put("getReport_UserUid", firebaseDatabaseGetSet.getUserUid());
+        hashMap.put("Report_Reason", reportCause);
+        String randomId = databaseReference.child("Report_user_section").child(firebaseUser.getUid()).push().getKey();
+        databaseReference.child("Report_user_section").child(firebaseDatabaseGetSet.getUserUid()).child(randomId).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(OtherUserProfileActivity.this, " 檢舉成功", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(OtherUserProfileActivity.this, " 檢舉失敗，請再試一次", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void createReportDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(OtherUserProfileActivity.this);
+        createReportReasons();
+
+        builder.setTitle(R.string.report_user).setSingleChoiceItems(reportReasons, reportReasons.length, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reportReason = reportReasons[which];
+            }
+        }).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reportUser(reportReason);
+                dialog.dismiss();
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create();
+
+        builder.show();
+    }
+
+    private void createReportReasons(){
+        reportReasons[0] = "使用者圖片不當";
+        reportReasons[1] = "使用者ID不當";
+        reportReasons[2] = "使用者約定無故未到";
+        reportReasons[3] = "惡意訊息傳送、宣傳";
+        reportReasons[4] = "惡意留言、故意謾罵其他人";
+        reportReasons[5] = "個人訊息充滿商業宣傳之行為";
+        reportReasons[6] = "意圖不當與他人見面之行為";
+        reportReasons[7] = "惡意洗版";
+        reportReasons[8] = "其他不當或違規項目";
+
     }
 
 

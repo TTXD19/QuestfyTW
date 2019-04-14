@@ -7,10 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".OtherUserProfileRelatedMethod.OtherUserProfileActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/otherUser_profile_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/user_profile_background"
+        app:title="User's Profile"
+        app:titleTextColor="@color/FullWhite"
+        android:theme="@style/BaseTheme">
+
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/otherUser_profile_coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/otherUser_profile_toolBar">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

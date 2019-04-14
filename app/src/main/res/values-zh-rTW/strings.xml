@@ -129,6 +129,8 @@
     <string name="reply_only_allow_one_image">一則回覆只能增加一張圖片</string>
     <string name="delete_photo">照片刪除</string>
     <string name="click_to_delete_photo">點擊確認已刪除這張照片</string>
+    <string name="report_user">檢舉使用者</string>
+    <string name="select_a_report_reason">選擇檢舉原因</string>
 
 
 </resources>

@@ -129,6 +129,8 @@
     <string name="reply">Reply</string>
     <string name="delete_photo">Delete photo</string>
     <string name="click_to_delete_photo">Click yes to delete this photo</string>
+    <string name="report_user">Report user</string>
+    <string name="select_a_report_reason">Select a report reason</string>
 
 
     <!-- SharedPreference file key -->
