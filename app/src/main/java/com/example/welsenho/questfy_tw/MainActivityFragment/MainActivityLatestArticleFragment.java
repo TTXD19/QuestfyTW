@@ -31,26 +31,24 @@ import java.util.ArrayList;
 
 public class MainActivityLatestArticleFragment extends Fragment {
 
-    private static final int ITEM_LOAD_COUNT = 5;
-
-    private int positionClick;
-    private int totalCount = 0;
-    private int lastVisibleItem;
-    private Boolean isLoading = false;
-    private Boolean isMaxData = false;
-    private String lastNode = "";
-    private String lastKey = "";
-    private NewArticleListRecyclerAdapter newArticleListRecyclerAdapter;
-    private ArrayList<FirebaseDatabaseGetSet> testArrayList;
-
-    private OnFragmentInteractionListener mListener;
-
-    private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
-    private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayoutManager layoutManager;
+
+    private Boolean isMaxData = false;
+    private String lastNode = "";
+    private String lastKey = "";
+
+
+    private OnFragmentInteractionListener mListener;
+
+    private ArrayList<FirebaseDatabaseGetSet> testArrayList;
+    private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private ArrayList<FirebaseDatabaseGetSet> searchArrayList;
+
+    private NewArticleListRecyclerAdapter newArticleListRecyclerAdapter;
+    private list_article_recyclerView_adapter adapter;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -77,7 +75,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
-        //Testing code
         InitItem();
         getLastKeyFromFirebase();
         setRecyclerView();
@@ -110,16 +107,26 @@ public class MainActivityLatestArticleFragment extends Fragment {
 
     private void InitItem(){
         progressBar.setVisibility(View.VISIBLE);
+
+        searchArrayList = new ArrayList<>();
         arrayList = new ArrayList<>();
         testArrayList = new ArrayList<>();
+
         newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.getItemID() {
             @Override
             public void getItemID(int position) {
                 String postID = arrayList.get(position).getArticle_ID();
                 Intent intent = new Intent(getContext(), ReadArticleActivity.class);
                 intent.putExtra("ArticleID", postID);
-                positionClick = position;
                 startActivity(intent);
+            }
+        });
+
+        adapter = new list_article_recyclerView_adapter(searchArrayList, getContext());
+        adapter.setOnMainClickListener(new MainOnClickListener() {
+            @Override
+            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Toast.makeText(getContext(), arrayList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -146,30 +153,36 @@ public class MainActivityLatestArticleFragment extends Fragment {
         void latestArticleFilter(ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 
-    /**
-     * For returning filtered data from main activity and rebuild the recyclerview data again
-     * @param returnList
-     */
-    public void returnFilterList(final ArrayList<FirebaseDatabaseGetSet> returnList){
-        if (returnList != null){
-            recyclerView.setVisibility(View.VISIBLE);
-            list_article_recyclerView_adapter filterAdapter = new list_article_recyclerView_adapter(returnList, getContext());
-            filterAdapter.setOnMainClickListener(new MainOnClickListener() {
-                @Override
-                public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                    String postID = arrayList.get(position).getArticle_ID();
-                    Intent intent = new Intent(getContext(), ReadArticleActivity.class);
-                    intent.putExtra("ArticleID", postID);
-                    startActivity(intent);
+    public void LoadQueryData(final String inputSearch){
+        progressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setEnabled(false);
+        Query query = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    searchArrayList.clear();
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase())) {
+                            searchArrayList.add(searchGetSet);
+                        }
+                    }
+                    if (!searchArrayList.isEmpty()){
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }else {
+                        recyclerView.setVisibility(View.GONE);
+                    }
+                    recyclerView.setAdapter(adapter);
+                    progressBar.setVisibility(View.GONE);
                 }
-            });
-            recyclerView.setAdapter(filterAdapter);
-            Log.d("FILTERLISTSIZEtitle", returnList.get(0).getTitle());
-        }
-    }
+            }
 
-    public void hideRecyclerView(){
-        recyclerView.setVisibility(View.GONE);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getLastKeyFromFirebase(){
@@ -217,7 +230,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
                      * Check whether is the max data or not
                      */
                     if (lastKey.equals(lastNode)){
-                        isLoading = true;
                         isMaxData = true;
                     }
 
@@ -252,6 +264,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                             newArticleListRecyclerAdapter.setGetArrayListForClick(arrayList);
                             testArrayList.remove(0);
                             newArticleListRecyclerAdapter.addAll(testArrayList);
+                            //newArticleListRecyclerAdapter.notifyDataSetChanged();
                             lastNode = newArticleListRecyclerAdapter.getLastItemId();
                             mListener.latestArticleFilter(arrayList);
                             progressBar.setVisibility(View.GONE);
@@ -260,7 +273,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
                              * Check whether is the max data or not
                              */
                             if (lastKey.equals(lastNode)) {
-                                isLoading = true;
                                 isMaxData = true;
                             }
                         }else {
@@ -311,6 +323,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
     }
 
     public void setOriginalRecyclerView(){
+        swipeRefreshLayout.setEnabled(true);
         recyclerView.setAdapter(newArticleListRecyclerAdapter);
         Toast.makeText(getContext(), "original", Toast.LENGTH_SHORT).show();
     }

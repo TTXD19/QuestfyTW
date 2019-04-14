@@ -178,26 +178,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        final MostPopularFragment mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
+        final MainActivityLatestArticleFragment latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
+        final MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment)getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
+
         getMenuInflater().inflate(R.menu.main_activity_serarch_view, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         menuItem = menu.findItem(R.id.action_search);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()) {
+
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment)getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
-                if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()) {
-                    if (latestArrayList != null) {
-                        Log.d("ArrayCheckNull", String.valueOf(latestArrayList.size()));
-                        LatestSearchFilter(s, latestArrayList);
-                    }
-                    if (mostPopularArrayList != null) {
-                        MostPopularFilter(s, mostPopularArrayList);
-                    }
+                if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()){
+                    mostPopularFragment.LoadQueryData(s);
+                    latestArticleFragment.LoadQueryData(s);
                 }
                 return false;
             }
@@ -211,12 +214,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                MainActivityLatestArticleFragment latestArticleFragment;
-                latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
                 latestArticleFragment.setOriginalRecyclerView();
+                mostPopularFragment.setOriginalRecyclerView();
                 return true;
             }
         });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -440,96 +443,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         btnCompleteUserInfo.setVisibility(View.GONE);
     }
 
-    /**
-     * searchFilter methods working process
-     * 1. Get currentFilter page first to decide which page the user currently is
-     * 2. Create FilterList(ArrayLise<FirebaseDatabaseGetSet>) for a referencer as a reference
-     * 3. let FilterList become either latest articleList or mostPopularList
-     * 4. Do Filtering process
-     * 5. return to each LatestArticle & MostPopular fragment's returnFilterList(Array<List>) method
-     *
-     * @param inputText
-     * @param decidedFilterList
-     */
-    private void searchFilter(String inputText, ArrayList<FirebaseDatabaseGetSet> decidedFilterList) {
-        ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
-        if (!filterList.isEmpty()) {
-            filterList.clear();
-        }
-
-        MainActivityLatestArticleFragment latestArticleFragment;
-        MostPopularFragment mostPopularFragment;
-        MainSubjectChooseFragment mainSubjectChooseFragment;
-
-
-        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(1);
-        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments().get(2);
-
-        for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decidedFilterList) {
-            if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase())) {
-                filterList.add(firebaseDatabaseGetSet);
-                if (currentFilterPage == 1) {
-                    if (latestArticleFragment != null) {
-                        if (!filterList.isEmpty()) {
-                            latestArticleFragment.returnFilterList(filterList);
-                        }
-                    }
-                } else if (currentFilterPage == 2) {
-                    if (mostPopularFragment != null) {
-                        if (!filterList.isEmpty()) {
-                            mostPopularFragment.returnFilterList(filterList);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void LatestSearchFilter(String inputText, ArrayList<FirebaseDatabaseGetSet> decideFilterList){
-        ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
-        if (!filterList.isEmpty()) {
-            filterList.clear();
-        }
-
-        MainActivityLatestArticleFragment latestArticleFragment;
-        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
-
-        for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
-            if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
-                filterList.add(firebaseDatabaseGetSet);
-                latestArticleFragment.returnFilterList(filterList);
-                Log.d("FILTERLISTSIZE", String.valueOf(filterList.size()) + filterList.get(0).getTitle());
-            }else {
-                if (filterList.size() == 0){
-                    latestArticleFragment.hideRecyclerView();
-                }
-            }
-        }
-    }
-
-    private void MostPopularFilter(String inputText, ArrayList<FirebaseDatabaseGetSet> decideFilterList){
-        ArrayList<FirebaseDatabaseGetSet> filterList = new ArrayList<>();
-        if (!filterList.isEmpty()) {
-            filterList.clear();
-        }
-
-        MostPopularFragment mostPopularFragment;
-        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
-
-        for (FirebaseDatabaseGetSet firebaseDatabaseGetSet : decideFilterList) {
-            if (firebaseDatabaseGetSet.getTitle().toLowerCase().contains(inputText.toLowerCase()) || firebaseDatabaseGetSet.getMajors().contains(inputText)) {
-                filterList.add(firebaseDatabaseGetSet);
-                if (!filterList.isEmpty()) {
-                    mostPopularFragment.returnFilterList(filterList);
-                }
-            }else {
-                /**
-                 * Do something when article is not exist
-                 */
-            }
-        }
-    }
-
     private void initializeArrayList() {
         latestArrayList = new ArrayList<>();
         mostPopularArrayList = new ArrayList<>();
@@ -594,21 +507,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         if (subject.equals("全部")){
             subject = "";
         }
-        /*
-        LatestSearchFilter(subject, latestArrayList);
-        MostPopularFilter(subject, mostPopularArrayList);
-        */
-        MainActivityLatestArticleFragment latestArticleFragment;
-        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
 
-        if (!subject.equals("")) {
-            searchMainCourse(subject, latestArticleFragment);
-        }else {
-            MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
-            mainActivityTabFragment.changePage();
-
-            latestArticleFragment.getFirstData();
-        }
+        searchMainCourse(subject);
     }
 
     private void showUserPostDialog(){
@@ -646,33 +546,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         }
     }
 
-    private void searchMainCourse(String course, final MainActivityLatestArticleFragment latestArticleFragment){
-        onlineSearchFilter = new ArrayList<>();
-        Query query = databaseReference.child("Users_Question_Articles").orderByChild("Majors").startAt("[" + course).endAt("[" + course+ "\uf8ff");
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    onlineSearchFilter.clear();
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        FirebaseDatabaseGetSet firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        onlineSearchFilter.add(firebaseDatabaseGetSet);
-                    }
-
-                    latestArticleFragment.returnFilterList(onlineSearchFilter);
-
-                    MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
-                    mainActivityTabFragment.changePage();
-                    Toast.makeText(MainActivity.this, "data exist", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(MainActivity.this, "data not exist", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    private void searchMainCourse(String course){
+        MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
+        mainActivityTabFragment.changePage();
     }
 }

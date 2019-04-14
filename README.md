@@ -25,7 +25,7 @@ Questfy-TW 0.0.5 2019/4/13(Fix recyclerView if there are too many items problem)
 
 Questfy-TW 0.0.5 2019/4/13(Add Report function)
                             (Add check folling user framgment)
-                            ()
+                            (Restructure article loading method)
                             ()
 
 
