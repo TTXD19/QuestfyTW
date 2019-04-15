@@ -1,34 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/latest_article_swipeRefresh"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/latest_article_swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivityFragment.MainActivityLatestArticleFragment">
+    tools:context=".MainActivityFragment.MainActivityLatestArticleFragment"
+    android:background="@color/FullWhite">
 
-    <RelativeLayout
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <ProgressBar
-            android:id="@+id/latest_article_progressBar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/latest_article_recyclerView"
-            android:layout_marginBottom="30dp"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/latest_article_recyclerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/latest_article_recycler1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/LightMainOrange">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BETA公告 \n 歡迎來到Questfy"
+                    android:textSize="20sp"
+                    android:textColor="@color/FullWhite"
+                    android:layout_centerInParent="true"
+                    android:textAlignment="center"/>
 
 
-        </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/latest_article_recycler2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rules_for_posting_question"
+                android:layout_below="@+id/latest_article_recycler1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="發文規則 更新日期2019/4/15"
+                    android:textSize="20sp"
+                    android:textColor="@color/CatergoryDarkGrayText"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    />
+
+
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/latest_article_recycler3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/latest_article_recycler2"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:descendantFocusability="blocksDescendants">
+
+
+            <ProgressBar
+                android:id="@+id/latest_article_progressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/latest_article_recyclerView"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="30dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/latest_article_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 
 </android.support.v4.widget.SwipeRefreshLayout>

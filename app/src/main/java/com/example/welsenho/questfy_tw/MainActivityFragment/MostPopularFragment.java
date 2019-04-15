@@ -68,7 +68,6 @@ public class MostPopularFragment extends Fragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +92,9 @@ public class MostPopularFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MostPopularFragment.OnFragmentInteractionListener){
+        if (context instanceof MostPopularFragment.OnFragmentInteractionListener) {
             mListener = (MostPopularFragment.OnFragmentInteractionListener) context;
-        }else {
+        } else {
             throw new RuntimeException(context.toString() +
                     " must implement OnFragmentInteractionListener");
         }
@@ -113,7 +112,7 @@ public class MostPopularFragment extends Fragment {
         //LoadData();
     }
 
-    private void InitItem(){
+    private void InitItem() {
         recyclerView = view.findViewById(R.id.most_pop_fm_recyclerView);
         progressBar = view.findViewById(R.id.most_pop_fm_progressBar);
         swipeRefreshLayout = view.findViewById(R.id.most_pop_fm_swipeRefresh);
@@ -149,24 +148,24 @@ public class MostPopularFragment extends Fragment {
         });
     }
 
-    private void InitRecyclerView(){
+    private void InitRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
     }
 
-    private void InitFirebase(){
+    private void InitFirebase() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void getLastKeyFromFirebase(){
-        Query getLastKey = databaseReference.child("Users_Question_Articles").orderByKey().limitToLast(1);
+    private void getLastKeyFromFirebase() {
+        Query getLastKey = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToLast(1);
         getLastKey.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot DS:dataSnapshot.getChildren()){
+                for (DataSnapshot DS : dataSnapshot.getChildren()) {
                     lastKey = DS.getKey();
                     Log.d("CHECLMAXDATA22345", lastKey);
                     getFirstData();
@@ -180,19 +179,19 @@ public class MostPopularFragment extends Fragment {
         });
     }
 
-    public void getFirstData(){
-        databaseReference.child("Users_Question_Articles").orderByKey().limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getFirstData() {
+        databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (lastKey != null) {
                     Log.d("CHECLMAXDATA223456", "NOT NULL" + lastKey + "???");
-                }else {
+                } else {
                     Log.d("CHECLMAXDATA223456", "NULL");
                 }
                 arrayList.clear();
                 clickArrayList.clear();
-                if (dataSnapshot.hasChildren()){
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         clickArrayList.add(getSet);
                         arrayList.add(getSet);
@@ -205,10 +204,12 @@ public class MostPopularFragment extends Fragment {
                      */
                     newArticleListRecyclerAdapter.setGetArrayListForClick(arrayList);
                     newArticleListRecyclerAdapter.addAll(clickArrayList);
-                    lastNode =  newArticleListRecyclerAdapter.getLastItemId();
+                    lastNode = newArticleListRecyclerAdapter.getLastItemId();
                     Log.d("LASTITEMKEY22", lastNode);
+                    recyclerView.setVisibility(View.VISIBLE);
                     recyclerView.setAdapter(newArticleListRecyclerAdapter);
                     progressBar.setVisibility(View.GONE);
+                    swipeRefreshLayout.setEnabled(true);
                     swipeRefreshLayout.setRefreshing(false);
 
                     /**
@@ -216,7 +217,7 @@ public class MostPopularFragment extends Fragment {
                      */
                     Log.d("CHECLMAXDATA2234", lastNode);
                     Log.d("CHECLMAXDATA223", lastKey);
-                    if (lastKey.equals(lastNode)){
+                    if (lastKey.equals(lastNode)) {
                         isLoading = true;
                         isMaxData = true;
                     }
@@ -234,11 +235,20 @@ public class MostPopularFragment extends Fragment {
         });
     }
 
-    private void getMoreData(){
-        databaseReference.child("Users_Question_Articles").orderByKey().startAt(lastNode).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void getMoreData() {
+        Query query = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp");
+        if (!lastNode.isEmpty()) {
+            Log.d("MOSTPOPCURRENTLASTNODE", "LAST NODE NOT NULL");
+        } else {
+            Log.d("MOSTPOPCURRENTLASTNODE", "LAST NODE IS NULL");
+        }
+
+        //databaseReference.child("Users_Question_Articles").orderByChild("Article_ID").startAt("-LU_zn9nqD6FnSxv7ucW");
+
+        databaseReference.child("Users_Question_Articles").orderByKey().startAt("6").limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     if (!isMaxData) {
                         if (dataSnapshot.hasChildren()) {
                             clickArrayList.clear();
@@ -269,13 +279,13 @@ public class MostPopularFragment extends Fragment {
                             }
 
                             Log.d("MostPopularMaxData", String.valueOf(arrayList.size()));
-                        }else {
+                        } else {
                             Log.d("MOSTPOPCURRENTLASTNODE", "DATADONOTEXIST");
                         }
                     } else {
                         Log.d("MOSTPOPCURRENTLASTNODE", "MAXDATA");
                     }
-                }else {
+                } else {
                     Log.d("MOSTPOPCURRENTLASTNODE", "STOPLOADING");
                 }
             }
@@ -287,55 +297,88 @@ public class MostPopularFragment extends Fragment {
         });
     }
 
-    private void loadMoreRecyclerData(){
+    private void loadMoreRecyclerData() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (!recyclerView.canScrollVertically(1)){
+                if (!recyclerView.canScrollVertically(1)) {
                     Log.d("SCROLLING", "TRUE");
                     Log.d("SCROLLING", isMaxData.toString() + "isMax");
                     if (!isMaxData) {
                         Log.d("SCROLLINGFORMORE", "TRUE");
-                        getMoreData();
-                    }else {
+                        //getMoreData();
+                        //testData();
+                    } else {
                         Log.d("SCROLLINGFORMORE", "FALSE");
                     }
-                }else {
+                } else {
                     Log.d("SCROLLING", "FALSE");
                 }
             }
         });
     }
 
-    public void setOriginalRecyclerView(){
-        recyclerView.setVisibility(View.VISIBLE);
-        recyclerView.setAdapter(newArticleListRecyclerAdapter);
+    private void testData() {
+        final ArrayList<FirebaseDatabaseGetSet> testArrayList;
+        testArrayList = new ArrayList<>();
+        databaseReference = firebaseDatabase.getReference().child("VTEST");
+        Query query = databaseReference.child("VTEST").orderByChild("NUMBER").startAt("7").limitToFirst(2);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Log.d("MOSTPOPCURRENTLASTNODE", "LOAINGMOREDATA");
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                        FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        testArrayList.add(getSet);
+                    }
+                    Log.d("MOSTPOPCURRENTLASTNODE", String.valueOf(testArrayList.get(0).getNUMBER()));
+                    Log.d("MOSTPOPCURRENTLASTNODE", String.valueOf(testArrayList.get(1).getNUMBER()));
+                } else {
+                    Log.d("MOSTPOPCURRENTLASTNODE", "NOLOAINGMOREDATA");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void setOriginalRecyclerView() {
+        recyclerView.setVisibility(View.GONE);
+        getLastKeyFromFirebase();
         Toast.makeText(getContext(), "original", Toast.LENGTH_SHORT).show();
     }
 
-    public void LoadQueryData(final String inputSearch){
+    public void LoadQueryData(final String inputSearch) {
         progressBar.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setEnabled(false);
         Query query = databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     searchArrayList.clear();
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase())) {
-                            searchArrayList.add(searchGetSet);
+                    if (!inputSearch.equals("")) {
+                        for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                            FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                            if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase()) || searchGetSet.getMajors().toLowerCase().contains(inputSearch.toLowerCase())) {
+                                searchArrayList.add(searchGetSet);
+                            }
                         }
-                    }
-                    if (searchArrayList.isEmpty()){
-                        recyclerView.setVisibility(View.GONE);
+                        if (searchArrayList.isEmpty()) {
+                            recyclerView.setVisibility(View.GONE);
+                        } else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                        recyclerView.setAdapter(adapter);
+                        progressBar.setVisibility(View.GONE);
                     }else {
-                        recyclerView.setVisibility(View.VISIBLE);
+                        getFirstData();
                     }
-                    recyclerView.setAdapter(adapter);
-                    progressBar.setVisibility(View.GONE);
                 }
             }
 

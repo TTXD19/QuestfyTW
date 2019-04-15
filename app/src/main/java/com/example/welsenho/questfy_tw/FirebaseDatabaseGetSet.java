@@ -86,6 +86,9 @@ public class FirebaseDatabaseGetSet{
     private String QuestionTumbnail;
     private String AskQuesitonUid;
 
+    //TESTING
+    private int NUMBER;
+
 
 
     //GetSet for firebase
@@ -559,5 +562,13 @@ public class FirebaseDatabaseGetSet{
 
     public void setAskQuesitonUid(String askQuesitonUid) {
         AskQuesitonUid = askQuesitonUid;
+    }
+
+    public int getNUMBER() {
+        return NUMBER;
+    }
+
+    public void setNUMBER(int NUMBER) {
+        this.NUMBER = NUMBER;
     }
 }

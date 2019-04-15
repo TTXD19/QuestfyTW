@@ -28,6 +28,11 @@ Questfy-TW 0.0.5 2019/4/13(Add Report function)
                             (Restructure article loading method)
                             ()
 
+Questfy-TW 0.0.5 2019/4/15(Fix bug & latestArticle fm & mostPopular fm in loading article list)
+                           (Add user announcement and question post rules activity)
+
+
+
 
 
 

@@ -109,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private ArrayList<FirebaseDatabaseGetSet> mostPopularArrayList;
     private ArrayList<FirebaseDatabaseGetSet> onlineSearchFilter;
 
+    private MostPopularFragment mostPopularFragment;
+    private MainActivityLatestArticleFragment latestArticleFragment;
+    private MainActivityTabFragment mainActivityTabFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             InitGuestUser();
         }
 
+
+
         /**
          * Lets inflate the very first fragment
          * Here , we are inflating the TabFragment as the first Fragment
@@ -174,18 +180,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
          */
         initializeArrayList();
         ItmeClick();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        final MostPopularFragment mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
-        final MainActivityLatestArticleFragment latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
-        final MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment)getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
-
         getMenuInflater().inflate(R.menu.main_activity_serarch_view, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         menuItem = menu.findItem(R.id.action_search);
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -198,7 +203,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
             @Override
             public boolean onQueryTextChange(String s) {
+                mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
                 if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()){
+                    latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
+                    mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
                     mostPopularFragment.LoadQueryData(s);
                     latestArticleFragment.LoadQueryData(s);
                 }
@@ -507,7 +515,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         if (subject.equals("全部")){
             subject = "";
         }
-
         searchMainCourse(subject);
     }
 
@@ -547,6 +554,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     }
 
     private void searchMainCourse(String course){
+        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
+        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
+
+        mostPopularFragment.LoadQueryData(course);
+        latestArticleFragment.LoadQueryData(course);
         MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
         mainActivityTabFragment.changePage();
     }

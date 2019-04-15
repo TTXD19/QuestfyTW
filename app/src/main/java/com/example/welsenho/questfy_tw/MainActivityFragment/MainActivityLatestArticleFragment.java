@@ -15,8 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.AppAnnouncementRelated.AppAnnouncementActivity;
+import com.example.welsenho.questfy_tw.AppAnnouncementRelated.AppRulesActivity;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
@@ -31,6 +34,8 @@ import java.util.ArrayList;
 
 public class MainActivityLatestArticleFragment extends Fragment {
 
+    private RelativeLayout relayAnnounce;
+    private RelativeLayout relayRules;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -68,6 +73,8 @@ public class MainActivityLatestArticleFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_activity_latest_article, container, false);
 
+        relayAnnounce = view.findViewById(R.id.latest_article_recycler1);
+        relayRules = view.findViewById(R.id.latest_article_recycler2);
         recyclerView = view.findViewById(R.id.latest_article_recyclerView);
         progressBar = view.findViewById(R.id.latest_article_progressBar);
         swipeRefreshLayout = view.findViewById(R.id.latest_article_swipeRefresh);
@@ -107,7 +114,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
 
     private void InitItem(){
         progressBar.setVisibility(View.VISIBLE);
-
         searchArrayList = new ArrayList<>();
         arrayList = new ArrayList<>();
         testArrayList = new ArrayList<>();
@@ -126,7 +132,9 @@ public class MainActivityLatestArticleFragment extends Fragment {
         adapter.setOnMainClickListener(new MainOnClickListener() {
             @Override
             public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                Toast.makeText(getContext(), arrayList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
+                startActivity(intent);
             }
         });
 
@@ -134,6 +142,22 @@ public class MainActivityLatestArticleFragment extends Fragment {
             @Override
             public void onRefresh() {
                 getFirstData();
+            }
+        });
+
+        relayAnnounce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AppAnnouncementActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        relayRules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AppRulesActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -160,21 +184,25 @@ public class MainActivityLatestArticleFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     searchArrayList.clear();
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase())) {
-                            searchArrayList.add(searchGetSet);
+                    if (!inputSearch.equals("")) {
+                        for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                            FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                            if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase()) || searchGetSet.getMajors().toLowerCase().contains(inputSearch.toLowerCase())) {
+                                searchArrayList.add(searchGetSet);
+                            }
                         }
-                    }
-                    if (!searchArrayList.isEmpty()){
-                        recyclerView.setVisibility(View.VISIBLE);
+                        if (!searchArrayList.isEmpty()) {
+                            recyclerView.setVisibility(View.VISIBLE);
+                        } else {
+                            recyclerView.setVisibility(View.GONE);
+                        }
+                        recyclerView.setAdapter(adapter);
+                        progressBar.setVisibility(View.GONE);
                     }else {
-                        recyclerView.setVisibility(View.GONE);
+                        getFirstData();
                     }
-                    recyclerView.setAdapter(adapter);
-                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -224,8 +252,8 @@ public class MainActivityLatestArticleFragment extends Fragment {
                     lastNode =  newArticleListRecyclerAdapter.getLastItemId();
                     recyclerView.setAdapter(newArticleListRecyclerAdapter);
                     progressBar.setVisibility(View.GONE);
+                    swipeRefreshLayout.setEnabled(true);
                     swipeRefreshLayout.setRefreshing(false);
-
                     /**
                      * Check whether is the max data or not
                      */
@@ -303,8 +331,8 @@ public class MainActivityLatestArticleFragment extends Fragment {
                     if (!isMaxData) {
                         int totalItem = layoutManager.getItemCount();
                         Log.d("CURRENTLASTNODE", String.valueOf(totalItem));
-                        progressBar.setVisibility(View.VISIBLE);
-                        getMoreData();
+                        //progressBar.setVisibility(View.VISIBLE);
+                        //getMoreData();
                     }else {
                         Log.d("SCROLLING", "MAXDATA");
                     }
@@ -324,7 +352,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
 
     public void setOriginalRecyclerView(){
         swipeRefreshLayout.setEnabled(true);
-        recyclerView.setAdapter(newArticleListRecyclerAdapter);
+        getFirstData();
         Toast.makeText(getContext(), "original", Toast.LENGTH_SHORT).show();
     }
 }
