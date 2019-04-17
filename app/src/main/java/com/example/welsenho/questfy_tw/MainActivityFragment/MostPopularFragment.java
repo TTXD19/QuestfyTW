@@ -3,9 +3,11 @@ package com.example.welsenho.questfy_tw.MainActivityFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.CustomScrollView;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.InternetConnectionDetect;
+import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -37,21 +42,26 @@ public class MostPopularFragment extends Fragment {
 
     private int positionClick;
 
+    private NestedScrollView nestedScrollView;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private View view;
 
     //New loading method
-    private String lastNode = "";
-    private String lastKey = "";
-    private Boolean isLoading = false;
+    private long lastNum;
+    private long lastNode;
     private Boolean isMaxData = false;
     private LinearLayoutManager layoutManager;
 
+    private int testInitNum = 3;
+    private long testLastNum;
+
+
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
-    private ArrayList<FirebaseDatabaseGetSet> clickArrayList;
     private ArrayList<FirebaseDatabaseGetSet> searchArrayList;
+
+    private ArrayList<FirebaseDatabaseGetSet> testArrayList;
 
     private list_article_recyclerView_adapter adapter;
     private NewArticleListRecyclerAdapter newArticleListRecyclerAdapter;
@@ -85,6 +95,7 @@ public class MostPopularFragment extends Fragment {
         InitRecyclerView();
         getLastKeyFromFirebase();
         loadMoreRecyclerData();
+        getLastNum();
 
         return view;
     }
@@ -113,29 +124,20 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void InitItem() {
+        nestedScrollView = view.findViewById(R.id.most_pop_fm_nestedScrollView);
         recyclerView = view.findViewById(R.id.most_pop_fm_recyclerView);
         progressBar = view.findViewById(R.id.most_pop_fm_progressBar);
         swipeRefreshLayout = view.findViewById(R.id.most_pop_fm_swipeRefresh);
 
-        arrayList = new ArrayList<>();
-        clickArrayList = new ArrayList<>();
         searchArrayList = new ArrayList<>();
+        testArrayList = new ArrayList<>();
 
         adapter = new list_article_recyclerView_adapter(searchArrayList, getContext());
         adapter.setOnMainClickListener(new MainOnClickListener() {
             @Override
             public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                Toast.makeText(getContext(), arrayList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.getItemID() {
-            @Override
-            public void getItemID(int position) {
-                String postID = arrayList.get(position).getArticle_ID();
                 Intent intent = new Intent(getContext(), ReadArticleActivity.class);
-                intent.putExtra("ArticleID", postID);
-                positionClick = position;
+                intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
                 startActivity(intent);
             }
         });
@@ -143,7 +145,7 @@ public class MostPopularFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getFirstData();
+                getLastKeyFromFirebase();
             }
         });
     }
@@ -161,13 +163,27 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void getLastKeyFromFirebase() {
+
+        isMaxData = false;
+        arrayList = new ArrayList<>();
+
+        newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.ClickItem() {
+            @Override
+            public void getItemPosition(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
+                startActivity(intent);
+            }
+        });
+
         Query getLastKey = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToLast(1);
         getLastKey.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot DS : dataSnapshot.getChildren()) {
-                    lastKey = DS.getKey();
-                    Log.d("CHECLMAXDATA22345", lastKey);
+                    FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                    lastNum = getSet.getUploadTimeStamp();
+                    Log.d("MOSTPOPMAXDATALastNum", String.valueOf(lastNum));
                     getFirstData();
                 }
             }
@@ -183,31 +199,27 @@ public class MostPopularFragment extends Fragment {
         databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (lastKey != null) {
-                    Log.d("CHECLMAXDATA223456", "NOT NULL" + lastKey + "???");
-                } else {
-                    Log.d("CHECLMAXDATA223456", "NULL");
-                }
                 arrayList.clear();
-                clickArrayList.clear();
                 if (dataSnapshot.hasChildren()) {
                     for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        clickArrayList.add(getSet);
                         arrayList.add(getSet);
-                        mListener.mostPopularArticleFilter(arrayList);
                     }
 
-
+                    for (int i = 0; i<= arrayList.size() - 1; i++){
+                        Log.d("MOSTPOPMAXDATACOUNT12", String.valueOf(arrayList.get(i).getUploadTimeStamp()));
+                    }
                     /**
                      * Handle arrayList filter & load first data
                      */
-                    newArticleListRecyclerAdapter.setGetArrayListForClick(arrayList);
-                    newArticleListRecyclerAdapter.addAll(clickArrayList);
-                    lastNode = newArticleListRecyclerAdapter.getLastItemId();
-                    Log.d("LASTITEMKEY22", lastNode);
+                    //newArticleListRecyclerAdapter.setGetArrayListForClick(clickArrayList);
+                    newArticleListRecyclerAdapter.addAll(arrayList);
+                    lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
+                    Log.d("MOSTPOPMAXDATALastNode", String.valueOf(lastNode));
+
                     recyclerView.setVisibility(View.VISIBLE);
                     recyclerView.setAdapter(newArticleListRecyclerAdapter);
+
                     progressBar.setVisibility(View.GONE);
                     swipeRefreshLayout.setEnabled(true);
                     swipeRefreshLayout.setRefreshing(false);
@@ -215,78 +227,11 @@ public class MostPopularFragment extends Fragment {
                     /**
                      * Check whether is the max data or not
                      */
-                    Log.d("CHECLMAXDATA2234", lastNode);
-                    Log.d("CHECLMAXDATA223", lastKey);
-                    if (lastKey.equals(lastNode)) {
-                        isLoading = true;
+                    Log.d("MOSTPOPMAXDATALastNode", String.valueOf(lastNode));
+                    Log.d("MOSTPOPMAXDATALastNum", String.valueOf(lastNum));
+                    if (lastNum == lastNode) {
                         isMaxData = true;
                     }
-
-                    Log.d("CHECLMAXDATA", isMaxData.toString() + "isMax");
-                    Log.d("MostPopularMaxData", String.valueOf(arrayList.size()));
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void getMoreData() {
-        Query query = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp");
-        if (!lastNode.isEmpty()) {
-            Log.d("MOSTPOPCURRENTLASTNODE", "LAST NODE NOT NULL");
-        } else {
-            Log.d("MOSTPOPCURRENTLASTNODE", "LAST NODE IS NULL");
-        }
-
-        //databaseReference.child("Users_Question_Articles").orderByChild("Article_ID").startAt("-LU_zn9nqD6FnSxv7ucW");
-
-        databaseReference.child("Users_Question_Articles").orderByKey().startAt("6").limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    if (!isMaxData) {
-                        if (dataSnapshot.hasChildren()) {
-                            clickArrayList.clear();
-                            arrayList.remove(arrayList.size() - 1);
-                            for (DataSnapshot DS : dataSnapshot.getChildren()) {
-                                FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                                clickArrayList.add(getSet);
-                                arrayList.add(getSet);
-                            }
-
-                            /**
-                             * Load more data after 100 past
-                             */
-                            newArticleListRecyclerAdapter.setGetArrayListForClick(arrayList);
-                            clickArrayList.remove(0);
-                            newArticleListRecyclerAdapter.addAll(clickArrayList);
-                            newArticleListRecyclerAdapter.notifyDataSetChanged();
-                            lastNode = newArticleListRecyclerAdapter.getLastItemId();
-                            mListener.mostPopularArticleFilter(arrayList);
-                            progressBar.setVisibility(View.GONE);
-
-                            /**
-                             * Check whether is the max data or not
-                             */
-                            if (lastKey.equals(lastNode)) {
-                                isLoading = true;
-                                isMaxData = true;
-                            }
-
-                            Log.d("MostPopularMaxData", String.valueOf(arrayList.size()));
-                        } else {
-                            Log.d("MOSTPOPCURRENTLASTNODE", "DATADONOTEXIST");
-                        }
-                    } else {
-                        Log.d("MOSTPOPCURRENTLASTNODE", "MAXDATA");
-                    }
-                } else {
-                    Log.d("MOSTPOPCURRENTLASTNODE", "STOPLOADING");
                 }
             }
 
@@ -298,53 +243,62 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void loadMoreRecyclerData() {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (!recyclerView.canScrollVertically(1)) {
-                    Log.d("SCROLLING", "TRUE");
-                    Log.d("SCROLLING", isMaxData.toString() + "isMax");
-                    if (!isMaxData) {
-                        Log.d("SCROLLINGFORMORE", "TRUE");
-                        //getMoreData();
-                        //testData();
-                    } else {
-                        Log.d("SCROLLINGFORMORE", "FALSE");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            nestedScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (!nestedScrollView.canScrollVertically(1)){
+                        if (!isMaxData){
+                            //testData();
+                            getMoreData();
+                            Log.d("GETMOREDATA", "LOADMORE");
+                        }else {
+                            Log.d("GETMOREDATA", "NOTLOADMORE");
+                        }
                     }
-                } else {
-                    Log.d("SCROLLING", "FALSE");
                 }
-            }
-        });
+            });
+        }
     }
 
-    private void testData() {
-        final ArrayList<FirebaseDatabaseGetSet> testArrayList;
-        testArrayList = new ArrayList<>();
-        databaseReference = firebaseDatabase.getReference().child("VTEST");
-        Query query = databaseReference.child("VTEST").orderByChild("NUMBER").startAt("7").limitToFirst(2);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Log.d("MOSTPOPCURRENTLASTNODE", "LOAINGMOREDATA");
-                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
-                        FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        testArrayList.add(getSet);
+    private void getMoreData(){
+        if (!isMaxData){
+            databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").startAt(lastNode).limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        Log.d("GETMOREDATA", "LOADING");
+                        arrayList.clear();
+                        for (DataSnapshot DS:dataSnapshot.getChildren()){
+                            FirebaseDatabaseGetSet get = DS.getValue(FirebaseDatabaseGetSet.class);
+                            arrayList.add(get);
+                        }
+
+                        arrayList.remove(0);
+                        for (int i = 0; i<= arrayList.size() - 1; i++){
+                            Log.d("MOSTPOPMAXDATACOUNT12", String.valueOf(arrayList.get(i).getUploadTimeStamp()));
+                        }
+                        lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
+                        newArticleListRecyclerAdapter.addAll(arrayList);
+                        newArticleListRecyclerAdapter.notifyDataSetChanged();
+                        Log.d("GETMOREDATA", "TOTAL DATA : " + String.valueOf(arrayList.size()));
+                        if (lastNum == lastNode){
+                            isMaxData = true;
+                        }
+
+                    }else {
+                        Log.d("GETMOREDATA", "NOTEXIST");
                     }
-                    Log.d("MOSTPOPCURRENTLASTNODE", String.valueOf(testArrayList.get(0).getNUMBER()));
-                    Log.d("MOSTPOPCURRENTLASTNODE", String.valueOf(testArrayList.get(1).getNUMBER()));
-                } else {
-                    Log.d("MOSTPOPCURRENTLASTNODE", "NOLOAINGMOREDATA");
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }else {
+            Log.d("GETMOREDATA", "DATAMAX");
+        }
     }
 
     public void setOriginalRecyclerView() {
@@ -377,7 +331,7 @@ public class MostPopularFragment extends Fragment {
                         recyclerView.setAdapter(adapter);
                         progressBar.setVisibility(View.GONE);
                     }else {
-                        getFirstData();
+                        getLastKeyFromFirebase();
                     }
                 }
             }
@@ -402,5 +356,101 @@ public class MostPopularFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void mostPopularArticleFilter(ArrayList<FirebaseDatabaseGetSet> arrayList);
+    }
+
+
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private void getLastNum(){
+        databaseReference.child("VTEST").orderByChild("NUMBER").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot DS:dataSnapshot.getChildren()){
+                    FirebaseDatabaseGetSet getSet  = DS.getValue(FirebaseDatabaseGetSet.class);
+                    testLastNum = getSet.getNUMBER();
+                    Log.d("MOSTPOPCURRENTLASTNODE", String.valueOf(testLastNum));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void testData() {
+        databaseReference = firebaseDatabase.getReference().child("VTEST");
+        Query query = databaseReference.orderByChild("NUMBER").startAt(testInitNum).limitToFirst(3);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (testInitNum != testLastNum) {
+                    if (dataSnapshot.exists()) {
+                        Log.d("MOSTPOPCURRENTLASTNODE", "LOAINGMOREDATA");
+                        for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                            FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                            testArrayList.add(getSet);
+                        }
+
+                        Log.d("MOSTPOPCURRENTLASTNODE", String.valueOf(testInitNum));
+                        for (int i = 0; i <= testArrayList.size() - 1; i++){
+                            Log.d("MOSTPOPCURRENTLASTNODE" + String.valueOf(i), String.valueOf(testArrayList.get(i).getNUMBER()));
+                        }
+
+                        /*
+                        Log.d("MOSTPOPCURRENTLASTNODE1", String.valueOf(testArrayList.get(0).getNUMBER()));
+                        Log.d("MOSTPOPCURRENTLASTNODE2", String.valueOf(testArrayList.get(1).getNUMBER()));
+                        if (testArrayList.size() == 4 || testArrayList.size() == 6) {
+                            Log.d("MOSTPOPCURRENTLASTNODE3", String.valueOf(testArrayList.get(2).getNUMBER()));
+                            Log.d("MOSTPOPCURRENTLASTNODE4", String.valueOf(testArrayList.get(3).getNUMBER()));
+                        }
+                        if (testArrayList.size() == 6) {
+                            Log.d("MOSTPOPCURRENTLASTNODE5", String.valueOf(testArrayList.get(4).getNUMBER()));
+                            Log.d("MOSTPOPCURRENTLASTNODE6", String.valueOf(testArrayList.get(5).getNUMBER()));
+                        }*/
+                        testInitNum = testArrayList.get(testArrayList.size() -1).getNUMBER();
+                        testArrayList.remove(testArrayList.size() - 1);
+
+                    } else {
+                        Log.d("MOSTPOPCURRENTLASTNODE", "NOLOAINGMOREDATA");
+                    }
+                }else {
+                    Log.d("MOSTPOPCURRENTLASTNODE", "DATAISMAX");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void UnderSdk23Scroll(){
+        nestedScrollView.setNestedScrollingEnabled(false);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+                    Log.d("SCROLLING", "TRUE");
+                    Log.d("SCROLLING", isMaxData.toString() + "isMax");
+                    if (!isMaxData) {
+                        Log.d("SCROLLINGFORMORE", "TRUE");
+                        //getMoreData();
+                        testData();
+                    } else {
+                        Log.d("SCROLLINGFORMORE", "FALSE");
+                    }
+                } else {
+                    Log.d("SCROLLING", "FALSE");
+                }
+            }
+        });
     }
 }

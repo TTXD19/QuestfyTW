@@ -24,23 +24,19 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
     private ArrayList<FirebaseDatabaseGetSet> clickArratyListSize;
     private Context context;
     private EditRelatedMethod editRelatedMethod;
-    private getItemID itemID;
+    private ClickItem clickItem;
 
-    public NewArticleListRecyclerAdapter(Context context, getItemID itemID) {
+    public NewArticleListRecyclerAdapter(Context context, ClickItem clickItem) {
         arrayList = new ArrayList<>();
         clickArratyListSize = new ArrayList<>();
         this.context = context;
-        this.itemID = itemID;
+        this.clickItem = clickItem;
     }
 
     public void addAll(ArrayList<FirebaseDatabaseGetSet> arrayList1){
         int initList = arrayList.size();
         arrayList.addAll(arrayList1);
         notifyItemChanged(initList, arrayList1.size());
-    }
-
-    public void setGetArrayListForClick(ArrayList<FirebaseDatabaseGetSet> clickArratyListSize){
-        this.clickArratyListSize = clickArratyListSize;
     }
 
     public String getLastItemId(){
@@ -82,7 +78,7 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
 
     @Override
     public int getItemCount() {
-        return clickArratyListSize.size();
+        return arrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -117,14 +113,14 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION){
-                        itemID.getItemID(position);
+                        clickItem.getItemPosition(position, arrayList);
                     }
                 }
             });
         }
     }
 
-    public interface getItemID{
-        void getItemID(int position);
+    public interface ClickItem{
+        void getItemPosition(int position, ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 }

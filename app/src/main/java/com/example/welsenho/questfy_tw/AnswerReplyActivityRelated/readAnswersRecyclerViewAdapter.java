@@ -41,7 +41,7 @@ public class readAnswersRecyclerViewAdapter extends RecyclerView.Adapter<readAns
         readAnswerViewHolder.txtUserName.setText(getSet.getUserName());
         readAnswerViewHolder.txtUpdateDate.setText(getSet.getUpdateDate());
         readAnswerViewHolder.txtAnswerContent.setText(getSet.getAnswerContent());
-        Picasso.get().load(getSet.getUserImage()).fit().into(readAnswerViewHolder.userCircleImageView);
+        Picasso.get().load(getSet.getUserImage()).error(R.drawable.user_default_image).fit().into(readAnswerViewHolder.userCircleImageView);
 
     }
 

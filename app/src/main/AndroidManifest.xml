@@ -14,9 +14,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/questfy_logo_style_5_1"
+        android:icon="@mipmap/questfy_logo_style_5_3"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/questfy_logo_style_5_1_round"
+        android:roundIcon="@mipmap/questfy_logo_style_5_3_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -50,48 +50,72 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginRelated.LoginActivity" />
-        <activity android:name=".LoginRelated.SignUpAcivity" />
-        <activity android:name=".MainUserActivity.MainActivity" />
+        <activity android:name=".LoginRelated.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginRelated.SignUpAcivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainUserActivity.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".OtherUserProfileRelatedMethod.OtherUserProfileActivity" />
         <activity
             android:name=".EditActivityRelated.EditInitActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".EditActivityRelated.EditDetailMeetUpActivity" />
-        <activity android:name=".EditActivityRelated.EditQuestionRelateMajorChose" />
-        <activity android:name=".ReadArticleRelated.ReadArticleActivity" />
-        <activity android:name=".AnswerReplyActivityRelated.ReadAnswersActivity" />
-        <activity android:name=".AnswerReplyActivityRelated.AnswerReplyActivity" />
-        <activity android:name=".ReigisterCompleteInfoRelated.RealNameRegisterActivity" />
-        <activity android:name=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity" />
-        <activity android:name=".ReigisterCompleteInfoRelated.UniversityRegister" />
-        <activity android:name=".ReigisterCompleteInfoRelated.MainCourseRegister" />
-        <activity android:name=".FriendMessagingRelated.FriendMessagingActivity" />
-        <activity android:name=".DailyQuestionsRelated.DailyQuestionArticleRead" />
+        <activity android:name=".EditActivityRelated.EditQuestionRelateMajorChose"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReadArticleRelated.ReadArticleActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AnswerReplyActivityRelated.ReadAnswersActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AnswerReplyActivityRelated.AnswerReplyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReigisterCompleteInfoRelated.RealNameRegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReigisterCompleteInfoRelated.UniversityRegister"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReigisterCompleteInfoRelated.MainCourseRegister"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FriendMessagingRelated.FriendMessagingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DailyQuestionsRelated.DailyQuestionArticleRead"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".MainUserActivity.OutOfConnectionActivity" />
-        <activity android:name=".MainUserActivity.WelcomeScreenActivity">
+        <activity android:name=".MainUserActivity.OutOfConnectionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainUserActivity.WelcomeScreenActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReadArticleRelated.EnlargeImageActivity" />
-        <activity android:name=".FriendRelatedActivity.SearchAndAddFriendActivity" />
-        <activity android:name=".EditActivityRelated.EditPreviewActivity" />
-        <activity android:name=".LoginRelated.FacebookRegister" />
-        <activity android:name=".PersonAskQuestionRelated.PersonalAskQuestReplyActivity" />
-        <activity android:name=".PersonAskQuestionRelated.PersonalAskReplyingActivity" />
+        <activity android:name=".ReadArticleRelated.EnlargeImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FriendRelatedActivity.SearchAndAddFriendActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".EditActivityRelated.EditPreviewActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginRelated.FacebookRegister"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PersonAskQuestionRelated.PersonalAskQuestReplyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PersonAskQuestionRelated.PersonalAskReplyingActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AppIntroRelated.AppIntroActivity"
-            android:label="@string/appIntro" />
-        <activity android:name=".AppAnnouncementRelated.AppAnnouncementActivity" />
-        <activity android:name=".AppAnnouncementRelated.AppRulesActivity"></activity>
+            android:label="@string/appIntro"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AppAnnouncementRelated.AppAnnouncementActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AppAnnouncementRelated.AppRulesActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

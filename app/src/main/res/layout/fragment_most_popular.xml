@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivityFragment.MostPopularFragment">
 
+
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/most_pop_fm_nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -55,16 +56,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/most_pop_fm_recycler2"
+                android:descendantFocusability="blocksDescendants"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:descendantFocusability="blocksDescendants">
+                android:layout_below="@+id/most_pop_fm_recycler2">
 
                 <ProgressBar
                     android:id="@+id/most_pop_fm_progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/most_pop_fm_recyclerView"
@@ -77,6 +78,7 @@
             </RelativeLayout>
 
         </RelativeLayout>
+
     </android.support.v4.widget.NestedScrollView>
 
 

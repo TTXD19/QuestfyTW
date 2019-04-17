@@ -222,8 +222,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                latestArticleFragment.setOriginalRecyclerView();
-                mostPopularFragment.setOriginalRecyclerView();
+                if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()) {
+                    latestArticleFragment.setOriginalRecyclerView();
+                    mostPopularFragment.setOriginalRecyclerView();
+                }
                 return true;
             }
         });

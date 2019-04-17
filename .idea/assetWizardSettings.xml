@@ -23,7 +23,6 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="104" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -35,11 +34,11 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="backgroundColor" value="fca037" />
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Documents/Photos/Questfy Assests/LogoDesign/Questfy_5.png" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Documents/Photos/Questfy Assests/LogoDesign/Questfy_5_2.png" />
                                       <entry key="foregroundLayerName" value="ic_launcher_foreground" />
-                                      <entry key="outputName" value="questfy_logo_style_5_1" />
+                                      <entry key="outputName" value="questfy_logo_style_5_3" />
                                     </map>
                                   </option>
                                 </PersistentState>
