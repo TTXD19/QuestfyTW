@@ -125,12 +125,15 @@
     <string name="invite_friend">Invite Friend</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="term_of_use">Term of use</string>
+    <string name="register_an_account">Register an account</string>
     <string name="reply_an_answer">Reply an answer</string>
     <string name="reply">Reply</string>
     <string name="delete_photo">Delete photo</string>
     <string name="click_to_delete_photo">Click yes to delete this photo</string>
     <string name="report_user">Report user</string>
     <string name="select_a_report_reason">Select a report reason</string>
+    <string name="Question_can_only_add_one_image">Question can only add one image</string>
+    <string name="Select_your_main_course">Select your main course</string>
 
 
     <!-- SharedPreference file key -->

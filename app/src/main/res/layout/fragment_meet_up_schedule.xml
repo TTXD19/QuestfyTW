@@ -14,6 +14,16 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:id="@+id/meet_up_txtScehdule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="尚未與人約好見面"
+        android:textColor="@color/CatergoryDarkGrayText"
+        android:textSize="18sp" />
+
+
 
 
 </RelativeLayout>

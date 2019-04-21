@@ -110,7 +110,7 @@
         android:layout_marginBottom="5dp"
         android:layout_toEndOf="@+id/pop_up_userProfile_customMessage_addPicture"
         android:layout_toRightOf="@+id/pop_up_userProfile_customMessage_addPicture"
-        android:text="Question can only add one image"
+        android:text="@string/Question_can_only_add_one_image"
         android:textSize="16sp" />
 
     <TextView

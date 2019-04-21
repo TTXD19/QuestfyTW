@@ -31,6 +31,8 @@ import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.github.florent37.expansionpanel.ExpansionHeader;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -310,7 +312,8 @@ public class ReadArticleActivity extends AppCompatActivity {
                         btnRequestMeet.setVisibility(View.GONE);
                     }
                     setOtherUserUid(getUserProfile.getUserUid());
-                    Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
+                    checkArticleUserImage();
+                    //Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
                     ShowItem();
                 }
             }
@@ -320,7 +323,30 @@ public class ReadArticleActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void checkArticleUserImage(){
+        databaseReference.child("Users_profile").child(getUserProfile.getUserUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    if (!getUserProfile.getUser_Image().equals(dataSnapshot.getValue().toString())){
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("User_Image", dataSnapshot.getValue().toString());
+                        databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
+                        Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(circleImageView);
+                    }
+                }else {
+                    String defaultImage = "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6";
+                    Picasso.get().load(defaultImage).fit().into(circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void ItemCLick() {

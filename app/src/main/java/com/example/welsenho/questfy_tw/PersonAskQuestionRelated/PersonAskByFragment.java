@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 public class PersonAskByFragment extends Fragment {
 
     private View view;
-
+    private TextView txtNoQuestion;
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
@@ -105,6 +106,7 @@ public class PersonAskByFragment extends Fragment {
 
     private void InitItem(){
         recyclerView = view.findViewById(R.id.personal_ask_by_recyclerView);
+        txtNoQuestion = view.findViewById(R.id.personal_ask_by_txtNoPostArticles);
         arrayList = new ArrayList<>();
         adapter = new PersonalAskRecyclerAdapter(arrayList, getContext(), new PersonalAskRecyclerAdapter.getQuestionUid() {
             @Override
@@ -136,11 +138,17 @@ public class PersonAskByFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
+                    arrayList.clear();
+                    recyclerView.setVisibility(View.VISIBLE);
+                    txtNoQuestion.setVisibility(View.GONE);
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(getSet);
                         recyclerView.setAdapter(adapter);
                     }
+                }else {
+                    recyclerView.setVisibility(View.GONE);
+                    txtNoQuestion.setVisibility(View.VISIBLE);
                 }
             }
 

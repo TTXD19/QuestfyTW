@@ -5,12 +5,27 @@
     android:layout_height="match_parent"
     tools:context=".PersonAskQuestionRelated.PersonAskByFragment">
 
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/personal_ask_by_recyclerView"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/personal_ask_by_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-   </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/personal_ask_by_txtNoPostArticles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="尚未有人詢問您任何問題"
+            android:textColor="@color/CatergoryDarkGrayText"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
 
 </FrameLayout>

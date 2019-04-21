@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.DailyQuestionsRelated.DailyQuestionArticleRead;
 import com.example.welsenho.questfy_tw.DailyQuestionsRelated.MainDailyQuestionRecyclerAdapter;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class MyOwnPostArticles extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private TextView txtNoPostArticles;
     private View view;
 
     private list_article_recyclerView_adapter adapter;
@@ -68,7 +71,7 @@ public class MyOwnPostArticles extends Fragment {
             setRecyclerView();
             LoadData();
             onItemClick();
-        }else {
+        } else {
             progressBar.setVisibility(View.GONE);
         }
         return view;
@@ -107,35 +110,41 @@ public class MyOwnPostArticles extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void InitFirebase(){
+    private void InitFirebase() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void InitItem(){
+    private void InitItem() {
         recyclerView = view.findViewById(R.id.my_own_postArticle_recyclerView);
         progressBar = view.findViewById(R.id.my_own_postArticle_progressBar);
+        txtNoPostArticles = view.findViewById(R.id.my_own_postArticle_txtNoPostArticles);
         arrayList = new ArrayList<>();
         adapter = new list_article_recyclerView_adapter(arrayList, getContext());
     }
 
-    private void LoadData(){
-        databaseReference.child("Users_Question_Articles").addListenerForSingleValueEvent(new ValueEventListener() {
+    private void LoadData() {
+        Query query = databaseReference.child("Users_Question_Articles");
+        query.orderByChild("userUid").equalTo(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
+                    txtNoPostArticles.setVisibility(View.GONE);
                     arrayList.clear();
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        if (getSet.getUserUid().equals(firebaseUser.getUid())) {
-                            arrayList.add(getSet);
-                            recyclerView.setAdapter(adapter);
-                        }
+                        recyclerView.setVisibility(View.VISIBLE);
+                        arrayList.add(getSet);
                     }
-                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    txtNoPostArticles.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -143,16 +152,45 @@ public class MyOwnPostArticles extends Fragment {
 
             }
         });
+        /*
+        databaseReference.child("Users_Question_Articles").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    arrayList.clear();
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                        getSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        if (getSet.getUserUid().equals(firebaseUser.getUid())) {
+                            txtNoPostArticles.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            arrayList.add(getSet);
+                            recyclerView.setAdapter(adapter);
+                        }
+                    }
+                } else {
+                    txtNoPostArticles.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        */
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    private void onItemClick(){
+    private void onItemClick() {
         adapter.setOnMainClickListener(new MainOnClickListener() {
             @Override
             public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {

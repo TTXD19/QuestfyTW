@@ -495,6 +495,9 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                 destoryByUser = false;
                 Intent intent = new Intent(EditInitActivity.this, EditQuestionRelateMajorChose.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (!getMajors.isEmpty()) {
+                    intent.putStringArrayListExtra("Majors", getMajors);
+                }
                 startActivity(intent);
                 SaveCurrentContent();
                 finish();

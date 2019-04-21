@@ -1,16 +1,12 @@
 package com.example.welsenho.questfy_tw.ReigisterCompleteInfoRelated;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
@@ -23,10 +19,12 @@ public class MainCourseChooseRecyclerAdapter extends RecyclerView.Adapter<MainCo
     private ArrayList<String> arrayReturnMainCourse;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private Context context;
+    private mainCourseClick mainCourseClick;
 
-    public MainCourseChooseRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
+    public MainCourseChooseRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, mainCourseClick mainCourseClick){
         this.arrayList = arrayList;
         this.context = context;
+        this.mainCourseClick = mainCourseClick;
     }
 
 
@@ -41,13 +39,7 @@ public class MainCourseChooseRecyclerAdapter extends RecyclerView.Adapter<MainCo
     @Override
     public void onBindViewHolder(@NonNull MainCourseViewHolder mainCourseViewHolder, int i) {
         firebaseDatabaseGetSet = arrayList.get(i);
-        mainCourseViewHolder.checkBoxMainCourse.setText(firebaseDatabaseGetSet.getCourseName());
-        firebaseDatabaseGetSet.setIsSelected(false);
-        if (firebaseDatabaseGetSet.getIsSelected()) {
-            mainCourseViewHolder.checkBoxMainCourse.setChecked(true);
-        } else {
-            mainCourseViewHolder.checkBoxMainCourse.setChecked(false);
-        }
+        mainCourseViewHolder.txtMainCourse.setText(firebaseDatabaseGetSet.getCourseName());
     }
 
     @Override
@@ -57,35 +49,25 @@ public class MainCourseChooseRecyclerAdapter extends RecyclerView.Adapter<MainCo
 
     public class MainCourseViewHolder extends RecyclerView.ViewHolder {
 
-        private CheckBox checkBoxMainCourse;
+        private TextView txtMainCourse;
 
         public MainCourseViewHolder(@NonNull View itemView) {
             super(itemView);
-            checkBoxMainCourse = itemView.findViewById(R.id.uniAndMajor_Recycler_CheckBox);
-            arrayReturnMainCourse = new ArrayList<>();
-            checkBoxMainCourse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            txtMainCourse = itemView.findViewById(R.id.mainCourse_recyclerLayout_txtMainCourse);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (arrayReturnMainCourse.size() >= 1) {
-                        if (checkBoxMainCourse.isChecked()) {
-                            buttonView.setChecked(false);
-                            Toast.makeText(MainCourseChooseRecyclerAdapter.this.context, "You can only select 1 university", Toast.LENGTH_SHORT).show();
-                        } else if (!checkBoxMainCourse.isChecked()) {
-                            arrayReturnMainCourse.remove(checkBoxMainCourse.getText().toString());
-                        }
-                    } else {
-                        if (checkBoxMainCourse.isChecked()) {
-                            buttonView.setChecked(true);
-                            arrayReturnMainCourse.add(checkBoxMainCourse.getText().toString());
-                        } else if (!checkBoxMainCourse.isChecked()) {
-                            arrayReturnMainCourse.remove(checkBoxMainCourse.getText().toString());
-                        }
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION){
+                        mainCourseClick.onMainCourseClick(position, arrayList);
                     }
-                    Intent intent = new Intent("main_course");
-                    intent.putExtra("courseName", arrayReturnMainCourse);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
             });
         }
+    }
+
+    public interface mainCourseClick{
+        void onMainCourseClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 }

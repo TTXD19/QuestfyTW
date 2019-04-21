@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
@@ -45,6 +46,7 @@ public class FriendMessageFragment extends Fragment {
     private Button btnAddFriend;
 
     private View view;
+    private TextView txtNoMessage;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
@@ -120,6 +122,7 @@ public class FriendMessageFragment extends Fragment {
     }
 
     private void InitItem() {
+        txtNoMessage = view.findViewById(R.id.friendMessagetxtMessages);
         recyclerView = view.findViewById(R.id.friendMessageRecyclerView);
         progressBar = view.findViewById(R.id.friendMessageProgressBar);
         btnAddFriend = view.findViewById(R.id.friendMessageBtnAddFriend);
@@ -169,6 +172,7 @@ public class FriendMessageFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    txtNoMessage.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                     arrayList.clear();
                     for (DataSnapshot DS : dataSnapshot.getChildren()) {
@@ -179,6 +183,7 @@ public class FriendMessageFragment extends Fragment {
                         databaseReference.removeEventListener(this);
                     }
                 } else {
+                    txtNoMessage.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
                 }

@@ -5,17 +5,15 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/mainCourse_recyclerLayout_txtMainCourse"
+        android:id="@+id/university_register_recycLayout_txtSchoolName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="朝陽科技大學"
         android:textSize="20sp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:textColor="@color/CatergoryDarkGrayText"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"/>
-
-
-
 
 </RelativeLayout>

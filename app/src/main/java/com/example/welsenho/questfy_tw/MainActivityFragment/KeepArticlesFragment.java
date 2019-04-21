@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
@@ -36,6 +37,7 @@ public class KeepArticlesFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private View view;
+    private TextView txtNoArticlesKeep;
     private keepArticleRecyclerViewAdapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -96,6 +98,7 @@ public class KeepArticlesFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.keep_article_swipeRefreshLayout);
         recyclerView = view.findViewById(R.id.keep_article_recyclerView);
         progressBar = view.findViewById(R.id.keep_articles_progressBar);
+        txtNoArticlesKeep = view.findViewById(R.id.keep_article_txtNoArticlesKeep);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -135,6 +138,8 @@ public class KeepArticlesFragment extends Fragment {
                 if (dataSnapshot.exists()){
                     arrayList.clear();
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        recyclerView.setVisibility(View.VISIBLE);
+                        txtNoArticlesKeep.setVisibility(View.GONE);
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
@@ -142,6 +147,8 @@ public class KeepArticlesFragment extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }else {
+                    recyclerView.setVisibility(View.GONE);
+                    txtNoArticlesKeep.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

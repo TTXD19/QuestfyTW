@@ -16,5 +16,13 @@
         android:textSize="64sp"
         android:textColor="@color/FullWhite"/>
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/questfy_logo_style_5_3"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/welcome_screen_txtLogo"
+        android:layout_marginBottom="12dp"/>
+
 
 </RelativeLayout>

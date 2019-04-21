@@ -27,6 +27,16 @@
            android:layout_height="wrap_content"
            android:layout_centerInParent="true"/>
 
+       <TextView
+           android:id="@+id/keep_article_txtNoArticlesKeep"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="尚未收藏任何問題"
+           android:layout_centerInParent="true"
+           android:textSize="18sp"
+           android:textColor="@color/CatergoryDarkGrayText"
+           android:visibility="gone"/>
+
 
    </RelativeLayout>
 

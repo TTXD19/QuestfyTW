@@ -39,6 +39,17 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
         notifyItemChanged(initList, arrayList1.size());
     }
 
+    public void clear2() {
+        final int size = arrayList.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                arrayList.remove(0);
+            }
+
+            notifyItemRangeRemoved(0, size);
+        }
+    }
+
     public String getLastItemId(){
         return arrayList.get(arrayList.size() - 1).getArticle_ID();
     }

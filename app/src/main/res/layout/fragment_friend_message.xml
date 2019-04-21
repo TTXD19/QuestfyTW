@@ -33,4 +33,13 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/add_friend_btn_background"/>
 
+    <TextView
+        android:id="@+id/friendMessagetxtMessages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="尚未有任何訊息"
+        android:textColor="@color/CatergoryDarkGrayText"
+        android:textSize="18sp" />
+
 </RelativeLayout>

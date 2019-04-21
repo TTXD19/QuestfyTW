@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.CustomScrollView;
@@ -95,7 +96,7 @@ public class MostPopularFragment extends Fragment {
         InitRecyclerView();
         getLastKeyFromFirebase();
         loadMoreRecyclerData();
-        getLastNum();
+        //getLastNum();
 
         return view;
     }
@@ -120,7 +121,7 @@ public class MostPopularFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //LoadData();
+        //getLastKeyFromFirebase();
     }
 
     private void InitItem() {
@@ -166,6 +167,7 @@ public class MostPopularFragment extends Fragment {
 
         isMaxData = false;
         arrayList = new ArrayList<>();
+        arrayList.clear();
 
         newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.ClickItem() {
             @Override
@@ -301,12 +303,6 @@ public class MostPopularFragment extends Fragment {
         }
     }
 
-    public void setOriginalRecyclerView() {
-        recyclerView.setVisibility(View.GONE);
-        getLastKeyFromFirebase();
-        Toast.makeText(getContext(), "original", Toast.LENGTH_SHORT).show();
-    }
-
     public void LoadQueryData(final String inputSearch) {
         progressBar.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setEnabled(false);
@@ -365,7 +361,7 @@ public class MostPopularFragment extends Fragment {
 
     //---------------------------------------------------------------------------------------------------------------------------------------
 
-    private void getLastNum(){
+    private void getLastNum2(){
         databaseReference.child("VTEST").orderByChild("NUMBER").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -383,7 +379,7 @@ public class MostPopularFragment extends Fragment {
         });
     }
 
-    private void testData() {
+    private void testData2() {
         databaseReference = firebaseDatabase.getReference().child("VTEST");
         Query query = databaseReference.orderByChild("NUMBER").startAt(testInitNum).limitToFirst(3);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -443,7 +439,7 @@ public class MostPopularFragment extends Fragment {
                     if (!isMaxData) {
                         Log.d("SCROLLINGFORMORE", "TRUE");
                         //getMoreData();
-                        testData();
+                        //testData();
                     } else {
                         Log.d("SCROLLINGFORMORE", "FALSE");
                     }

@@ -1,6 +1,5 @@
 package com.example.welsenho.questfy_tw.MainUserActivity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +17,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -60,7 +58,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -205,28 +202,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             public boolean onQueryTextChange(String s) {
                 mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
                 if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()){
-                    latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
-                    mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
-                    mostPopularFragment.LoadQueryData(s);
-                    latestArticleFragment.LoadQueryData(s);
+                        latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
+                        mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
+                        mostPopularFragment.LoadQueryData(s);
+                        latestArticleFragment.LoadQueryData(s);
+
                 }
                 return false;
-            }
-        });
-
-        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()) {
-                    latestArticleFragment.setOriginalRecyclerView();
-                    mostPopularFragment.setOriginalRecyclerView();
-                }
-                return true;
             }
         });
 

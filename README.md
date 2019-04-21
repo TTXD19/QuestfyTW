@@ -31,6 +31,10 @@ Questfy-TW 0.0.5 2019/4/13(Add Report function)
 Questfy-TW 0.0.5 2019/4/15(Fix bug & latestArticle fm & mostPopular fm in loading article list)
                            (Add user announcement and question post rules activity)
 
+Questfy-TW 0.0.5 2019/4/20(Personal information register complete redesign)
+                           (Details added)
+
+
 
 
 

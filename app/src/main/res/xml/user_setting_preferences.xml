@@ -19,6 +19,11 @@
         android:title="@string/account_information">
 
         <Preference
+            android:key="registerAccount"
+            android:title="@string/register_an_account"
+            />
+
+        <Preference
             android:key="registerEmail"
             android:title="@string/register_email"
             android:summary="example@gmail.com"/>
@@ -35,6 +40,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="accountInfo"
         android:title="@string/abount_questfy">
 
         <Preference

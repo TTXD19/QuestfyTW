@@ -103,9 +103,11 @@ public class LoginActivity extends AppCompatActivity {
             if (internetConnectionDetect.isNetworkAvailable(getApplicationContext())) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }else {
                 Intent intent = new Intent(LoginActivity.this, OutOfConnectionActivity.class);
                 startActivity(intent);
+                finish();
             }
 
         }

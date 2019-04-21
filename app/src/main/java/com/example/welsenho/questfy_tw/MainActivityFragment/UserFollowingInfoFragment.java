@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 public class UserFollowingInfoFragment extends Fragment {
 
     private View view;
+    private TextView txtNoFollowingUsers;
     private RecyclerView recyclerView;
     private UserFollowingRecyclerAdapter adapter;
 
@@ -57,10 +59,14 @@ public class UserFollowingInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_following_info, container, false);
-        InitItem();
-        InitRecyclerView();
         InitFirebase();
-        getUserFollowingData();
+        InitItem();
+        if (firebaseUser != null) {
+            InitRecyclerView();
+            getUserFollowingData();
+        }else {
+            recyclerView.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -88,7 +94,7 @@ public class UserFollowingInfoFragment extends Fragment {
 
     private void InitItem(){
         recyclerView = view.findViewById(R.id.user_following_info_recyclerView);
-
+        txtNoFollowingUsers = view.findViewById(R.id.user_following_info_txtNoFollowingUsers);
         arrayList = new ArrayList<>();
         adapter = new UserFollowingRecyclerAdapter(arrayList, getContext(), new UserFollowingRecyclerAdapter.UserItemClick() {
             @Override
@@ -114,11 +120,15 @@ public class UserFollowingInfoFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        recyclerView.setVisibility(View.VISIBLE);
+                        txtNoFollowingUsers.setVisibility(View.GONE);
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                     }
-
                     recyclerView.setAdapter(adapter);
+                }else {
+                    recyclerView.setVisibility(View.GONE);
+                    txtNoFollowingUsers.setVisibility(View.VISIBLE);
                 }
             }
 

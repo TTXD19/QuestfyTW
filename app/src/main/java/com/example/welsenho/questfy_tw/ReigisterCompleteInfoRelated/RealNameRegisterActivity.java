@@ -26,6 +26,11 @@ public class RealNameRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_real_name_register);
 
         InitItem();
+
+        if (getIntent().getStringExtra("realName") != null){
+            editName.setText(getIntent().getStringExtra("realName"));
+        }
+
         btnNext.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -35,9 +40,10 @@ public class RealNameRegisterActivity extends AppCompatActivity {
                 } else if (name.isEmpty()){
                     Toast.makeText(RealNameRegisterActivity.this, "Name can not be empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(RealNameRegisterActivity.this, BirthdayRegisterActivity.class);
+                    Intent intent = new Intent(RealNameRegisterActivity.this, CurrentDegreeChoose.class);
                     intent.putExtra("realName", name);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

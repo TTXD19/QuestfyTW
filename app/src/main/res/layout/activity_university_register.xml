@@ -14,15 +14,34 @@
         android:textColor="@color/ＭainOrange"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"/>
+        android:layout_marginStart="5dp"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/universityName_register_editSearchUniversity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:hint="搜索您的大學"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/university_register_txtProcess"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/search_friend_background"
+        android:textColor="@color/CatergoryDarkGrayText"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/university_register_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/university_register_txtProcess"
+        android:layout_below="@+id/universityName_register_editSearchUniversity"
         android:layout_marginTop="15dp">
 
 
@@ -33,7 +52,7 @@
         android:id="@+id/university_register_btnPrevious"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/university_register_btnNext"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -43,20 +62,6 @@
         android:background="@drawable/sign_in_rectangle"
         android:textColor="@color/FullWhite"
         />
-
-    <Button
-        android:id="@+id/university_register_btnNext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="@string/next"
-        android:textAllCaps="false"
-        android:textSize="24sp"
-        android:background="@drawable/add_friend_btn_background"
-        android:textColor="@color/FullWhite"/>
 
 
 

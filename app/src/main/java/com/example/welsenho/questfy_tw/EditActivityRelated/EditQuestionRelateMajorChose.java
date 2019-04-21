@@ -71,13 +71,23 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getMajors = new ArrayList<>();
         arrayList = new ArrayList<>();
+
+        if (getIntent().getStringArrayListExtra("Majors") != null){
+            getMajors = getIntent().getStringArrayListExtra("Majors");
+            tagGroup.setTags(getMajors);
+        }
+
         adapter = new EditQuestionRelateRecyclerViewAdapter(arrayList, this, new EditQuestionRelateRecyclerViewAdapter.majorSelectListener() {
             @Override
             public void select(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
                 if (!getMajors.contains(arrayList.get(position).getMajor())) {
-                    getMajors.add(arrayList.get(position).getMajor());
-                    tagGroup.setTags(getMajors);
-                    confirmRecyclerAdapter = new EditInitMajorChooseConfirmRecyclerAdapter(getMajors);
+                    if (getMajors.size() < 3) {
+                        getMajors.add(arrayList.get(position).getMajor());
+                        tagGroup.setTags(getMajors);
+                        confirmRecyclerAdapter = new EditInitMajorChooseConfirmRecyclerAdapter(getMajors);
+                    }else {
+                        Toast.makeText(EditQuestionRelateMajorChose.this, "只能選3種相關科系", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

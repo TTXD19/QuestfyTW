@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -35,15 +34,12 @@ import java.util.HashMap;
 public class MainCourseRegister extends AppCompatActivity {
 
     private String realName;
-    private String birthdayDate;
+    private String currentDegree;
     private String schooleName;
-    private String courseName;
 
-    private Button btnNext;
     private Button btnPrevious;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
-    public BroadcastReceiver broadcastReceiver;
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private ArrayList<String> getMainCourse;
@@ -60,7 +56,7 @@ public class MainCourseRegister extends AppCompatActivity {
         setContentView(R.layout.activity_main_course_register);
 
         realName = getIntent().getStringExtra("realName");
-        birthdayDate = getIntent().getStringExtra("birthdayDate");
+        currentDegree = getIntent().getStringExtra("currentDegree");
         schooleName = getIntent().getStringExtra("schoolName");
 
         Toast.makeText(this, realName, Toast.LENGTH_SHORT).show();
@@ -69,18 +65,34 @@ public class MainCourseRegister extends AppCompatActivity {
         itemClick();
         initRecyclerView();
         getFirebaseData();
-        receiveCourseName();
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("main_course"));
     }
 
-    private void initItem(){
-        btnNext = findViewById(R.id.mainCourse_register_btnNext);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(MainCourseRegister.this, UniversityRegister.class);
+        intent.putExtra("realName", realName);
+        intent.putExtra("currentDegree", currentDegree);
+        startActivity(intent);
+        finish();
+    }
+
+    private void initItem() {
         btnPrevious = findViewById(R.id.mainCourse_register_btnPrevious);
         recyclerView = findViewById(R.id.mainCourse_recyclerView);
 
         progressDialog = new ProgressDialog(this);
         arrayList = new ArrayList<>();
-        adapter = new MainCourseChooseRecyclerAdapter(arrayList, this);
+        adapter = new MainCourseChooseRecyclerAdapter(arrayList, this, new MainCourseChooseRecyclerAdapter.mainCourseClick() {
+            @Override
+            public void onMainCourseClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                progressDialog.setTitle("Update");
+                progressDialog.setMessage("We're updating your profile, please hold on.....");
+                progressDialog.show();
+                UpdateUserProfile(arrayList.get(position).getCourseName());
+
+            }
+        });
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -88,18 +100,18 @@ public class MainCourseRegister extends AppCompatActivity {
 
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
-    private void getFirebaseData(){
+    private void getFirebaseData() {
         databaseReference.child("UniversityInfo").child(schooleName).child("courseList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot ds:dataSnapshot.getChildren()){
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         firebaseDatabaseGetSet = ds.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
@@ -114,59 +126,30 @@ public class MainCourseRegister extends AppCompatActivity {
         });
     }
 
-    private void  receiveCourseName(){
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                getMainCourse = intent.getStringArrayListExtra("courseName");
-                if (!getMainCourse.isEmpty()) {
-                    courseName = getMainCourse.get(0);
-                }
-            }
-        };
-    }
-
-    private void itemClick(){
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressDialog.setTitle("Update");
-                progressDialog.setMessage("We're updating your profile, please hold on.....");
-                progressDialog.show();
-                if (courseName != null && !courseName.isEmpty()) {
-                    UpdateUserProfile();
-                }else {
-                    Toast.makeText(MainCourseRegister.this, "Must choose a course", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
+    private void itemClick() {
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainCourseRegister.this, UniversityRegister.class);
-                intent.putExtra("realName", realName);
-                intent.putExtra("birthdayDate", birthdayDate);
-                startActivity(intent);
+                onBackPressed();
             }
         });
     }
 
-    private void UpdateUserProfile(){
+    private void UpdateUserProfile(String mainCourse) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("realName", realName);
-        hashMap.put("birthdayDate", birthdayDate);
+        hashMap.put("currentDegree", currentDegree);
         hashMap.put("schoolName", schooleName);
-        hashMap.put("courseName", courseName);
+        hashMap.put("courseName", mainCourse);
         hashMap.put("CompleteInformationCheck", "success");
         databaseReference.child("Users_profile").child(firebaseAuth.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     progressDialog.dismiss();
                     Intent intent = new Intent(MainCourseRegister.this, MainActivity.class);
                     startActivity(intent);
-                }else {
+                } else {
                     progressDialog.dismiss();
                 }
             }

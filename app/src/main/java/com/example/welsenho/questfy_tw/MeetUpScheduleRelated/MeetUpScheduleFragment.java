@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
@@ -39,6 +40,7 @@ public class MeetUpScheduleFragment extends Fragment {
     private MeetUpScheduleRecyclerAdapter adapter;
 
     private View view;
+    private TextView txtScehdule;
     private RecyclerView recyclerView;
 
     private FirebaseAuth firebaseAuth;
@@ -114,7 +116,7 @@ public class MeetUpScheduleFragment extends Fragment {
 
     private void InitItem(){
         recyclerView = view.findViewById(R.id.meet_up_recyclerView);
-
+        txtScehdule = view.findViewById(R.id.meet_up_txtScehdule);
         arrayList = new ArrayList<>();
         adapter = new MeetUpScheduleRecyclerAdapter(arrayList, getContext(), new MeetUpScheduleRecyclerAdapter.onArticleClick() {
             @Override
@@ -145,11 +147,14 @@ public class MeetUpScheduleFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     arrayList.clear();
+                    txtScehdule.setVisibility(View.GONE);
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                         recyclerView.setAdapter(adapter);
                     }
+                }else {
+                    txtScehdule.setVisibility(View.VISIBLE);
                 }
             }
 

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class UniversityRegister extends AppCompatActivity {
 
     private String realName;
-    private String birthdayDate;
+    private String currentDegree;
     private String schoolName;
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
@@ -38,7 +38,6 @@ public class UniversityRegister extends AppCompatActivity {
     private UniversityAndMajorsChooseRecyclerAdapter adapter;
     public BroadcastReceiver broadcastReceiver;
 
-    private Button btnNext;
     private Button btnPrevious;
     private RecyclerView recyclerView;
 
@@ -52,23 +51,23 @@ public class UniversityRegister extends AppCompatActivity {
         setContentView(R.layout.activity_university_register);
 
         realName = getIntent().getStringExtra("realName");
-        birthdayDate = getIntent().getStringExtra("birthdayDate");
-
-        Toast.makeText(this, realName, Toast.LENGTH_SHORT).show();
+        currentDegree = getIntent().getStringExtra("currentDegree");
 
         InitItem();
         ItemClick();
         InitRecyclerView();
         getFirebaseData();
-        receiveSchoolName();
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("school_name"));
-
-
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(UniversityRegister.this, CurrentDegreeChoose.class);
+        intent.putExtra("realName", realName);
+        startActivity(intent);
+    }
 
     private void InitItem(){
-        btnNext = findViewById(R.id.university_register_btnNext);
         btnPrevious = findViewById(R.id.university_register_btnPrevious);
         recyclerView = findViewById(R.id.university_register_recyclerView);
 
@@ -76,29 +75,25 @@ public class UniversityRegister extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
-        adapter = new UniversityAndMajorsChooseRecyclerAdapter(arrayList, this);
+        adapter = new UniversityAndMajorsChooseRecyclerAdapter(arrayList, this, new UniversityAndMajorsChooseRecyclerAdapter.itemOnClick() {
+            @Override
+            public void getClickItem(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(UniversityRegister.this, MainCourseRegister.class);
+                intent.putExtra("realName", realName);
+                intent.putExtra("currentDegree", currentDegree);
+                intent.putExtra("schoolName", arrayList.get(position).getSchoolName());
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void ItemClick(){
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (schoolName!= null && !schoolName.isEmpty()){
-                    Intent intent = new Intent(UniversityRegister.this, MainCourseRegister.class);
-                    intent.putExtra("schoolName", schoolName);
-                    intent.putExtra("realName", realName);
-                    intent.putExtra("birthdayDate", birthdayDate);
-                    startActivity(intent);
-                }
-            }
-        });
 
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UniversityRegister.this, BirthdayRegisterActivity.class);
-                intent.putExtra("realName", realName);
-                startActivity(intent);
+                onBackPressed();
             }
         });
     }
@@ -111,9 +106,8 @@ public class UniversityRegister extends AppCompatActivity {
                     for (DataSnapshot DS : dataSnapshot.getChildren()){
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
-                        recyclerView.setAdapter(adapter);
-
                     }
+                    recyclerView.setAdapter(adapter);
                 }
             }
 
@@ -128,17 +122,5 @@ public class UniversityRegister extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-    }
-
-    private void  receiveSchoolName(){
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                getSchoolName = intent.getStringArrayListExtra("schoolName");
-                if (!getSchoolName.isEmpty()) {
-                    schoolName = getSchoolName.get(0);
-                }
-            }
-        };
     }
 }

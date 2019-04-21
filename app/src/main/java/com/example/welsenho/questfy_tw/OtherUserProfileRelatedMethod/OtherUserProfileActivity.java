@@ -91,6 +91,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private TextView txtPopAsk;
     private TextView txtPopCancel;
     private TextView txtPopCount;
+    private TextView txtMaxCount;
     private ImageView imgPopAddImage;
     private ImageView imgPopPreview;
     private EditText editPopAskContent;
@@ -127,9 +128,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         getOtherUserInfo();
         getSelfUserInfo();
         if (firebaseUser != null) {
-            detectFriend();
-            detectFollowing();
-            onItemClick();
+            if (!firebaseUser.getUid().equals(otherUserUid)) {
+                detectFriend();
+                detectFollowing();
+                onItemClick();
+            }else {
+                getToSelfPage();
+            }
         }else {
             guestClick();
         }
@@ -216,23 +221,23 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()){
                     firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     txtUserName.setText(firebaseDatabaseGetSet.getID());
-                    getSupportActionBar().setTitle(firebaseDatabaseGetSet.getID() + "'s profile");
+                    getSupportActionBar().setTitle(firebaseDatabaseGetSet.getID() + "的個人資訊");
                     if (firebaseDatabaseGetSet.getSchoolName() != null){
                         txtUniversityName.setText(firebaseDatabaseGetSet.getSchoolName());
                         txtCorseName.setText(firebaseDatabaseGetSet.getCourseName());
                     }else {
-                        txtUniversityName.setText("Not register");
-                        txtCorseName.setText("Not register");
+                        txtUniversityName.setText("尚未審核");
+                        txtCorseName.setText("尚未審核");
                     }
-                    if (firebaseDatabaseGetSet.getUserSpeciality() != null) {
+                    if (firebaseDatabaseGetSet.getUserSpeciality() != null || !firebaseDatabaseGetSet.getUserSpeciality().trim().isEmpty()) {
                         txtSpecility.setText(firebaseDatabaseGetSet.getUserSpeciality());
                     } else {
-                        txtSpecility.setText("Not set yet");
+                        txtSpecility.setText("");
                     }
-                    if (firebaseDatabaseGetSet.getUserStatusMessage() != null) {
+                    if (firebaseDatabaseGetSet.getUserStatusMessage() != null || !firebaseDatabaseGetSet.getUserSpeciality().trim().isEmpty()) {
                         txtStatusMessage.setText(firebaseDatabaseGetSet.getUserStatusMessage());
                     }else {
-                        txtStatusMessage.setText("Not set yet");
+                        txtStatusMessage.setText("");
                     }
                     Picasso.get().load(firebaseDatabaseGetSet.getUser_image_uri()).fit().into(circleImageView);
                 }
@@ -523,6 +528,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.user_profile_custom_message_editing);
         txtPopTitle = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtTitle);
         txtPopCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
+        txtMaxCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtMaxCount);
         txtPopAsk = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtSave);
         txtPopCancel = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCancel);
         imgPopAddImage = dialog.findViewById(R.id.pop_up_userProfile_customMessage_addPicture);
@@ -578,6 +584,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+        txtPopCount.setVisibility(View.GONE);
+        txtMaxCount.setVisibility(View.GONE);
     }
 
     private void uploadPersonalAsk(String question){
@@ -725,6 +734,12 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         reportReasons[7] = "惡意洗版";
         reportReasons[8] = "其他不當或違規項目";
 
+    }
+
+    private void getToSelfPage(){
+        btnAddFriend.setVisibility(View.GONE);
+        btnSendMessageQuestion.setVisibility(View.GONE);
+        btnFollow.setVisibility(View.GONE);
     }
 
 

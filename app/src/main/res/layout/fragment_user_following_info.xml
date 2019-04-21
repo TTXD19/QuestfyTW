@@ -13,4 +13,14 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:id="@+id/user_following_info_txtNoFollowingUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="尚未追蹤任何使用者"
+        android:layout_centerInParent="true"
+        android:textSize="18sp"
+        android:textColor="@color/CatergoryDarkGrayText"
+        android:visibility="gone"/>
+
 </RelativeLayout>

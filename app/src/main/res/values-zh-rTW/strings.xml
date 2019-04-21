@@ -108,6 +108,7 @@
     <string name="complete_user_info_enjoy">現在立即填寫使用者資訊以啟用更多服務吧 : )</string>
     <string name="person_ans_question">個人問答</string>
     <string name="setting">設定</string>
+    <string name="Select_your_main_course">請選擇您的科系</string>
 
     <string name="general">一般</string>
     <string name="app_version">應用程式版本</string>
@@ -122,6 +123,7 @@
     <string name="invite_friend">邀請朋友</string>
     <string name="privacy_policy">隱私權政策</string>
     <string name="term_of_use">使用者協議</string>
+    <string name="register_an_account">帳號註冊</string>
     <string name="hello_visitor">您好，訪客</string>
     <string name="log_in_to_enjoy_more_service">登入享有更多服務吧</string>
     <string name="reply_an_answer">回覆答案</string>
@@ -131,6 +133,7 @@
     <string name="click_to_delete_photo">點擊確認已刪除這張照片</string>
     <string name="report_user">檢舉使用者</string>
     <string name="select_a_report_reason">選擇檢舉原因</string>
+    <string name="Question_can_only_add_one_image">一則問題僅限一張照片</string>
 
 
 </resources>

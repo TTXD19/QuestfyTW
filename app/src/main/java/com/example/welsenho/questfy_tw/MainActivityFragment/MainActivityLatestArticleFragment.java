@@ -86,9 +86,8 @@ public class MainActivityLatestArticleFragment extends Fragment {
         databaseReference = firebaseDatabase.getReference();
 
         InitItem();
-        getLastKeyFromFirebase();
         setRecyclerView();
-        getFirstData();
+        getLastKeyFromFirebase();
         loadMoreRecyclerData();
         return view;
     }
@@ -113,12 +112,22 @@ public class MainActivityLatestArticleFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        //getLastKeyFromFirebase();
     }
 
     private void InitItem(){
         progressBar.setVisibility(View.VISIBLE);
         searchArrayList = new ArrayList<>();
         arrayList = new ArrayList<>();
+
+        newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.ClickItem() {
+            @Override
+            public void getItemPosition(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(getContext(), ReadArticleActivity.class);
+                intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
+                startActivity(intent);
+            }
+        });
 
         adapter = new list_article_recyclerView_adapter(searchArrayList, getContext());
         adapter.setOnMainClickListener(new MainOnClickListener() {
@@ -205,10 +214,13 @@ public class MainActivityLatestArticleFragment extends Fragment {
         });
     }
 
+
+
     private void getLastKeyFromFirebase() {
 
         isMaxData = false;
         arrayList = new ArrayList<>();
+        arrayList.clear();
 
         newArticleListRecyclerAdapter = new NewArticleListRecyclerAdapter(getContext(), new NewArticleListRecyclerAdapter.ClickItem() {
             @Override
@@ -255,7 +267,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                     /**
                      * Handle arrayList filter & load first data
                      */
-                    //newArticleListRecyclerAdapter.setGetArrayListForClick(clickArrayList);
+
                     newArticleListRecyclerAdapter.addAll(arrayList);
                     lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
                     Log.d("MOSTPOPMAXDATALastNode", String.valueOf(lastNode));
@@ -274,6 +286,8 @@ public class MainActivityLatestArticleFragment extends Fragment {
                     Log.d("MOSTPOPMAXDATALastNum", String.valueOf(lastNum));
                     if (lastNum == lastNode) {
                         isMaxData = true;
+                    }else {
+                        isMaxData = false;
                     }
                 }
             }
@@ -292,7 +306,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     if (!nestedScrollView.canScrollVertically(1)){
                         if (!isMaxData){
-                            //testData();
                             getMoreData();
                             Log.d("GETMOREDATA", "LOADMORE");
                         }else {
@@ -318,9 +331,9 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         }
 
                         arrayList.remove(0);
-                        for (int i = 0; i<= arrayList.size() - 1; i++){
+                        /*for (int i = 0; i<= arrayList.size() - 1; i++){
                             Log.d("MOSTPOPMAXDATACOUNT12", String.valueOf(arrayList.get(i).getUploadTimeStamp()));
-                        }
+                        }*/
                         lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
                         newArticleListRecyclerAdapter.addAll(arrayList);
                         newArticleListRecyclerAdapter.notifyDataSetChanged();
@@ -344,16 +357,12 @@ public class MainActivityLatestArticleFragment extends Fragment {
         }
     }
 
+
+
     private void setRecyclerView(){
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         recyclerView.setVisibility(View.VISIBLE);
-    }
-
-    public void setOriginalRecyclerView(){
-        recyclerView.setVisibility(View.GONE);
-        getLastKeyFromFirebase();
-        Toast.makeText(getContext(), "original", Toast.LENGTH_SHORT).show();
     }
 }

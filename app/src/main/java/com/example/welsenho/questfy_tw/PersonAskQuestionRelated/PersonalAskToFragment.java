@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.R;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class PersonalAskToFragment extends Fragment {
 
     private View view;
+    private TextView txtNoQuestion;
     private RecyclerView recyclerView;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private PersonalAskRecyclerAdapter adapter;
@@ -55,6 +57,7 @@ public class PersonalAskToFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal_ask_to, container, false);
         recyclerView = view.findViewById(R.id.personal_ask_to_recyclerView);
+        txtNoQuestion = view.findViewById(R.id.personal_ask_to_txtNoPostArticles);
         InitItem();
         InitFirebase();
         InitRecyclerView();
@@ -134,12 +137,15 @@ public class PersonalAskToFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
+                    arrayList.clear();
+                    txtNoQuestion.setVisibility(View.GONE);
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(getSet);
                         recyclerView.setAdapter(adapter);
                     }
                 }else {
+                    txtNoQuestion.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
             }

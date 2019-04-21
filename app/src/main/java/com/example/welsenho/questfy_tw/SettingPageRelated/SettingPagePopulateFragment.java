@@ -27,7 +27,10 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
     private Preference preInviteFriend;
     private Preference prePrivacyPolicy;
     private Preference preTermOfAgreements;
+    private Preference preRegisterAccount;
+
     private PreferenceCategory preferenceGeneral;
+    private Preference preferenceaccountInfo;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -45,6 +48,9 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
         preInviteFriend = findPreference("inviteFriend");
         prePrivacyPolicy = findPreference("privacyPolicy");
         preTermOfAgreements = findPreference("termOfUses");
+        preRegisterAccount = findPreference("registerAccount");
+
+        preferenceaccountInfo = findPreference("accountInfo");
 
 
         preAppVersion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -54,6 +60,7 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
+
 
         InitFirebase();
         setKey();
@@ -65,7 +72,18 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
     }
 
     private void setKey(){
-        preEmailRegister.setSummary(firebaseUser.getEmail());
+        if (firebaseUser != null) {
+            preEmailRegister.setSummary(firebaseUser.getEmail());
+            preRegisterAccount.setVisible(false);
+            preEmailRegister.setVisible(true);
+            preResetPassword.setVisible(true);
+            preLogOut.setVisible(true);
+        }else {
+            preRegisterAccount.setVisible(true);
+            preEmailRegister.setVisible(false);
+            preResetPassword.setVisible(false);
+            preLogOut.setVisible(false);
+        }
     }
 
 
