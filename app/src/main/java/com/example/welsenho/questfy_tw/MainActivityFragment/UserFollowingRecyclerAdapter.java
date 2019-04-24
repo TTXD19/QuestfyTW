@@ -41,7 +41,11 @@ public class UserFollowingRecyclerAdapter extends RecyclerView.Adapter<UserFollo
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         firebaseDatabaseGetSet = arrayList.get(i);
         viewHolder.txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
-        viewHolder.txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
+        if (firebaseDatabaseGetSet.getSchoolName() != null){
+            viewHolder.txtSchoolName.setText(firebaseDatabaseGetSet.getSchoolName());
+        }else {
+            viewHolder.txtSchoolName.setText("大學尚未設定");
+        }
         if (firebaseDatabaseGetSet.getUser_image_uri() != null) {
             Picasso.get().load(firebaseDatabaseGetSet.getUser_image_uri()).fit().into(viewHolder.circleImageView);
         }

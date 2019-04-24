@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendMessagingRecyclerAdapter.FriendMessagingViewHolder> {
 
     private static final int MESSAGE_TYPE_RIGHT = 0;
@@ -63,12 +65,18 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
             switch (getItemViewType(i)){
                 case MESSAGE_TYPE_LEFT:
                     friendMessagingViewHolder.txtLeft.setText(getSet.getMessage());
+                    if (getSet.getMessageUserImage() != null) {
+                        Picasso.get().load(getSet.getMessageUserImage()).fit().into(friendMessagingViewHolder.userImage);
+                    }
                     break;
                 case MESSAGE_TYPE_RIGHT:
                     friendMessagingViewHolder.txtRight.setText(getSet.getMessage());
                     break;
                 case MESSAGE_TYPE_LEFT_PICTURE:
                     Picasso.get().load(getSet.getMessage()).resize(200,200).into(friendMessagingViewHolder.imgLeft);
+                    if (getSet.getMessageUserImage() != null) {
+                        Picasso.get().load(getSet.getMessageUserImage()).fit().into(friendMessagingViewHolder.userImage);
+                    }
                     break;
                 case MESSAGE_TYPE_RIGHT_PICTURE:
                     Picasso.get().load(getSet.getMessage()).resize(200,200).into(friendMessagingViewHolder.imgRight);
@@ -86,6 +94,7 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
 
         private TextView txtLeft;
         private TextView txtRight;
+        private CircleImageView userImage;
         private ImageView imgLeft;
         private ImageView imgRight;
 
@@ -94,6 +103,7 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
 
             txtLeft = itemView.findViewById(R.id.friendMessagingLeftText);
             txtRight = itemView.findViewById(R.id.friendMessagingRightText);
+            userImage = itemView.findViewById(R.id.friendMessagingLeftUserImage);
             imgLeft = itemView.findViewById(R.id.friendMessagingLeftImage);
             imgRight = itemView.findViewById(R.id.friendMessagingRightImage);
 

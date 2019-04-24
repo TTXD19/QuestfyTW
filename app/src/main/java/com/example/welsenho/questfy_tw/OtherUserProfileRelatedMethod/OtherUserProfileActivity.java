@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -701,7 +702,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private void createReportDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(OtherUserProfileActivity.this);
         createReportReasons();
-
         builder.setTitle(R.string.report_user).setSingleChoiceItems(reportReasons, reportReasons.length, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -4,7 +4,8 @@
     android:layout_width="350dp"
     android:layout_height="475dp"
     android:background="@color/FullWhite"
-    app:layout_gravity="center">
+    app:layout_gravity="center"
+    android:paddingRight="10dp">
 
 
     <TextView
@@ -65,7 +66,8 @@
                 android:hint="Tpye in here"
                 android:maxLength="200"
                 android:textColor="@color/FullBlack"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:paddingEnd="4dp"/>
 
             <ProgressBar
                 android:id="@+id/pop_up_userProfile_customMessage_progressBar"

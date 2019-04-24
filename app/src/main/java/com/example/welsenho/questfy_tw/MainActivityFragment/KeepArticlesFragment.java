@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,8 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.example.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
+import com.facebook.login.Login;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -72,6 +75,16 @@ public class KeepArticlesFragment extends Fragment {
             getFirebaseData();
         } else {
             progressBar.setVisibility(View.GONE);
+            txtNoArticlesKeep.setVisibility(View.VISIBLE);
+            txtNoArticlesKeep.setText("登入享有更多服務");
+            txtNoArticlesKeep.setTextColor(ContextCompat.getColor(getContext(), R.color.com_facebook_blue));
+            txtNoArticlesKeep.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
         return view;
     }

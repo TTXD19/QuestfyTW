@@ -1,5 +1,6 @@
 package com.example.welsenho.questfy_tw.FriendMessagingRelated;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -10,6 +11,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -51,10 +54,10 @@ public class FriendMessagingActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView txtSend;
     private EditText editMessage;
-    private ImageButton imgBtnCamera;
     private ImageButton imgBtnPicture;
     private RecyclerView recyclerView;
     private FriendMessagingRecyclerAdapter adapter;
+    private ProgressDialog progressDialog;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -62,6 +65,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage;
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,6 @@ public class FriendMessagingActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.friend_messaging_toolBar);
         txtSend = findViewById(R.id.friend_messaging_txtSend);
         editMessage = findViewById(R.id.friend_messaging_editMessage);
-        imgBtnCamera = findViewById(R.id.friend_messaging_imgBtn_Camera);
         imgBtnPicture = findViewById(R.id.friend_messaging_imgBtn_Picture);
         recyclerView = findViewById(R.id.friend_messaging_recyclerView);
         editRelatedMethod = new EditRelatedMethod();
@@ -91,6 +94,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
         toolbar.setTitle(FriendName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        progressDialog = new ProgressDialog(this);
     }
 
     @Override
@@ -106,6 +110,12 @@ public class FriendMessagingActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        databaseReference.removeEventListener(valueEventListener);
+    }
+
     private void InitFirebase(){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -116,6 +126,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
     }
 
     private void ItemClick(){
+        detectTyping();
         txtSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +149,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
             selfHashMap.put("Message", message);
             selfHashMap.put("MessageUserUid", firebaseUser.getUid());
             selfHashMap.put("MessageType", "Text");
+            selfHashMap.put("MessageUserImage", firebaseUser.getPhotoUrl().toString());
 
             HashMap<String, Object> updateMessage = new HashMap<>();
             updateMessage.put("LatestMessage", message);
@@ -159,7 +171,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
     }
 
     private void getMessageData(){
-        databaseReference.child("FriendMessages").child(firebaseUser.getUid()).child(FriendUid).addValueEventListener(new ValueEventListener() {
+         valueEventListener = databaseReference.child("FriendMessages").child(firebaseUser.getUid()).child(FriendUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -191,6 +203,11 @@ public class FriendMessagingActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_SELECT){
             if (resultCode == RESULT_OK){
                 if (data != null){
+                    progressDialog.setTitle("上傳中");
+                    progressDialog.setMessage("圖片上傳中...");
+                    progressDialog.setCancelable(false);
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
                     UploadPhotoFirebase(storageReference, data.getData());
                 }
             }
@@ -212,6 +229,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
                     storageReference1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            progressDialog.dismiss();
                             imageUploadDatebase(uri.toString());
                             Toast.makeText(FriendMessagingActivity.this, "Success", Toast.LENGTH_SHORT).show();
                         }
@@ -228,6 +246,7 @@ public class FriendMessagingActivity extends AppCompatActivity {
         hashMap.put("Message", imgLink);
         hashMap.put("MessageUserUid", firebaseUser.getUid());
         hashMap.put("MessageType", "Image");
+        hashMap.put("MessageUserImage", firebaseUser.getPhotoUrl().toString());
 
         HashMap<String, Object> latestMessage = new HashMap<>();
         latestMessage.put("LatestMessage", "New Image");
@@ -236,5 +255,28 @@ public class FriendMessagingActivity extends AppCompatActivity {
         databaseReference.child("FriendMessages").child(FriendUid).child(firebaseUser.getUid()).child(randonMessageID).updateChildren(hashMap);
         databaseReference.child("UserFriendList").child(firebaseUser.getUid()).child(FriendUid).updateChildren(latestMessage);
         databaseReference.child("UserFriendList").child(FriendUid).child(firebaseUser.getUid()).updateChildren(latestMessage);
+    }
+
+    private void detectTyping(){
+        editMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().trim().length() < 1){
+                    txtSend.setClickable(false);
+                }else {
+                    txtSend.setClickable(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }

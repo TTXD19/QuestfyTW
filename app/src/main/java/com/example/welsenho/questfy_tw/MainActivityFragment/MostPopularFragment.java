@@ -234,6 +234,7 @@ public class MostPopularFragment extends Fragment {
                     if (lastNum == lastNode) {
                         isMaxData = true;
                     }
+
                 }
             }
 
@@ -287,6 +288,7 @@ public class MostPopularFragment extends Fragment {
                         if (lastNum == lastNode){
                             isMaxData = true;
                         }
+
 
                     }else {
                         Log.d("GETMOREDATA", "NOTEXIST");

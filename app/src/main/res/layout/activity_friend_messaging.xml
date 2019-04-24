@@ -27,67 +27,56 @@
     <RelativeLayout
         android:id="@+id/friend_messaging_relaytive1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <ImageButton
-            android:id="@+id/friend_messaging_imgBtn_Camera"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/photocamera_1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_centerVertical="true"
-            />
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/friend_messaging_imgBtn_Picture"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/picture"
-            android:layout_toRightOf="@+id/friend_messaging_imgBtn_Camera"
-            android:layout_toEndOf="@+id/friend_messaging_imgBtn_Camera"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_centerVertical="true"/>
+            />
 
         <EditText
             android:id="@+id/friend_messaging_editMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="150dp"
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/FullWhite"
+            android:hint="@string/type_a_message"
             android:maxWidth="200dp"
             android:maxLines="5"
-            android:layout_toRightOf="@+id/friend_messaging_imgBtn_Picture"
+            android:minWidth="150dp"
+            android:textSize="18sp"
             android:layout_toEndOf="@+id/friend_messaging_imgBtn_Picture"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:hint="@string/type_a_message"
-            android:background="@color/FullWhite"
-            android:layout_marginTop="13dp"
-            android:textSize="18sp"/>
+            android:layout_toStartOf="@+id/friend_messaging_txtSend"
+            android:layout_centerVertical="true"
+            />
 
 
         <TextView
             android:id="@+id/friend_messaging_txtSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send"
-            android:textSize="18sp"
-            android:textColor="@color/LightMainOrange"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/friend_messaging_editMessage"
-            android:layout_toEndOf="@+id/friend_messaging_editMessage"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="end"
+            android:text="傳送"
             android:textAlignment="textEnd"
-            android:gravity="end" />
+            android:textColor="@color/LightMainOrange"
+            android:textSize="18sp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:background="?selectableItemBackground"/>
 
 
 

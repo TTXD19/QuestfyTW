@@ -65,6 +65,7 @@ public class FirebaseDatabaseGetSet{
     private String Message;
     private String MessageUserUid;
     private String MessageType;
+    private String MessageUserImage;
 
     //For getting daily question information
     private String dailyQuestionArticleUid;
@@ -330,6 +331,14 @@ public class FirebaseDatabaseGetSet{
 
     public void setMessageType(String messageType) {
         MessageType = messageType;
+    }
+
+    public String getMessageUserImage() {
+        return MessageUserImage;
+    }
+
+    public void setMessageUserImage(String messageUserImage) {
+        MessageUserImage = messageUserImage;
     }
 
     public String getLatestMessage() {

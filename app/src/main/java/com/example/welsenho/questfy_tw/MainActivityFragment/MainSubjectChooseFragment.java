@@ -146,7 +146,7 @@ public class MainSubjectChooseFragment extends Fragment {
     }
 
     private void getFirebaseHistorySearch(){
-        databaseReference.child("UserSearchHistory").child(firebaseUser.getUid()).child("Choose_majors_section_history").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("UserSearchHistory").child(firebaseUser.getUid()).child("Choose_majors_section_history").orderByChild("writeTime").limitToFirst(5).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -184,8 +184,12 @@ public class MainSubjectChooseFragment extends Fragment {
     }
 
     private void writeHistory(String subject){
+        EditRelatedMethod editRelatedMethod = new EditRelatedMethod();
         if (!subject.equals("全部")) {
             HashMap<String, Object> hashMap = new HashMap<>();
+            long writeTime = System.currentTimeMillis();
+            writeTime *= -1;
+            hashMap.put("writeTime", writeTime);
             hashMap.put("Major", subject);
             hashMap.put("DateSequence", editRelatedMethod.getDate());
             databaseReference.child("UserSearchHistory").child(firebaseUser.getUid()).child("Choose_majors_section_history").child(subject).updateChildren(hashMap);

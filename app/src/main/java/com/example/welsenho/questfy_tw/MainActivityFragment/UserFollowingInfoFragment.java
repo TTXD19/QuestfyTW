@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,6 +68,16 @@ public class UserFollowingInfoFragment extends Fragment {
             getUserFollowingData();
         }else {
             recyclerView.setVisibility(View.GONE);
+            txtNoFollowingUsers.setVisibility(View.VISIBLE);
+            txtNoFollowingUsers.setText("登入享有更多服務");
+            txtNoFollowingUsers.setTextColor(ContextCompat.getColor(getContext(), R.color.com_facebook_blue));
+            txtNoFollowingUsers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
         return view;
     }
@@ -115,7 +127,7 @@ public class UserFollowingInfoFragment extends Fragment {
     }
 
     private void getUserFollowingData(){
-        databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
