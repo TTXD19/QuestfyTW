@@ -34,6 +34,10 @@ Questfy-TW 0.0.5 2019/4/15(Fix bug & latestArticle fm & mostPopular fm in loadin
 Questfy-TW 0.0.5 2019/4/20(Personal information register complete redesign)
                            (Details added)
 
+Questfy-TW 0.0.5 2019/4/26(Most popular fragment functions updated)
+
+
+
 
 
 

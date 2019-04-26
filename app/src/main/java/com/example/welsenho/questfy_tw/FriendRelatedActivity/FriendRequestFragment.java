@@ -1,10 +1,12 @@
 package com.example.welsenho.questfy_tw.FriendRelatedActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,6 +73,16 @@ public class FriendRequestFragment extends Fragment {
             getRequestFriendList();
         }else {
             progressBar.setVisibility(View.GONE);
+            txtNoFreindsRequest.setVisibility(View.VISIBLE);
+            txtNoFreindsRequest.setText("登入享有更多服務");
+            txtNoFreindsRequest.setTextColor(ContextCompat.getColor(getContext(), R.color.com_facebook_blue));
+            txtNoFreindsRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
         return view;
     }

@@ -8,6 +8,17 @@
     tools:context=".MainUserActivity.UserProfileFragment"
     android:paddingTop="20dp">
 
+
+    <TextView
+        android:id="@+id/user_profile_fm_txtNotRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="註冊享有更多服務"
+        android:textSize="18sp"
+        android:textColor="@color/com_facebook_blue"
+        android:layout_centerInParent="true"
+        />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,6 +30,7 @@
 
 
         <android.support.v7.widget.CardView
+            android:id="@+id/user_profile_fm_cardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="30dp"
@@ -135,7 +147,7 @@
                     android:layout_marginTop="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="商業管理，會計，統計學，管理學"
+                    android:text="----------------------------"
                     android:textColor="@color/FullBlack"
                     android:textSize="18sp" />
 

@@ -26,6 +26,7 @@ public class FirebaseDatabaseGetSet{
     private long uploadTimeStamp;
     private int AnswerCount;
     private int Article_like_count;
+    private long MostPopCount;
 
     //For Major choose
     private String Major;
@@ -579,5 +580,13 @@ public class FirebaseDatabaseGetSet{
 
     public void setNUMBER(int NUMBER) {
         this.NUMBER = NUMBER;
+    }
+
+    public long getMostPopCount() {
+        return MostPopCount;
+    }
+
+    public void setMostPopCount(long mostPopCount) {
+        MostPopCount = mostPopCount;
     }
 }

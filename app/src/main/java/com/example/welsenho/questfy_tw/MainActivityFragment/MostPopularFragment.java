@@ -55,6 +55,7 @@ public class MostPopularFragment extends Fragment {
     private Boolean isMaxData = false;
     private LinearLayoutManager layoutManager;
 
+    //
     private int testInitNum = 3;
     private long testLastNum;
 
@@ -96,7 +97,7 @@ public class MostPopularFragment extends Fragment {
         InitRecyclerView();
         getLastKeyFromFirebase();
         loadMoreRecyclerData();
-        //getLastNum();
+
 
         return view;
     }
@@ -178,13 +179,13 @@ public class MostPopularFragment extends Fragment {
             }
         });
 
-        Query getLastKey = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToLast(1);
+        Query getLastKey = databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").limitToLast(1);
         getLastKey.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot DS : dataSnapshot.getChildren()) {
                     FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                    lastNum = getSet.getUploadTimeStamp();
+                    lastNum = getSet.getMostPopCount();
                     Log.d("MOSTPOPMAXDATALastNum", String.valueOf(lastNum));
                     getFirstData();
                 }
@@ -198,7 +199,7 @@ public class MostPopularFragment extends Fragment {
     }
 
     public void getFirstData() {
-        databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
@@ -216,7 +217,7 @@ public class MostPopularFragment extends Fragment {
                      */
                     //newArticleListRecyclerAdapter.setGetArrayListForClick(clickArrayList);
                     newArticleListRecyclerAdapter.addAll(arrayList);
-                    lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
+                    lastNode = arrayList.get(arrayList.size() - 1).getMostPopCount();
                     Log.d("MOSTPOPMAXDATALastNode", String.valueOf(lastNode));
 
                     recyclerView.setVisibility(View.VISIBLE);
@@ -266,7 +267,7 @@ public class MostPopularFragment extends Fragment {
 
     private void getMoreData(){
         if (!isMaxData){
-            databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").startAt(lastNode).limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").startAt(lastNode).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
@@ -281,7 +282,7 @@ public class MostPopularFragment extends Fragment {
                         for (int i = 0; i<= arrayList.size() - 1; i++){
                             Log.d("MOSTPOPMAXDATACOUNT12", String.valueOf(arrayList.get(i).getUploadTimeStamp()));
                         }
-                        lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
+                        lastNode = arrayList.get(arrayList.size() - 1).getMostPopCount();
                         newArticleListRecyclerAdapter.addAll(arrayList);
                         newArticleListRecyclerAdapter.notifyDataSetChanged();
                         Log.d("GETMOREDATA", "TOTAL DATA : " + String.valueOf(arrayList.size()));
@@ -308,7 +309,7 @@ public class MostPopularFragment extends Fragment {
     public void LoadQueryData(final String inputSearch) {
         progressBar.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setEnabled(false);
-        Query query = databaseReference.child("Users_Question_Articles").orderByChild("Article_like_count");
+        Query query = databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -357,8 +358,7 @@ public class MostPopularFragment extends Fragment {
     }
 
 
-
-
+    //---------------------------------------------------------------------------------------------------------------------------------------
 
 
     //---------------------------------------------------------------------------------------------------------------------------------------
@@ -451,4 +451,9 @@ public class MostPopularFragment extends Fragment {
             }
         });
     }
+
+    private void arrange(){
+
+    }
+
 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -71,6 +73,7 @@ public class UserProfileFragment extends Fragment {
     private TextView txtCount;
     private TextView txtSave;
     private TextView txtCancel;
+    private TextView txtNotRegister;
     private EditText editText;
     private ImageButton imageButtonSpeciality;
     private ImageButton imageButtonStatusMessage;
@@ -79,6 +82,7 @@ public class UserProfileFragment extends Fragment {
     private CircleImageView circleImageView;
     private ProgressDialog progressDialog;
     private ProgressBar progressBar;
+    private CardView cardView;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -119,6 +123,8 @@ public class UserProfileFragment extends Fragment {
         btnEmailCertifiacte = view.findViewById(R.id.user_profile_fm_btn_emailCertificate);
         circleImageView = view.findViewById(R.id.user_profile_fm_circleImage_userImage);
         progressBar = view.findViewById(R.id.user_profile_fm_progressBar);
+        cardView = view.findViewById(R.id.user_profile_fm_cardView);
+        txtNotRegister = view.findViewById(R.id.user_profile_fm_txtNotRegister);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -134,7 +140,19 @@ public class UserProfileFragment extends Fragment {
             onItemClick();
             LoadUserProfile();
             getFirebaseData();
+            txtNotRegister.setVisibility(View.GONE);
+        }else {
+            cardView.setVisibility(View.GONE);
+            txtNotRegister.setVisibility(View.VISIBLE);
+            txtNotRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
+
 
 
         return view;
