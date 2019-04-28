@@ -258,7 +258,9 @@ public class MainActivityLatestArticleFragment extends Fragment {
                 if (dataSnapshot.hasChildren()) {
                     for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(getSet);
+                        if (getSet.getUser_Name() != null) {
+                            arrayList.add(getSet);
+                        }
                     }
 
                     for (int i = 0; i<= arrayList.size() - 1; i++){
@@ -327,7 +329,9 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         arrayList.clear();
                         for (DataSnapshot DS:dataSnapshot.getChildren()){
                             FirebaseDatabaseGetSet get = DS.getValue(FirebaseDatabaseGetSet.class);
-                            arrayList.add(get);
+                            if (get.getUser_Name() != null) {
+                                arrayList.add(get);
+                            }
                         }
 
                         arrayList.remove(0);

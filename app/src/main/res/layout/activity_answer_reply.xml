@@ -4,30 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnswerReplyActivityRelated.AnswerReplyActivity"
-    android:background="@color/FullWhite">
+    android:background="@color/FullWhite"
+    tools:context=".AnswerReplyActivityRelated.AnswerReplyActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/read_answers_toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/LightMainOrange"
-        app:title="Reply an answer"
+        app:title="回覆答案"
         app:titleTextColor="@color/FullWhite">
 
 
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/answer_reply_scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/answer_reply_relayRecyclerView"
         android:layout_below="@+id/read_answers_toolBar">
 
         <RelativeLayout
             android:id="@+id/answer_reply_relay_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -70,51 +71,102 @@
                 android:id="@+id/read_answers_editAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/click_to_replay_an_answer"
                 android:layout_below="@+id/answer_reply_txtUpdateDate"
-                android:background="@color/FullWhite"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
+                android:layout_marginRight="16dp"
+                android:background="@color/FullWhite"
+                android:hint="@string/click_to_replay_an_answer"
                 android:textColor="@color/FullBlack"
-                />
+                android:textSize="18sp" />
 
         </RelativeLayout>
 
     </ScrollView>
-    
+
+    <RelativeLayout
+        android:id="@+id/answer_reply_relayRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/answer_reply_lin1">
+
+        <RelativeLayout
+            android:id="@+id/answer_reply_relayAddPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/answer_reply_imgBtnAddPicture"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/picture"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_toEndOf="@+id/answer_reply_imgBtnAddPicture"
+                android:layout_toRightOf="@+id/answer_reply_imgBtnAddPicture"
+                android:text="新增圖片"
+                android:textColor="@color/CatergoryDarkGrayText"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/answer_reply_relayAddPhoto">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/answer_reply_recyclerViewImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/answer_reply_lin1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
+        android:elevation="10dp"
         android:gravity="center_horizontal"
-        android:weightSum="2"
-        android:elevation="10dp">
-        
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <Button
             android:id="@+id/answer_reply_btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@color/FullWhite"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textSize="18sp"
             android:textColor="@color/signInRetangleRed"
-            android:layout_weight="1"/>
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/answer_reply_btnReply"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/FullWhite"
-            android:text="Reply"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            android:textColor="@color/ＭainOrange"
             android:layout_weight="1"
-            />
+            android:background="@color/FullWhite"
+            android:text="@string/reply"
+            android:textAllCaps="false"
+            android:textColor="@color/ＭainOrange"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

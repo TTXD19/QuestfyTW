@@ -313,7 +313,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                     }
                     setOtherUserUid(getUserProfile.getUserUid());
                     checkArticleUserImage();
-                    //Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
+                    Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
                     ShowItem();
                 }
             }
@@ -334,11 +334,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("User_Image", dataSnapshot.getValue().toString());
                         databaseReference.child("Users_Question_Articles").child(Article_ID).updateChildren(hashMap);
-                        Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(circleImageView);
                     }
-                }else {
-                    String defaultImage = "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6";
-                    Picasso.get().load(defaultImage).fit().into(circleImageView);
                 }
             }
 

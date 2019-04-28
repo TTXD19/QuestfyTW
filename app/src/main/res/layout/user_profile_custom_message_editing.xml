@@ -104,6 +104,7 @@
         android:layout_marginTop="5dp"/>
 
     <TextView
+        android:id="@+id/pop_up_userProfile_customMessage_txtAddPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/pop_up_userProfile_customMessage_addPicture"

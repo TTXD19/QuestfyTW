@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:background="@color/LightMainOrange"
         app:titleTextColor="@color/FullWhite"
-        android:theme="@style/BaseTheme">
+        android:theme="@style/BaseTheme"
+        >
 
 
     </android.support.v7.widget.Toolbar>

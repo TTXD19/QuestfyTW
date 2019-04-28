@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,8 @@ public class UserProfileFragment extends Fragment {
     private TextView txtSave;
     private TextView txtCancel;
     private TextView txtNotRegister;
+    private TextView txtAddPhoto;
+    private ImageView imgAddPhoto;
     private EditText editText;
     private ImageButton imageButtonSpeciality;
     private ImageButton imageButtonStatusMessage;
@@ -241,9 +244,13 @@ public class UserProfileFragment extends Fragment {
         txtCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
         txtSave = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtSave);
         txtCancel = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCancel);
+        txtAddPhoto = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtAddPicture);
         editText = dialog.findViewById(R.id.pop_up_userProfile_customMessage_editMessage);
+        imgAddPhoto = dialog.findViewById(R.id.pop_up_userProfile_customMessage_addPicture);
 
         txtPopTitle.setText(type);
+        txtAddPhoto.setVisibility(View.GONE);
+        imgAddPhoto.setVisibility(View.GONE);
         dialog.show();
 
         txtCancel.setOnClickListener(new View.OnClickListener() {

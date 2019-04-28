@@ -1,6 +1,7 @@
 package com.example.welsenho.questfy_tw.EditActivityRelated;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,9 +35,9 @@ public class EditPreviewActivity extends AppCompatActivity {
 
     private String Article_Uid;
     private boolean isMeet;
-    private ArrayList<FirebaseDatabaseGetSet> arrayList;
+    private ArrayList<String> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
-    private EditInitRelateRecyclerViewAdapterImageViews adapterImageViews;
+    private EditOfflineImageViewRecyclerAdapter adapterImageViews;
 
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
@@ -67,7 +69,10 @@ public class EditPreviewActivity extends AppCompatActivity {
         InitRecycleView();
         InitFirebase();
         showCurrentContent();
-        LoadImageFromFirebase();
+        if (getIntent().getStringArrayListExtra("ImageList") != null){
+            arrayList = getIntent().getStringArrayListExtra("ImageList");
+            showImages();
+        }
     }
 
     @Override
@@ -94,6 +99,7 @@ public class EditPreviewActivity extends AppCompatActivity {
         Article_Uid = sharedPreferences.getString("EditArticleUid", null);
         Picasso.get().load(sharedPreferences.getString("UserImageUri", "")).fit().into(circleImageView);
         isMeet = sharedPreferences.getBoolean("MeetUp", false);
+
         if (isMeet){
             txtMeetdate.setText(sharedPreferences.getString("EditMeetDate", "Choose a date"));
             txtMeetTime.setText(sharedPreferences.getString("EditMeetTime", "Choose a time"));
@@ -141,7 +147,6 @@ public class EditPreviewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         arrayList = new ArrayList<>();
-        adapterImageViews = new EditInitRelateRecyclerViewAdapterImageViews(arrayList);
     }
 
     private void InitFirebase(){
@@ -155,37 +160,10 @@ public class EditPreviewActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
     }
 
-    private void LoadImageFromFirebase(){
-        databaseReference.child("Users_Question_Articles").child(Article_Uid).child("Images").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    arrayList.clear();
-                    expansionHeader.setVisibility(View.VISIBLE);
-                    txtCheckImages.setText("Loading Image...");
-                    for (DataSnapshot DS : dataSnapshot.getChildren()){
-                        firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(firebaseDatabaseGetSet);
-                        recyclerView.setAdapter(adapterImageViews);
-                        adapterImageViews.setOnMainAdapterClickListner(new MainOnClickListener() {
-                            @Override
-                            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                                Toast.makeText(EditPreviewActivity.this, "not set up", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        txtCheckImages.setText(R.string.click_to_check);
-                        Log.d("RecyclerViewTask", "Success");
-                    }
-                }else {
-                    expansionHeader.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+    private void showImages(){
+        if (arrayList != null){
+            adapterImageViews = new EditOfflineImageViewRecyclerAdapter(arrayList);
+            recyclerView.setAdapter(adapterImageViews);
+        }
     }
 }

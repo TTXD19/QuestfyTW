@@ -199,14 +199,16 @@ public class MostPopularFragment extends Fragment {
     }
 
     public void getFirstData() {
-        databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
                 if (dataSnapshot.hasChildren()) {
                     for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(getSet);
+                        if (getSet.getUser_Name() != null) {
+                            arrayList.add(getSet);
+                        }
                     }
 
                     for (int i = 0; i<= arrayList.size() - 1; i++){
@@ -267,7 +269,7 @@ public class MostPopularFragment extends Fragment {
 
     private void getMoreData(){
         if (!isMaxData){
-            databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").startAt(lastNode).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount").startAt(lastNode).limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
@@ -275,7 +277,9 @@ public class MostPopularFragment extends Fragment {
                         arrayList.clear();
                         for (DataSnapshot DS:dataSnapshot.getChildren()){
                             FirebaseDatabaseGetSet get = DS.getValue(FirebaseDatabaseGetSet.class);
-                            arrayList.add(get);
+                            if (get.getUser_Name() != null) {
+                                arrayList.add(get);
+                            }
                         }
 
                         arrayList.remove(0);

@@ -23,7 +23,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
-            android:textSize="24sp"/>
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/personal_ask_quest_reply_recycler_txtQuestionContent"
@@ -33,7 +33,7 @@
             android:layout_marginRight="25dp"
             android:text="Question content"
             android:layout_below="@+id/personal_ask_quest_reply_recycler_txtUserFrom"
-            android:textSize="22sp"
+            android:textSize="16sp"
             android:textColor="@color/CatergoryDarkGrayText"
             android:textIsSelectable="true"/>
 
@@ -47,18 +47,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="4dp"
             />
-
-        <TextView
-            android:id="@+id/personal_ask_quest_reply_recycler_txtUserSolveIt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Best answer"
-            android:textColor="@color/LightMainOrange"
-            android:layout_below="@+id/personal_ask_quest_reply_recycler_imgQuestionImage"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="15dp"/>
 
         <TextView
             android:id="@+id/personal_ask_quest_reply_recycler_txtUserAskDate"

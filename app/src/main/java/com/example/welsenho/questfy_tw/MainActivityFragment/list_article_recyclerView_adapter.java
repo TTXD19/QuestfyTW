@@ -20,14 +20,14 @@ import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list_article_recyclerView_adapter.ViewHolder> implements MainAdapterOnClickListener{
+public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list_article_recyclerView_adapter.ViewHolder> implements MainAdapterOnClickListener {
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private Context context;
     private MainOnClickListener mainOnClickListener;
     private EditRelatedMethod editRelatedMethod;
 
-    public list_article_recyclerView_adapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
+    public list_article_recyclerView_adapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -44,25 +44,26 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         editRelatedMethod = new EditRelatedMethod();
         FirebaseDatabaseGetSet getSet = arrayList.get(i);
-            viewHolder.txtUserName.setText(getSet.getUser_Name());
-            viewHolder.txtTitle.setText(getSet.getTitle());
-            viewHolder.txtUploadDate.setText(editRelatedMethod.getFormattedDate(context, Math.abs(getSet.getUploadTimeStamp())));
-            viewHolder.txtMajors.setText(getSet.getMajors());
-            viewHolder.txtArticlePreview.setText(getSet.getContent());
-            viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
-            if (getSet.getIsMeet().equals("Meet")){
-                viewHolder.txtMeetUp.setVisibility(View.VISIBLE);
-                viewHolder.imgMeetUp.setVisibility(View.VISIBLE);
-            }else{
-                viewHolder.txtMeetUp.setVisibility(View.GONE);
-                viewHolder.imgMeetUp.setVisibility(View.GONE);
-            }
-            if (getSet.getAnswerCount() != 0) {
-                viewHolder.txtAnserCount.setText(String.valueOf(getSet.getAnswerCount()));
-            }else {
-                viewHolder.txtAnserCount.setText(String.valueOf(0));
-            }
-            Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
+
+        viewHolder.txtUserName.setText(getSet.getUser_Name());
+        viewHolder.txtTitle.setText(getSet.getTitle());
+        viewHolder.txtUploadDate.setText(editRelatedMethod.getFormattedDate(context, Math.abs(getSet.getUploadTimeStamp())));
+        viewHolder.txtMajors.setText(getSet.getMajors());
+        viewHolder.txtArticlePreview.setText(getSet.getContent());
+        viewHolder.txtArticleCount.setText(String.valueOf(Math.abs(getSet.getArticle_like_count())));
+        if (getSet.getIsMeet().equals("Meet")) {
+            viewHolder.txtMeetUp.setVisibility(View.VISIBLE);
+            viewHolder.imgMeetUp.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.txtMeetUp.setVisibility(View.GONE);
+            viewHolder.imgMeetUp.setVisibility(View.GONE);
+        }
+        if (getSet.getAnswerCount() != 0) {
+            viewHolder.txtAnserCount.setText(String.valueOf(getSet.getAnswerCount()));
+        } else {
+            viewHolder.txtAnserCount.setText(String.valueOf(0));
+        }
+        Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
     }
 
 
-    public void setOnMainClickListener(MainOnClickListener mainClickListener){
+    public void setOnMainClickListener(MainOnClickListener mainClickListener) {
         this.mainOnClickListener = mainClickListener;
     }
 
@@ -99,7 +100,7 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
             txtTitle = itemView.findViewById(R.id.list_article_recycLayout_txtArticleName);
             txtMajors = itemView.findViewById(R.id.list_article_recycLayout_txtTag);
             txtUploadDate = itemView.findViewById(R.id.list_article_recycLayout_txtUploadData);
-            txtUserName  = itemView.findViewById(R.id.list_article_recycLayout_txtUserName);
+            txtUserName = itemView.findViewById(R.id.list_article_recycLayout_txtUserName);
             txtArticlePreview = itemView.findViewById(R.id.list_article_recycLayout_txtArticlePreview);
             txtArticleCount = itemView.findViewById(R.id.list_article_recycLayout_txtViews);
             txtAnserCount = itemView.findViewById(R.id.list_article_recycLayout_txtAnswerCount);
@@ -112,7 +113,7 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION){
+                    if (position != RecyclerView.NO_POSITION) {
                         mOnClickListener.onClick(position);
                     }
                 }

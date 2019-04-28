@@ -467,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                 if (completeInfo.equals("success")) {
                     Intent intent = new Intent(MainActivity.this, EditInitActivity.class);
                     startActivity(intent);
+                    finish();
                 }else {
                     showUserPostDialog();
                 }

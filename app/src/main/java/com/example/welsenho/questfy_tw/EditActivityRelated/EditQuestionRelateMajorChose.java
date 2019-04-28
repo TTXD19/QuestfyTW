@@ -45,6 +45,7 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private ArrayList<String> imageList;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private ArrayList<String> getMajors;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -75,6 +76,11 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
         if (getIntent().getStringArrayListExtra("Majors") != null){
             getMajors = getIntent().getStringArrayListExtra("Majors");
             tagGroup.setTags(getMajors);
+        }
+
+        if (getIntent().getStringArrayListExtra("ImageList") != null){
+            imageList = new ArrayList<>();
+            imageList = getIntent().getStringArrayListExtra("ImageList");
         }
 
         adapter = new EditQuestionRelateRecyclerViewAdapter(arrayList, this, new EditQuestionRelateRecyclerViewAdapter.majorSelectListener() {
@@ -110,7 +116,12 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditQuestionRelateMajorChose.this, EditInitActivity.class);
-                intent.putStringArrayListExtra("getMajors", getMajors);
+                if (getMajors != null) {
+                    intent.putStringArrayListExtra("getMajors", getMajors);
+                }
+                if (imageList != null) {
+                    intent.putStringArrayListExtra("ImageList", imageList);
+                }
                 startActivity(intent);
                 finish();
 
@@ -141,6 +152,12 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(EditQuestionRelateMajorChose.this, EditInitActivity.class);
+        if (getMajors != null) {
+            intent.putStringArrayListExtra("getMajors", getMajors);
+        }
+        if (imageList != null) {
+            intent.putStringArrayListExtra("ImageList", imageList);
+        }
         startActivity(intent);
         finish();
         super.onBackPressed();

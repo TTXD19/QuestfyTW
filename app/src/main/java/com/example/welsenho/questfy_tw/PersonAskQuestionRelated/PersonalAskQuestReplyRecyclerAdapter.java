@@ -61,7 +61,6 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
         private TextView txtAskUserName;
         private TextView txtAskContent;
         private TextView txtAskDate;
-        private TextView txtAskSolver;
         private ImageView imgAsk;
 
         public personQuestViewHolder(@NonNull View itemView) {
@@ -70,7 +69,6 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
             txtAskUserName = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_txtUserFrom);
             txtAskContent = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_txtQuestionContent);
             txtAskDate = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_txtUserAskDate);
-            txtAskSolver = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_txtUserSolveIt);
             imgAsk = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_imgQuestionImage);
         }
     }

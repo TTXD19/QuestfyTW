@@ -10,9 +10,11 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +38,12 @@ public class AnswerReplyActivity extends AppCompatActivity{
     private CircleImageView circleImageView;
     private TextView txtUserName;
     private TextView txtUpdateDate;
+    private ImageView imgAddPhoto;
     private EditText editAnswer;
     private Button btnCancel;
     private Button btnReply;
     private ProgressDialog progressDialog;
+    private RecyclerView recyclerView;
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
 
@@ -126,9 +130,11 @@ public class AnswerReplyActivity extends AppCompatActivity{
         circleImageView = findViewById(R.id.answer_reply_imgUser);
         txtUserName = findViewById(R.id.answer_reply_txtUserName);
         txtUpdateDate = findViewById(R.id.answer_reply_txtUpdateDate);
+        imgAddPhoto = findViewById(R.id.answer_reply_imgBtnAddPicture);
         editAnswer = findViewById(R.id.read_answers_editAnswer);
         btnCancel = findViewById(R.id.answer_reply_btnCancel);
         btnReply = findViewById(R.id.answer_reply_btnReply);
+        recyclerView = findViewById(R.id.answer_reply_recyclerViewImage);
         isNetworkAvaliable = false;
         progressDialog = new ProgressDialog(this);
         anserReplyRelatedMethods = new AnserReplyRelatedMethods();

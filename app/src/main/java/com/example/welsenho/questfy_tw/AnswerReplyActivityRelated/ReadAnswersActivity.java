@@ -104,8 +104,9 @@ public class ReadAnswersActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-        toolbar.setTitle("  ");
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("答案區");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

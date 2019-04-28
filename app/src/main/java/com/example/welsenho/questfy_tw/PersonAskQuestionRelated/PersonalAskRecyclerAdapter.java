@@ -70,7 +70,6 @@ public class PersonalAskRecyclerAdapter extends RecyclerView.Adapter<PersonalAsk
         private TextView txtAskUserName;
         private TextView txtAskTitle;
         private TextView txtAskDate;
-        private TextView txtAskSolver;
         private ImageView imgAsk;
 
         public PersonalAskViewHolder(@NonNull View itemView) {
@@ -78,7 +77,6 @@ public class PersonalAskRecyclerAdapter extends RecyclerView.Adapter<PersonalAsk
             txtAskUserName = itemView.findViewById(R.id.pesonal_ask_recycler_txtUserFrom);
             txtAskTitle = itemView.findViewById(R.id.pesonal_ask_recycler_txtQuestionContent);
             txtAskDate = itemView.findViewById(R.id.pesonal_ask_recycler_txtUserAskDate);
-            txtAskSolver = itemView.findViewById(R.id.pesonal_ask_recycler_txtUserSolveIt);
             imgAsk = itemView.findViewById(R.id.pesonal_ask_recycler_imgQuestionImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {

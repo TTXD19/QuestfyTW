@@ -36,6 +36,9 @@ Questfy-TW 0.0.5 2019/4/20(Personal information register complete redesign)
 
 Questfy-TW 0.0.5 2019/4/26(Most popular fragment functions updated)
 
+Questfy-TW 0.0.5 2019/4/28(EditInit bug fixed)
+Bug detail: App will crash when other peoples is editing their questions. onBackPressed get back to editInit.Activity bug fixed.
+
 
 
 
