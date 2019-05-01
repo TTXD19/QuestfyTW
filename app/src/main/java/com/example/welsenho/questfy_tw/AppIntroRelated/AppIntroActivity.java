@@ -1,23 +1,19 @@
 package com.example.welsenho.questfy_tw.AppIntroRelated;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
-import com.example.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import com.example.welsenho.questfy_tw.R;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
-public class AppIntroActivity extends AppIntro implements AppIntroFragment1.OnFragmentInteractionListener, AppIntroFragment2.OnFragmentInteractionListener{
+public class AppIntroActivity extends AppIntro implements AppIntroFragment1.OnFragmentInteractionListener, AppIntroFragment2.OnFragmentInteractionListener, AppIntroFragment3.OnFragmentInteractionListener, AppIntroFragment4.OnFragmentInteractionListener{
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -28,7 +24,10 @@ public class AppIntroActivity extends AppIntro implements AppIntroFragment1.OnFr
 
 
         addSlide(new AppIntroFragment1());
+        addSlide(new AppIntroFragment3());
+        addSlide(new AppIntroFragment4());
         addSlide(new AppIntroFragment2());
+
 
         setNextArrowColor(ContextCompat.getColor(getApplicationContext(), R.color.FullBlack));
         setColorSkipButton(ContextCompat.getColor(getApplicationContext(), R.color.FullBlack));

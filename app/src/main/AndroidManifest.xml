@@ -58,7 +58,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainUserActivity.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity android:name=".OtherUserProfileRelatedMethod.OtherUserProfileActivity" />
         <activity
             android:name=".EditActivityRelated.EditInitActivity"
@@ -139,7 +139,8 @@
         <activity
             android:name=".AppAnnouncementRelated.AppRulesActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ReigisterCompleteInfoRelated.CurrentDegreeChoose"></activity>
+        <activity android:name=".ReigisterCompleteInfoRelated.CurrentDegreeChoose" />
+        <activity android:name=".AnswerReplyActivityRelated.EnlargeAnswerImageActivity"></activity>
     </application>
 
 </manifest>

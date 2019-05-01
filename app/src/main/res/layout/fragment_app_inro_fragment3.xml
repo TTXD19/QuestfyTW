@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/FullWhite"
+    tools:context=".AppIntroRelated.AppIntroFragment3">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+
+            <TextView
+                android:id="@+id/AppIntro_fragment3_txtShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:text="在這裡你可以"
+                android:textColor="@color/LightMainOrange"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:id="@+id/AppIntro_fragment3_imageView"
+                android:layout_width="150dp"
+                android:layout_height="300dp"
+                android:layout_below="@+id/AppIntro_fragment3_txtShow"
+                android:layout_centerHorizontal="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AppIntro_fragment3_imageView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="跟你有同興趣的人認識"
+                android:textColor="@color/LightMainOrange"
+                android:textSize="24sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

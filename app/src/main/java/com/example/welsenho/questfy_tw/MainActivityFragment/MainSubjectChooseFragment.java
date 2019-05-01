@@ -70,8 +70,8 @@ public class MainSubjectChooseFragment extends Fragment {
         InitFirebase();
         if (firebaseUser != null) {
             getFirebaseHistorySearch();
-            onItemClick();
         }
+        onItemClick();
         getFirebaseData();
         return view;
     }
@@ -171,7 +171,9 @@ public class MainSubjectChooseFragment extends Fragment {
             @Override
             public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
                 mListener.onSubjectChooseFilter(arrayList.get(position).getMajor());
-                writeHistory(arrayList.get(position).getMajor());
+                if (firebaseUser != null) {
+                    writeHistory(arrayList.get(position).getMajor());
+                }
             }
         });
 

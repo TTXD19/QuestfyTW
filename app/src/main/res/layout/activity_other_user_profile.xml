@@ -123,7 +123,7 @@
                 android:layout_below="@id/relayUserProfile1"
                 android:layout_centerHorizontal="true"
                 android:background="@color/LightMainOrange"
-                android:text="Follow"
+                android:text="@string/follow"
                 android:textColor="@color/FullWhite"
                 android:textStyle="bold"/>
 
@@ -223,7 +223,7 @@
                     android:id="@+id/otherUser_profile_btnAddFriend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="------------------"
+                    android:text="------"
                     android:background="@drawable/add_friend_btn_background"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -262,10 +262,12 @@
                 android:id="@+id/txtPosts2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Posts"
+                android:text="發問問題"
                 android:textColor="@color/FullBlack"
                 android:layout_below="@id/otherUser_profile_relay_3"
-                android:textSize="32sp"
+                android:textSize="28sp"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
                 android:textStyle="bold"
                 />
             <android.support.v7.widget.RecyclerView

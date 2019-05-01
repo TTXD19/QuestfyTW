@@ -80,6 +80,14 @@
                 android:textColor="@color/FullBlack"
                 android:textSize="18sp" />
 
+            <ImageView
+                android:id="@+id/read_answers_editShowImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:padding="20dp"
+                android:layout_below="@+id/read_answers_editAnswer"
+                android:layout_marginTop="10dp"/>
+
         </RelativeLayout>
 
     </ScrollView>
@@ -111,25 +119,11 @@
                 android:layout_marginLeft="12dp"
                 android:layout_toEndOf="@+id/answer_reply_imgBtnAddPicture"
                 android:layout_toRightOf="@+id/answer_reply_imgBtnAddPicture"
-                android:text="新增圖片"
+                android:text="新增一張圖片（限1張）"
                 android:textColor="@color/CatergoryDarkGrayText"
                 android:textSize="16sp"
                 android:layout_centerVertical="true"/>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/answer_reply_relayAddPhoto">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/answer_reply_recyclerViewImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-            </android.support.v7.widget.RecyclerView>
 
 
         </RelativeLayout>

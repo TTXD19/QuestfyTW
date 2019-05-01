@@ -28,11 +28,11 @@
                 android:textColor="@color/FullWhite"
                 android:textSize="22sp"/>
 
-            <TextView
+            <ImageView
                 android:id="@+id/new_login_txtLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Questfy"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/questfy_logo_style_5_4"
                 android:textColor="@color/FullWhite"
                 android:textStyle="bold"
                 android:textSize="36sp"
@@ -45,7 +45,7 @@
                 android:id="@+id/new_login_txtWelcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="歡迎"
+                android:text="wels  "
                 android:textColor="@color/FullWhite"
                 android:layout_marginTop="20dp"
                 android:textSize="36sp"
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/new_login_txtWelcome"
-                android:text="開始登入享受"
+                android:text="@string/log_in_to_start_your"
                 android:textSize="24sp"
                 android:textColor="@color/FullWhite"
                 android:layout_marginLeft="30dp"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/new_login_txtWelcome2"
-                android:text="共同科系話題的交流吧 !"
+                android:text="@string/favorite_topics_discussion"
                 android:textColor="@color/FullWhite"
                 android:textSize="24sp"
                 android:layout_marginLeft="30dp"

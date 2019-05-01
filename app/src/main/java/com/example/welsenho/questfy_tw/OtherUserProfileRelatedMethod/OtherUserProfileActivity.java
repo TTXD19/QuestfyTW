@@ -127,9 +127,10 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         InitItem();
         InitFirebaseItem();
         getOtherUserInfo();
-        getSelfUserInfo();
         if (firebaseUser != null) {
+            getSelfUserInfo();
             if (!firebaseUser.getUid().equals(otherUserUid)) {
+                Toast.makeText(this, "different user", Toast.LENGTH_SHORT).show();
                 detectFriend();
                 detectFollowing();
                 onItemClick();
@@ -169,6 +170,8 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             case R.id.read_article_report:
                 if (firebaseUser != null){
                     createReportDialog();
+                }else {
+                    Toast.makeText(this, "需登入回報", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -230,17 +233,18 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                         txtUniversityName.setText("尚未審核");
                         txtCorseName.setText("尚未審核");
                     }
-                    if (firebaseDatabaseGetSet.getUserSpeciality() != null || !firebaseDatabaseGetSet.getUserSpeciality().trim().isEmpty()) {
+                    if (firebaseDatabaseGetSet.getUserSpeciality() != null) {
                         txtSpecility.setText(firebaseDatabaseGetSet.getUserSpeciality());
                     } else {
                         txtSpecility.setText("");
                     }
-                    if (firebaseDatabaseGetSet.getUserStatusMessage() != null || !firebaseDatabaseGetSet.getUserSpeciality().trim().isEmpty()) {
+                    if (firebaseDatabaseGetSet.getUserStatusMessage() != null) {
                         txtStatusMessage.setText(firebaseDatabaseGetSet.getUserStatusMessage());
                     }else {
                         txtStatusMessage.setText("");
                     }
                     Picasso.get().load(firebaseDatabaseGetSet.getUser_image_uri()).fit().into(circleImageView);
+
                 }
             }
 
@@ -249,6 +253,38 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
             }
         });
+
+        databaseReference.child("Users_profile").child(otherUserUid).child("AnsweredCount").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long n;
+                ArrayList<Long> answerCountList = new ArrayList<>();
+                answerCountList.clear();
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        n = DS.getChildrenCount();
+                        Log.d("AnswerCount", String.valueOf(n));
+                        answerCountList.add(n);
+                        Log.d("AnswerCountSum", answerCountList.toString());
+
+                    }
+
+                    n = 0;
+                    for (int count = 0; count <= answerCountList.size() - 1; count++){
+                        n += answerCountList.get(count);
+                    }
+                    txtAnsweredCount.setText(String.valueOf(n));
+                }else {
+                    txtAnsweredCount.setText(String.valueOf(0));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void getSelfUserInfo() {
@@ -332,7 +368,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                         btnAddFriend.setText(getString(R.string.waiting_friend_accept));
                         btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                         btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.sign_in_rectangle));
-
                         btnAddFriend.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -374,13 +409,16 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                     btnAddFriend.setText(getString(R.string.friend_added));
                     btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_friend_btn_background));
-
-
+                    btnAddFriend.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(OtherUserProfileActivity.this, "cancel friend", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     btnAddFriend.setText(getString(R.string.add_friend));
                     btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_friend_btn_background));
-
                     btnAddFriend.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -614,14 +652,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OtherUserProfileActivity.this, "Null user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherUserProfileActivity.this, "登入享有更多功能", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OtherUserProfileActivity.this, "Null user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherUserProfileActivity.this, "登入享有更多功能", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -629,7 +667,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         btnSendMessageQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OtherUserProfileActivity.this, "Null user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherUserProfileActivity.this, "登入享有更多功能", Toast.LENGTH_SHORT).show();
 
             }
         });

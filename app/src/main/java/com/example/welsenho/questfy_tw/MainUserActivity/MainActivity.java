@@ -461,15 +461,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     }
 
     private void ItmeClick(){
+
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (completeInfo.equals("success")) {
-                    Intent intent = new Intent(MainActivity.this, EditInitActivity.class);
-                    startActivity(intent);
-                    finish();
+                if (firebaseUser != null) {
+                    if (completeInfo.equals("success")) {
+                        Intent intent = new Intent(MainActivity.this, EditInitActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        showUserPostDialog();
+                    }
                 }else {
-                    showUserPostDialog();
+                    UserNotLogin userNotLogin = new UserNotLogin();
+                    userNotLogin.show(getSupportFragmentManager(), "UserNotLogIn");
+                    //Toast.makeText(MainActivity.this, "Null", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -516,7 +533,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     }
 
     public static class UserInfoNotComplete extends DialogFragment {
-
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
@@ -526,6 +542,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(getContext(), RealNameRegisterActivity.class);
                             startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+    }
+
+    public static class UserNotLogin extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("訪客").setMessage("尚未登入，登入享有更多功能")
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

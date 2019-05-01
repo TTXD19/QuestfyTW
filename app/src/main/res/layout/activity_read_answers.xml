@@ -42,20 +42,22 @@
                     android:id="@+id/read_answers_txtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
                     android:text="How to play this song"
                     android:textColor="@color/FullBlack"
-                    android:textSize="30sp"
-                    android:textStyle="bold"/>
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:background="@color/FullWhite"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/read_answers_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/read_answers_txtTitle"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="20dp">
 
 
             </android.support.v7.widget.RecyclerView>

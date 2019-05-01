@@ -29,11 +29,11 @@
                 android:textColor="@color/FullWhite"
                 android:textSize="16sp"/>
 
-            <TextView
+            <ImageView
                 android:id="@+id/new_login_txtLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Questfy"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/questfy_logo_style_5_4"
                 android:textColor="@color/FullWhite"
                 android:textStyle="bold"
                 android:textSize="36sp"

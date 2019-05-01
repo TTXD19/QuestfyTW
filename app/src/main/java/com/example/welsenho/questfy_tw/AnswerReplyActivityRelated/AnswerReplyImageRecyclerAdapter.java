@@ -34,7 +34,8 @@ public class AnswerReplyImageRecyclerAdapter extends RecyclerView.Adapter<Answer
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Picasso.get().load(firebaseDatabaseGetSet.getEditInitImageUploadViewUri()).fit().into(viewHolder.imageView);
+        firebaseDatabaseGetSet = arrayList.get(i);
+        Picasso.get().load(firebaseDatabaseGetSet.getUserImage()).fit().into(viewHolder.imageView);
     }
 
     @Override

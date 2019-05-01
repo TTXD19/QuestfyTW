@@ -367,6 +367,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                 Intent intent = new Intent(ReadArticleActivity.this, ReadAnswersActivity.class);
                 intent.putExtra("Article_ID", Article_ID);
                 intent.putExtra("Article_Title", txtTitle.getText().toString());
+                intent.putExtra("otherUserUid", otherUserUid);
                 startActivity(intent);
             }
         });

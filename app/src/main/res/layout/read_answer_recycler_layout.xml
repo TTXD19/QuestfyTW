@@ -50,12 +50,20 @@
         android:layout_marginRight="16dp"
         android:layout_below="@+id/recycler_layout_read_answers_txtUpdateDate"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:textSize="16sp"
+        android:layout_toStartOf="@+id/recycler_layout_read_answers_imgAnswer"
         android:textColor="@color/FullBlack"
         />
 
-
+    <ImageView
+        android:id="@+id/recycler_layout_read_answers_imgAnswer"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"/>
 
 
 </RelativeLayout>

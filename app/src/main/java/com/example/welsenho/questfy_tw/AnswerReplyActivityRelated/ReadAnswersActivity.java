@@ -99,7 +99,14 @@ public class ReadAnswersActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.read_answers_toolBar);
         txtAnswerTitle.setText(Article_Title);
         arrayList = new ArrayList<>();
-        adapter = new readAnswersRecyclerViewAdapter(arrayList);
+        adapter = new readAnswersRecyclerViewAdapter(arrayList, getApplicationContext(), new readAnswersRecyclerViewAdapter.AnswerImage() {
+            @Override
+            public void getImage(String imageUri) {
+                Intent intent = new Intent(ReadAnswersActivity.this, EnlargeAnswerImageActivity.class);
+                intent.putExtra("imageUri", imageUri);
+                startActivity(intent);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
@@ -140,6 +147,5 @@ public class ReadAnswersActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }
