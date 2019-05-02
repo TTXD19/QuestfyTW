@@ -21,7 +21,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/daily_question"
+                android:text="每週訪問"
                 android:textColor="@color/CatergoryDarkGrayText"
                 android:textSize="32sp"
                 android:textStyle="bold" />

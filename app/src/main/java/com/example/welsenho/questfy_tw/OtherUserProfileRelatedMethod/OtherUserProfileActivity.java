@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import afu.org.checkerframework.checker.igj.qual.I;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherUserProfileActivity extends AppCompatActivity {
@@ -93,6 +94,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private TextView txtPopCancel;
     private TextView txtPopCount;
     private TextView txtMaxCount;
+    private TextView txtNoPost;
     private ImageView imgPopAddImage;
     private ImageView imgPopPreview;
     private EditText editPopAskContent;
@@ -187,6 +189,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         txtCorseName = findViewById(R.id.otherUser_profile_txtMainCourse);
         txtSpecility = findViewById(R.id.otherUser_profile_txtSpeciality);
         txtStatusMessage = findViewById(R.id.otherUser_profile_txtStatuseMessage);
+        txtNoPost = findViewById(R.id.otherUser_profile_txtNoPost);
         circleImageView = findViewById(R.id.otherUser_profile_circleImgUser);
         btnFollow = findViewById(R.id.otherUser_profile_btnFollow);
         btnAddFriend = findViewById(R.id.otherUser_profile_btnAddFriend);
@@ -404,15 +407,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-
-
                     btnAddFriend.setText(getString(R.string.friend_added));
                     btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_friend_btn_background));
                     btnAddFriend.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(OtherUserProfileActivity.this, "cancel friend", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OtherUserProfileActivity.this, "已加為好友", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -447,6 +448,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                             arrayList.add(getSet);
                             txtPostsCount.setText(String.valueOf(arrayList.size()));
                             recyclerView.setAdapter(adapter);
+                        }
+                        if (arrayList.isEmpty()){
+                            txtNoPost.setVisibility(View.VISIBLE);
+                        }else {
+                            txtNoPost.setVisibility(View.GONE);
                         }
                     }
                 }

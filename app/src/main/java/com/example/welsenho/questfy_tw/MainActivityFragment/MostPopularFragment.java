@@ -19,10 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.AppAnnouncementRelated.AppAnnouncementActivity;
+import com.example.welsenho.questfy_tw.AppAnnouncementRelated.AppRulesActivity;
 import com.example.welsenho.questfy_tw.CustomScrollView;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.InternetConnectionDetect;
@@ -48,6 +51,8 @@ public class MostPopularFragment extends Fragment {
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private View view;
+    private RelativeLayout relativeLayout;
+    private RelativeLayout relativeAppRules;
 
     //New loading method
     private long lastNum;
@@ -130,6 +135,8 @@ public class MostPopularFragment extends Fragment {
         recyclerView = view.findViewById(R.id.most_pop_fm_recyclerView);
         progressBar = view.findViewById(R.id.most_pop_fm_progressBar);
         swipeRefreshLayout = view.findViewById(R.id.most_pop_fm_swipeRefresh);
+        relativeLayout = view.findViewById(R.id.most_pop_fm_recycler1);
+        relativeAppRules = view.findViewById(R.id.most_pop_fm_recycler2);
 
         searchArrayList = new ArrayList<>();
         testArrayList = new ArrayList<>();
@@ -148,6 +155,22 @@ public class MostPopularFragment extends Fragment {
             @Override
             public void onRefresh() {
                 getLastKeyFromFirebase();
+            }
+        });
+
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AppAnnouncementActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        relativeAppRules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AppRulesActivity.class);
+                startActivity(intent);
             }
         });
     }

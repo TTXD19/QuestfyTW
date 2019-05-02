@@ -270,6 +270,17 @@
                 android:layout_marginTop="2dp"
                 android:textStyle="bold"
                 />
+
+            <TextView
+                android:id="@+id/otherUser_profile_txtNoPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="目前他沒有詢問任何問題喔"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/txtPosts2"
+                android:layout_marginTop="20dp"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/otherUser_profile_recyclerView"
                 android:layout_width="match_parent"

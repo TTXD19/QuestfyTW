@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.example.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import com.example.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
+import com.example.welsenho.questfy_tw.MainActivityFragment.MostPopularFragment;
 import com.example.welsenho.questfy_tw.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -86,6 +88,7 @@ public class UserProfileFragment extends Fragment {
     private ProgressDialog progressDialog;
     private ProgressBar progressBar;
     private CardView cardView;
+    private OnFragmentInteractionListener listener;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -97,7 +100,7 @@ public class UserProfileFragment extends Fragment {
     private EditRelatedMethod editRelatedMethod;
 
 
-    private OnFragmentInteractionListener mListener;
+
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -130,6 +133,9 @@ public class UserProfileFragment extends Fragment {
         txtNotRegister = view.findViewById(R.id.user_profile_fm_txtNotRegister);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.getCurrentUser().reload();
+        }
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
@@ -161,6 +167,23 @@ public class UserProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof UserProfileFragment.OnFragmentInteractionListener) {
+            listener = (UserProfileFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() +
+                    " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -173,7 +196,7 @@ public class UserProfileFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onUserImageChange();
     }
 
     @Override
@@ -207,6 +230,8 @@ public class UserProfileFragment extends Fragment {
         Log.d("UploadStatus", "Finish Uploading");
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 
     private void onItemClick(){
         circleImageView.setOnClickListener(new View.OnClickListener() {
@@ -312,7 +337,7 @@ public class UserProfileFragment extends Fragment {
                 StorageReference storageReference1 = storageReference.child("User_Profile_Image").child(firebaseUser.getUid()).child(date);
                 storageReference1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(Uri uri) {
+                    public void onSuccess(final Uri uri) {
                         Log.d("DownloadUri", uri.toString());
                         UpdateFirebaseLink(uri);
                         UserProfileChangeRequest userProfile = new UserProfileChangeRequest.Builder().setPhotoUri(uri).build();
@@ -320,6 +345,7 @@ public class UserProfileFragment extends Fragment {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
+                                listener.onUserImageChange();
                                 progressDialog.dismiss();
                             }
                         });
@@ -341,10 +367,38 @@ public class UserProfileFragment extends Fragment {
                     .fit().into(circleImageView);
         }
         txtUserName.setText(firebaseUser.getDisplayName());
+
+        firebaseUser.reload();
         if (firebaseUser.isEmailVerified()) {
             btnEmailCertifiacte.setText("信箱已認證\n" + firebaseUser.getEmail());
         }else {
+            Toast.makeText(getContext(), "如果Email已經驗證過，請關閉App在重開一次", Toast.LENGTH_SHORT).show();
             btnEmailCertifiacte.setText("信箱未認證(點擊認證)\n" + firebaseUser.getEmail());
+            btnEmailCertifiacte.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btnEmailCertifiacte.setText("認證寄送中...");
+                    if (!firebaseUser.isEmailVerified()){
+                        firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            btnEmailCertifiacte.setText("已將認證Email寄送至您的郵件");
+                                            Toast.makeText(getContext(), "如果Email已經驗證過，請關閉App在重開一次", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }, 5);
+                                }else {
+                                    btnEmailCertifiacte.setText("信箱未認證(點擊認證)\n" + firebaseUser.getEmail());
+                                    Toast.makeText(getContext(), "寄送失敗，請在試一次", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         }
 
     }
@@ -408,5 +462,4 @@ public class UserProfileFragment extends Fragment {
 
         return options;
     }
-
 }

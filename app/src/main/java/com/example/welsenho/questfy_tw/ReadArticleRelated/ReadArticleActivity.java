@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private String[] reportReasons = new String[9];
     private long likeCount;
 
+    private ScrollView scrollView;
     private CircleImageView circleImageView;
     private TextView txtUserName;
     private TextView txtUploadData;
@@ -185,6 +187,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     private void InitializeItem() {
+        scrollView = findViewById(R.id.read_article_scrollView);
         circleImageView = findViewById(R.id.read_article_circle_image_user);
         txtUserName = findViewById(R.id.read_article_txt_userName);
         txtTitle = findViewById(R.id.read_article_txt_title);
@@ -210,6 +213,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         shineButtonHeart = findViewById(R.id.read_article_shineBtn_heart);
         shineButtonLike = findViewById(R.id.read_article_shineBtn_like);
 
+        scrollView.smoothScrollTo(0,0);
         editRelatedMethod = new EditRelatedMethod();
         progressBar.bringToFront();
         shineButtonHeart.init(this);
@@ -633,6 +637,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                 /**
                  * Write code to handle not null firebaseUser
                  */
+                Toast.makeText(ReadArticleActivity.this, "登入已享有這項服務", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -643,6 +648,14 @@ public class ReadArticleActivity extends AppCompatActivity {
                 /**
                  * Write code to handle not null firebaseUser
                  */
+                Toast.makeText(ReadArticleActivity.this, "登入已享有這項服務", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnRequestMeet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReadArticleActivity.this, "登入享有更多服務", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -658,6 +671,9 @@ public class ReadArticleActivity extends AppCompatActivity {
                         arrayUserData.add(getAttendantData);
                         recyclerUserData.setAdapter(adapterAttendantUser);
                     }
+                    recyclerUserData.setVisibility(View.VISIBLE);
+                }else {
+                    recyclerUserData.setVisibility(View.GONE);
                 }
             }
 

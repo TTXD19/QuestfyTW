@@ -79,15 +79,6 @@ public class SignUpMethod {
         });
     }
 
-
-    public void autoLogin(FirebaseUser firebaseUser, Context context){
-        if (firebaseUser != null){
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }
-    }
-
     public void emailVarification(FirebaseUser firebaseUser, final Context context){
         if (firebaseUser.isEmailVerified()){
             Toast.makeText(context, "Email has verified", Toast.LENGTH_SHORT).show();

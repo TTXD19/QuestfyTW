@@ -177,8 +177,10 @@ public class LoginActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setTitle("Signing your account");
-                progressDialog.setMessage("Please hold on for a moment");
+                progressDialog.setTitle("登入");
+                progressDialog.setMessage("帳號登入中，請稍後");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
                 progressDialog.show();
                 email = editEmail.getText().toString();
                 password = editPassword.getText().toString();

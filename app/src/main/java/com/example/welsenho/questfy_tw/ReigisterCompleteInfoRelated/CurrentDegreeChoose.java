@@ -34,7 +34,7 @@ public class CurrentDegreeChoose extends AppCompatActivity {
         txtUniversityStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentDegree = txtUniversityStudent.getText().toString();
+                currentDegree = "UniversityInfo";
                 Intent intent = new Intent(CurrentDegreeChoose.this, UniversityRegister.class);
                 intent.putExtra("realName",realName);
                 intent.putExtra("currentDegree", currentDegree);
@@ -46,7 +46,7 @@ public class CurrentDegreeChoose extends AppCompatActivity {
         txtHighSchoolStudnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentDegree = txtHighSchoolStudnet.getText().toString();
+                currentDegree = "HighSchoolInfo";
                 Intent intent = new Intent(CurrentDegreeChoose.this, UniversityRegister.class);
                 intent.putExtra("realName",realName);
                 intent.putExtra("currentDegree", currentDegree);

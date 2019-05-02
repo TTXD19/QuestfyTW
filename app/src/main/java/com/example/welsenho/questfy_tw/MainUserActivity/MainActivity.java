@@ -447,19 +447,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         databaseReference = firebaseDatabase.getReference();
     }
 
-    private void sendEmainVerificationProcess() {
-        txtCheckVerified.setText(R.string.not_verified);
-
-        btnCompleteUserInfo.setText("Sending...");
-        signUpMethod.emailVarification(firebaseUser, getApplicationContext());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btnCompleteUserInfo.setText("Click to send email verification");
-            }
-        }, 2000);
-    }
-
     private void ItmeClick(){
 
 
@@ -530,6 +517,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("userCompleteInfo", userCompleteInfo);
         editor.apply();
+    }
+
+    @Override
+    public void onUserImageChange() {
+        Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
     }
 
     public static class UserInfoNotComplete extends DialogFragment {

@@ -1,7 +1,9 @@
 package com.example.welsenho.questfy_tw.SettingPageRelated;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -12,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import com.example.welsenho.questfy_tw.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -56,10 +61,38 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
         preAppVersion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getContext(), preference.getKey(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), preference.getSummary(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
+
+        preResetPassword.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(firebaseUser.getEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(getContext(), "已寄出一封重設郵件至您的Email", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                return true;
+            }
+        });
+
+        preLogOut.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                firebaseAuth.signOut();
+                return false;
+            }
+        });
+
+
 
 
         InitFirebase();

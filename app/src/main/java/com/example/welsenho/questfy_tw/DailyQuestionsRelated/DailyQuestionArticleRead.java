@@ -137,7 +137,11 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
         txtComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendComment();
+                if (firebaseUser != null) {
+                    SendComment();
+                }else {
+                    Toast.makeText(DailyQuestionArticleRead.this, "登入以享有這項功能", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
