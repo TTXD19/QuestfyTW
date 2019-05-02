@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (!email.isEmpty() && !password.isEmpty()) {
                     signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), LoginActivity.this, progressDialog, txtWrongPassword);
                 }else{
-                    txtWrongPassword.setText("Email and Password can not be empty");
+                    txtWrongPassword.setText("帳號密碼不能為空");
                     txtWrongPassword.setVisibility(View.VISIBLE);
                     progressDialog.dismiss();
                 }
@@ -223,8 +223,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                progressDialog.setTitle("Account Registering");
-                progressDialog.setMessage("Please hold on for a moment");
+                progressDialog.setTitle("帳號登入中");
+                progressDialog.setMessage("請稍候，登入即將完成");
                 progressDialog.setCancelable(false);
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
@@ -272,7 +272,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void googleSignIn(){
-        Toast.makeText(LoginActivity.this, "google sign in2", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "google sign in", Toast.LENGTH_SHORT).show();
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }

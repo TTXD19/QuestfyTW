@@ -107,7 +107,7 @@ public class MainCourseRegister extends AppCompatActivity {
     }
 
     private void getFirebaseData() {
-        databaseReference.child("UniversityInfo").child(schooleName).child("courseList").addValueEventListener(new ValueEventListener() {
+        databaseReference.child(currentDegree).child(schooleName).child("courseList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

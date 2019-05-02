@@ -70,8 +70,8 @@ public class SignUpAcivity extends AppCompatActivity {
 
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Registering...");
-        progressDialog.setMessage("Creating your account");
+        progressDialog.setTitle("帳號註冊");
+        progressDialog.setMessage("正在註冊您的帳號中，請稍候");
 
         editRelatedMethod = new EditRelatedMethod();
         signUpMethod = new SignUpMethod();
@@ -83,12 +83,12 @@ public class SignUpAcivity extends AppCompatActivity {
             public void onClick(View v) {
                 checkSex();
                 if (checkSex() == null) {
-                    txtMissing.setText("Please select your sex");
+                    txtMissing.setText("請選擇您的性別");
                     txtMissing.setVisibility(View.VISIBLE);
                     scrollView.fullScroll(View.FOCUS_DOWN);
                 } else {
-                    progressDialog.setMessage("Please hold on a moment while we register your account");
-                    progressDialog.setTitle("Registering.......");
+                    progressDialog.setMessage("正在註冊您的帳號中，請稍候");
+                    progressDialog.setTitle("帳號註冊");
                     progressDialog.show();
                     register();
                 }
@@ -163,7 +163,7 @@ public class SignUpAcivity extends AppCompatActivity {
         password = editPassword.getText().toString();
         confirmPassword = editConfirmPassword.getText().toString();
         ID = editID.getText().toString();
-        loginType = "false";
+        loginType = "EmailPassword";
     }
 
 
