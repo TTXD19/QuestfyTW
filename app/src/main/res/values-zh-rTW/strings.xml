@@ -19,7 +19,7 @@
     <string name="register">註冊</string>
     <string name="regis_missing">＊＊＊空格不能為空白喔</string>
     <string name="regis_type_success">註冊成功</string>
-    <string name="regis_type_failed">註冊失敗</string>
+    <string name="regis_type_failed">註冊失敗，請檢查您的網路</string>
     <string name="regis_type_password_not_equal">密碼與確認密碼不一致</string>
     <string name="action_drawer_open">drawer open</string>
     <string name="action_drawer_close">drawer close</string>

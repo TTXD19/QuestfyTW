@@ -39,7 +39,19 @@ Questfy-TW 0.0.5 2019/4/26(Most popular fragment functions updated)
 Questfy-TW 0.0.5 2019/4/28(EditInit bug fixed)
 Bug detail: App will crash when other peoples is editing their questions. onBackPressed get back to editInit.Activity bug fixed.
 
-Questfy-TW 0.0.5 2019/4/28(First Alpha test 0.0.5)
+***Major change
+Questfy-TW 0.0.5 2019/4/28(First Alpha test 0.0.6, Change pakage name from com.example.welsenho.questfy_tw to taiwan.questfy.welsenho.questfy_tw)
+
+
+
+
+
+
+
+
+
+
+Questfy-TW versionCode 2 : Fix goolge place Api
 
 
 

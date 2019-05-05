@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path name="android.support.v4.content.FileProvider"
-        path="Android/data/com.example.welsenho.questfy_tw/files/Pictures" />
+        path="Android/data/com.questfy.welsenho.questfy_tw/files/Pictures" />
 </paths>

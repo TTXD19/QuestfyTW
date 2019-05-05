@@ -33,20 +33,50 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "31006726738-jikvbsouvd7r47hgkcgsdoda3esbmd29.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31006726738:android:9ca39be1675398a4",
+        "android_client_info": {
+          "package_name": "taiwan.questfy.welsenho.questfy_tw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31006726738-ltfg0n8dfqr12r8cu627is6f1bvmu2n5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "taiwan.questfy.welsenho.questfy_tw",
+            "certificate_hash": "c45edbea18591d9d5e3a5d1b0edcdad42b459553"
+          }
         },
-        "ads_service": {
-          "status": 2
+        {
+          "client_id": "31006726738-jikvbsouvd7r47hgkcgsdoda3esbmd29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANVnIoSVi_-ykaEML657AtUIYfC_T5XbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31006726738-jikvbsouvd7r47hgkcgsdoda3esbmd29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

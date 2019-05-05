@@ -131,13 +131,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/signUp_txtReviewPrvacyPolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="點我查看隱私權政策內容"
+                    android:textSize="20sp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/com_facebook_blue"
+                    android:layout_below="@+id/checkTermService"
+                    />
+
+                <TextView
+                    android:id="@+id/signUp_txtReviewUserAgreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="點我查看使用者協議內容"
+                    android:textSize="20sp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/com_facebook_blue"
+                    android:layout_below="@+id/signUp_txtReviewPrvacyPolicy"
+                    />
+
                 <CheckBox
                     android:id="@+id/checkPrivacy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="@string/privacy_agreement"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"/>
 
                 <CheckBox
                     android:id="@+id/checkTermService"
