@@ -11,8 +11,9 @@
         android:id="@+id/welcome_screen_txtLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Questfy"
+        android:text="Questfy\n 問飛"
         android:layout_centerInParent="true"
+        android:textAlignment="center"
         android:textSize="64sp"
         android:textColor="@color/FullWhite"/>
 

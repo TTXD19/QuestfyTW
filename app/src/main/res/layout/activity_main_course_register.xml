@@ -13,8 +13,8 @@
         android:text="@string/Select_your_main_course"
         android:textColor="@color/ＭainOrange"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:layout_centerHorizontal="true"/>
@@ -22,9 +22,11 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mainCourse_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/mainCourse_register_txtProcess"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:layout_above="@+id/mainCourse_register_btnPrevious"
+        android:layout_marginBottom="10dp">
 
 
 

@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,12 +30,17 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
     private Context context;
     private EditRelatedMethod editRelatedMethod;
     private ClickItem clickItem;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public NewArticleListRecyclerAdapter(Context context, ClickItem clickItem) {
         arrayList = new ArrayList<>();
         clickArratyListSize = new ArrayList<>();
         this.context = context;
         this.clickItem = clickItem;
+
+        firebaseDatabase =FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     public void addAll(ArrayList<FirebaseDatabaseGetSet> arrayList1){
@@ -63,9 +73,9 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         editRelatedMethod = new EditRelatedMethod();
-        FirebaseDatabaseGetSet getSet = arrayList.get(i);
+        final FirebaseDatabaseGetSet getSet = arrayList.get(i);
         viewHolder.txtUserName.setText(getSet.getUser_Name());
         viewHolder.txtTitle.setText(getSet.getTitle());
         viewHolder.txtUploadDate.setText(editRelatedMethod.getFormattedDate(context, Math.abs(getSet.getUploadTimeStamp())));
@@ -84,7 +94,20 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
         }else {
             viewHolder.txtAnserCount.setText(String.valueOf(0));
         }
-        Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
+
+        databaseReference.child("Users_profile").child(getSet.getUserUid()).child("User_image_uri").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(viewHolder.circleImageViewUserImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

@@ -84,5 +84,4 @@ dependencies {
     //Firebase Pagination Library
     implementation 'com.shreyaspatil:FirebaseRecyclerPagination:1.0.1'
 
-
 }

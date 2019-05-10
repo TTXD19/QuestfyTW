@@ -103,7 +103,7 @@ public class SearchAndAddFriendActivity extends AppCompatActivity{
         arrayList = new ArrayList<>();
         adapter = new SearchAndAddFriendRecyclerAdapter(arrayList, new SearchAndAddFriendRecyclerAdapter.userClickListener() {
             @Override
-            public void onUserClick(int position) {
+            public void onUserClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
                 Intent intent = new Intent(SearchAndAddFriendActivity.this, OtherUserProfileActivity.class);
                 intent.putExtra("otherUserUid", arrayList.get(position).getUserUid());
                 startActivity(intent);

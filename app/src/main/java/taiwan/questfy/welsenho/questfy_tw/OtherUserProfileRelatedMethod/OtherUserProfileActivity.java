@@ -7,9 +7,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -55,7 +60,7 @@ import taiwan.questfy.welsenho.questfy_tw.MainActivityFragment.list_article_recy
 import taiwan.questfy.welsenho.questfy_tw.R;
 import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 
-public class OtherUserProfileActivity extends AppCompatActivity {
+public class OtherUserProfileActivity extends AppCompatActivity implements UserAskedQuestionsFragment.OnFragmentInteractionListener, CheckFollowersFragment.OnCheckFollowersFragment, AnsweredHitstoryFragment.OnAnsweredHistory {
 
     private static final int REQUEST_IMAGE_SELECT = 0;
 
@@ -67,9 +72,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private String seldUserSchoolName;
     private String reportReason;
     private String[] reportReasons = new String[9];
-    private ArrayList<FirebaseDatabaseGetSet> arrayList;
-    private FirebaseDatabaseGetSet getSet;
-    private list_article_recyclerView_adapter adapter;
 
     private TextView txtUserName;
     private TextView txtUniversityName;
@@ -84,7 +86,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private TextView txtPopCancel;
     private TextView txtPopCount;
     private TextView txtMaxCount;
-    private TextView txtNoPost;
     private ImageView imgPopAddImage;
     private ImageView imgPopPreview;
     private EditText editPopAskContent;
@@ -92,16 +93,22 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     private Button btnFollow;
     private Button btnAddFriend;
     private Button btnSendMessageQuestion;
-    private RecyclerView recyclerView;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private Dialog dialog;
     private ProgressBar progressBar;
     private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private AppBarLayout appBarLayout;
+
 
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private OtherUserProfileRelatedMethods otherUserProfileRelatedMethods;
     private EditRelatedMethod editRelatedMethod;
+    private UserAskedQuestionsFragment userAskedQuestionsFragment;
+
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -126,21 +133,20 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 detectFriend();
                 detectFollowing();
                 onItemClick();
-            }else {
+            } else {
                 getToSelfPage();
             }
-        }else {
+        } else {
             guestClick();
         }
         getFollowersCount();
-        getUserArticlesData();
-        setRecyclerView();
+        setViewPager();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_IMAGE_SELECT){
-            if (resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_SELECT) {
+            if (resultCode == RESULT_OK) {
                 progressBar.setVisibility(View.VISIBLE);
                 Uri uri = data.getData();
                 UploadPhotoToFirebase(uri);
@@ -158,11 +164,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        switch (itemId){
+        switch (itemId) {
             case R.id.read_article_report:
-                if (firebaseUser != null){
+                if (firebaseUser != null) {
                     createReportDialog();
-                }else {
+                } else {
                     Toast.makeText(this, "需登入回報", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -170,7 +176,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void InitItem(){
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
+    private void InitItem() {
         txtUserName = findViewById(R.id.otherUser_profile_txtUserName);
         txtUniversityName = findViewById(R.id.otherUser_profile_txtUniName);
         txtFollowesCount = findViewById(R.id.otherUser_profile_txtFollowersCount);
@@ -179,28 +192,31 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         txtCorseName = findViewById(R.id.otherUser_profile_txtMainCourse);
         txtSpecility = findViewById(R.id.otherUser_profile_txtSpeciality);
         txtStatusMessage = findViewById(R.id.otherUser_profile_txtStatuseMessage);
-        txtNoPost = findViewById(R.id.otherUser_profile_txtNoPost);
         circleImageView = findViewById(R.id.otherUser_profile_circleImgUser);
         btnFollow = findViewById(R.id.otherUser_profile_btnFollow);
         btnAddFriend = findViewById(R.id.otherUser_profile_btnAddFriend);
         btnSendMessageQuestion = findViewById(R.id.otherUser_profile_btnSendMessageQuestion);
-        recyclerView = findViewById(R.id.otherUser_profile_recyclerView);
         coordinatorLayout = findViewById(R.id.otherUser_profile_coordinatorLayout);
         toolbar = findViewById(R.id.otherUser_profile_toolBar);
+        tabLayout = findViewById(R.id.otherUser_profile_tabLayout);
+        viewPager = findViewById(R.id.otherUser_profile_viewPager);
+        collapsingToolbarLayout = findViewById(R.id.otherUser_profile_collaspingToolBar);
+        appBarLayout = findViewById(R.id.otherUser_profile_appBayLayout);
         otherUserUid = getIntent().getStringExtra("otherUserUid");
+
         otherUserProfileRelatedMethods = new OtherUserProfileRelatedMethods();
         editRelatedMethod = new EditRelatedMethod();
-
-        arrayList = new ArrayList<>();
-        adapter = new list_article_recyclerView_adapter(arrayList, this);
-        recyclerView.setFocusable(false);
 
         dialog = new Dialog(this);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("  ");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
-    private void InitFirebaseItem(){
+    private void InitFirebaseItem() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -210,19 +226,19 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
     }
 
-    private void getOtherUserInfo(){
+    private void getOtherUserInfo() {
 
         databaseReference.child("Users_profile").child(otherUserUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     firebaseDatabaseGetSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     txtUserName.setText(firebaseDatabaseGetSet.getID());
                     getSupportActionBar().setTitle(firebaseDatabaseGetSet.getID() + "的個人資訊");
-                    if (firebaseDatabaseGetSet.getSchoolName() != null){
+                    if (firebaseDatabaseGetSet.getSchoolName() != null) {
                         txtUniversityName.setText(firebaseDatabaseGetSet.getSchoolName());
                         txtCorseName.setText(firebaseDatabaseGetSet.getCourseName());
-                    }else {
+                    } else {
                         txtUniversityName.setText("尚未審核");
                         txtCorseName.setText("尚未審核");
                     }
@@ -233,11 +249,10 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                     }
                     if (firebaseDatabaseGetSet.getUserStatusMessage() != null) {
                         txtStatusMessage.setText(firebaseDatabaseGetSet.getUserStatusMessage());
-                    }else {
+                    } else {
                         txtStatusMessage.setText("");
                     }
                     Picasso.get().load(firebaseDatabaseGetSet.getUser_image_uri()).fit().into(circleImageView);
-
                 }
             }
 
@@ -247,14 +262,34 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    collapsingToolbarLayout.setTitle(firebaseDatabaseGetSet.getID());
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle("  ");
+                    isShow = false;
+                }
+            }
+        });
+
         databaseReference.child("Users_profile").child(otherUserUid).child("AnsweredCount").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long n;
                 ArrayList<Long> answerCountList = new ArrayList<>();
                 answerCountList.clear();
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         n = DS.getChildrenCount();
                         Log.d("AnswerCount", String.valueOf(n));
                         answerCountList.add(n);
@@ -263,11 +298,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                     }
 
                     n = 0;
-                    for (int count = 0; count <= answerCountList.size() - 1; count++){
+                    for (int count = 0; count <= answerCountList.size() - 1; count++) {
                         n += answerCountList.get(count);
                     }
                     txtAnsweredCount.setText(String.valueOf(n));
-                }else {
+                } else {
                     txtAnsweredCount.setText(String.valueOf(0));
                 }
             }
@@ -284,9 +319,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("schoolName").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     seldUserSchoolName = dataSnapshot.getValue().toString();
-                }else {
+                } else {
                     seldUserSchoolName = "為註冊";
                 }
             }
@@ -298,9 +333,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void FriendAddingProcess(){
+    private void FriendAddingProcess() {
 
-        String ProcessKey =  databaseReference.child("FriendAddingProcess").push().getKey();
+        String ProcessKey = databaseReference.child("FriendAddingProcess").push().getKey();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("RecieverUid", otherUserUid);
         hashMap.put("SenderUid", SelfUid);
@@ -313,7 +348,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         databaseReference.child("FriendAddingProcess").child(otherUserUid).child(SelfUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     createSnackBar();
                 }
             }
@@ -321,7 +356,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).updateChildren(hashMap);
     }
 
-    private void acceptFriendRequest(String friendUid, String friendName, String selfUid, String selfName){
+    private void acceptFriendRequest(String friendUid, String friendName, String selfUid, String selfName) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("FriendUid", friendUid);
         hashMap.put("FriendName", friendName);
@@ -337,7 +372,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         databaseReference.child("FriendAddingProcess").child(friendUid).child(selfUid).removeValue();
     }
 
-    private void createSnackBar(){
+    private void createSnackBar() {
         snackbar = Snackbar.make(coordinatorLayout, "Add friend successfully", Snackbar.LENGTH_LONG);
         snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
@@ -350,11 +385,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         snackbar.show();
     }
 
-    private void detectFriend(){
+    private void detectFriend() {
         databaseReference.child("FriendAddingProcess").child(SelfUid).child(otherUserUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     FirebaseDatabaseGetSet getFriend = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     String detectSender = getFriend.getSenderUid();
                     final String friendName = getFriend.getRequestName();
@@ -393,11 +428,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void detectAddedFriend(){
+    private void detectAddedFriend() {
         databaseReference.child("UserFriendList").child(SelfUid).child(otherUserUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     btnAddFriend.setText(getString(R.string.friend_added));
                     btnAddFriend.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnAddFriend.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_friend_btn_background));
@@ -427,35 +462,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void getUserArticlesData(){
-        databaseReference.child("Users_Question_Articles").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    arrayList.clear();
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        if (getSet.getUserUid().equals(otherUserUid)){
-                            arrayList.add(getSet);
-                            txtPostsCount.setText(String.valueOf(arrayList.size()));
-                            recyclerView.setAdapter(adapter);
-                        }
-                        if (arrayList.isEmpty()){
-                            txtNoPost.setVisibility(View.VISIBLE);
-                        }else {
-                            txtNoPost.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
+    /*
     private void setRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -468,9 +475,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+    }*/
 
-    private void followUser(){
+    private void followUser() {
         HashMap<String, Object> followBy = new HashMap<>();
         followBy.put("userUid", firebaseUser.getUid());
         followBy.put("User_Name", firebaseUser.getDisplayName());
@@ -482,7 +489,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         following.put("User_Name", txtUserName.getText().toString());
         if (firebaseDatabaseGetSet.getSchoolName() != null || !firebaseDatabaseGetSet.getSchoolName().isEmpty()) {
             following.put("schoolName", firebaseDatabaseGetSet.getSchoolName());
-        }else {
+        } else {
             following.put("schoolName", "未註冊");
         }
         following.put("User_image_uri", firebaseDatabaseGetSet.getUser_image_uri());
@@ -491,7 +498,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).updateChildren(followBy);
     }
 
-    private void onItemClick(){
+    private void onItemClick() {
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -507,11 +514,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void detectFollowing(){
+    private void detectFollowing() {
         databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     btnFollow.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnFollow.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.LightGreen));
                     btnFollow.setText(getString(R.string.following));
@@ -522,7 +529,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                             databaseReference.child("Users_Followers_Section").child(firebaseUser.getUid()).child("FollowingInfo").child(otherUserUid).removeValue();
                         }
                     });
-                }else {
+                } else {
                     btnFollow.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
                     btnFollow.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.LightMainOrange));
                     btnFollow.setText(R.string.follow);
@@ -542,13 +549,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void getFollowersCount(){
+    private void getFollowersCount() {
         databaseReference.child("Users_Followers_Section").child(otherUserUid).child("FollowBy").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     txtFollowesCount.setText(String.valueOf(dataSnapshot.getValue()));
-                }else {
+                } else {
                     txtFollowesCount.setText(String.valueOf(0));
                 }
             }
@@ -560,7 +567,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void askMeAnyQustion(){
+    private void askMeAnyQustion() {
         dialog.setContentView(R.layout.user_profile_custom_message_editing);
         txtPopTitle = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtTitle);
         txtPopCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
@@ -574,7 +581,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
         uploadTimeStamp = String.valueOf(System.currentTimeMillis());
         AskQuesitonUid = databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).push().getKey();
-        String title  = getString(R.string.ask) + txtUserName.getText().toString() + getString(R.string.anything);
+        String title = getString(R.string.ask) + txtUserName.getText().toString() + getString(R.string.anything);
         txtPopTitle.setText(title);
         txtPopAsk.setText(getString(R.string.ask_it));
         if (Locale.getDefault().getDisplayLanguage().equals("en")) {
@@ -587,10 +594,10 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         txtPopAsk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!editPopAskContent.getText().toString().isEmpty()){
+                if (!editPopAskContent.getText().toString().isEmpty()) {
                     uploadPersonalAsk(editPopAskContent.getText().toString());
                     dialog.dismiss();
-                }else {
+                } else {
                     Toast.makeText(OtherUserProfileActivity.this, getString(R.string.question_can_not_be_emoty), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -615,7 +622,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         imgPopPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri != null){
+                if (imageUri != null) {
                     deletePhotoPop();
                 }
             }
@@ -625,7 +632,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         txtMaxCount.setVisibility(View.GONE);
     }
 
-    private void uploadPersonalAsk(String question){
+    private void uploadPersonalAsk(String question) {
 
         String randomAskUid = databaseReference.child("Personal_Ask_Question").push().getKey();
         String AskDate = editRelatedMethod.getUploadDate();
@@ -638,14 +645,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         askBy.put("AskDate", AskDate);
         askBy.put("AskQuestionContent", question);
         askBy.put("AskQuesitonUid", randomAskUid);
-        if (imageUri != null){
+        if (imageUri != null) {
             askBy.put("QuestionTumbnail", imageUri);
         }
         databaseReference.child("Personal_Ask_Question").child(otherUserUid).child("AskedBy").child(randomAskUid).updateChildren(askBy);
         databaseReference.child("Personal_Ask_Question").child(firebaseUser.getUid()).child("AskTo").child(randomAskUid).updateChildren(askBy);
     }
 
-    private void guestClick(){
+    private void guestClick() {
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -670,14 +677,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void UploadPhotoToFirebase(Uri uri){
+    private void UploadPhotoToFirebase(Uri uri) {
         storageReference = storageReference.child("Personal_Ask_Request_Images").child(AskQuesitonUid).child(firebaseUser.getUid()).child(uploadTimeStamp);
         storageReference.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()){
+                if (!task.isSuccessful()) {
                     throw task.getException();
-                }else {
+                } else {
                     return storageReference.getDownloadUrl();
                 }
             }
@@ -691,13 +698,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void ClickToDeletePhoto(){
+    private void ClickToDeletePhoto() {
         imageUri = null;
         imgPopPreview.setImageResource(0);
         storageReference.delete();
     }
 
-    private void deletePhotoPop(){
+    private void deletePhotoPop() {
         AlertDialog.Builder builder = new AlertDialog.Builder(OtherUserProfileActivity.this);
         builder.setTitle(R.string.delete_photo).setMessage(R.string.click_to_delete_photo).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
             @Override
@@ -714,7 +721,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void reportUser(String reportCause){
+    private void reportUser(String reportCause) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("Report_User_Name", firebaseUser.getDisplayName());
         hashMap.put("Report_UserUid", firebaseUser.getUid());
@@ -725,16 +732,16 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         databaseReference.child("Report_user_section").child(firebaseDatabaseGetSet.getUserUid()).child(randomId).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(OtherUserProfileActivity.this, " 檢舉成功", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(OtherUserProfileActivity.this, " 檢舉失敗，請再試一次", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void createReportDialog(){
+    private void createReportDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(OtherUserProfileActivity.this);
         createReportReasons();
         builder.setTitle(R.string.report_user).setSingleChoiceItems(reportReasons, reportReasons.length, new DialogInterface.OnClickListener() {
@@ -758,7 +765,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void createReportReasons(){
+    private void createReportReasons() {
         reportReasons[0] = "使用者圖片不當";
         reportReasons[1] = "使用者ID不當";
         reportReasons[2] = "使用者約定無故未到";
@@ -771,12 +778,34 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
     }
 
-    private void getToSelfPage(){
+    private void getToSelfPage() {
         btnAddFriend.setVisibility(View.GONE);
         btnSendMessageQuestion.setVisibility(View.GONE);
         btnFollow.setVisibility(View.GONE);
     }
 
+    private void setViewPager() {
+        viewPager.setAdapter(new OtherUserProfileTabAdapter(getSupportFragmentManager()));
+        tabLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                tabLayout.setupWithViewPager(viewPager);
+                Toast.makeText(OtherUserProfileActivity.this, String.valueOf(viewPager.getCurrentItem()), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+
+    @Override
+    public void onFragmentInteraction(String postCount) {
+        txtPostsCount.setText(postCount);
+    }
+
+    @Override
+    public Bundle getBundle() {
+        Bundle args = new Bundle();
+        args.putString("otherUserUid", otherUserUid);
+        return args;
+    }
 
 }

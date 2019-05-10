@@ -1,4 +1,4 @@
-package taiwan.questfy.welsenho.questfy_tw.FriendRelatedActivity;
+package taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,50 +7,65 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import taiwan.questfy.welsenho.questfy_tw.FriendRelatedActivity.SearchAndAddFriendRecyclerAdapter;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
-public class SearchAndAddFriendRecyclerAdapter extends RecyclerView.Adapter<SearchAndAddFriendRecyclerAdapter.SearchFriendViewHolder> {
+public class CheckFollowerRecyclerAdapter extends RecyclerView.Adapter<CheckFollowerRecyclerAdapter.viewHolder> {
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private userClickListener userClickListener;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
-
-    public SearchAndAddFriendRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, userClickListener userClickListener){
+    public CheckFollowerRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, userClickListener userClickListener){
         this.arrayList = arrayList;
         this.userClickListener = userClickListener;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
-
 
     @NonNull
     @Override
-    public SearchFriendViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_friend_list_recycler_layout, viewGroup, false);
-        SearchFriendViewHolder viewHolder = new SearchFriendViewHolder(view);
+        viewHolder viewHolder = new viewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchFriendViewHolder searchFriendViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final viewHolder viewHolder, int i) {
         firebaseDatabaseGetSet = arrayList.get(i);
-        searchFriendViewHolder.txtUserName.setText(firebaseDatabaseGetSet.getID());
+        viewHolder.txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
         if (firebaseDatabaseGetSet.getSchoolName() != null) {
-            searchFriendViewHolder.txtUserUniversity.setText(firebaseDatabaseGetSet.getSchoolName());
+            viewHolder.txtUserUniversity.setText(firebaseDatabaseGetSet.getSchoolName());
         }else {
-            searchFriendViewHolder.txtUserUniversity.setText("未註冊大學");
+            viewHolder.txtUserUniversity.setText("未註冊大學");
         }
 
-        if (searchFriendViewHolder.circleImageView != null) {
-            Picasso.get().load(firebaseDatabaseGetSet.getUser_image_uri()).fit().into(searchFriendViewHolder.circleImageView);
-        }
+        //Testing code not confirm yet this is for auto getting user profile image
+        databaseReference.child("Users_profile").child(firebaseDatabaseGetSet.getUserUid()).child("User_image_uri").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(viewHolder.circleImageView);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -58,13 +73,13 @@ public class SearchAndAddFriendRecyclerAdapter extends RecyclerView.Adapter<Sear
         return arrayList.size();
     }
 
-    public class SearchFriendViewHolder extends RecyclerView.ViewHolder {
+    public class viewHolder extends RecyclerView.ViewHolder {
 
         private CircleImageView circleImageView;
         private TextView txtUserName;
         private TextView txtUserUniversity;
 
-        public SearchFriendViewHolder(@NonNull View itemView) {
+        public viewHolder(@NonNull View itemView) {
             super(itemView);
 
             circleImageView = itemView.findViewById(R.id.search_friend_recycler_userImage);

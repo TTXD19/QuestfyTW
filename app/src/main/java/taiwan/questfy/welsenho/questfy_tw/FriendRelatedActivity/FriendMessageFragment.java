@@ -228,6 +228,8 @@ public class FriendMessageFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 databaseReference.child("UserFriendList").child(firebaseUser.getUid()).child(arrayList.get(position).getFriendUid()).removeValue();
                 databaseReference.child("UserFriendList").child(arrayList.get(position).getFriendUid()).child(firebaseUser.getUid()).removeValue();
+                databaseReference.child("FriendMessages").child(firebaseUser.getUid()).child(arrayList.get(position).getFriendUid()).removeValue();
+                databaseReference.child("FriendMessages").child(arrayList.get(position).getFriendUid()).child(firebaseUser.getUid()).removeValue();
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

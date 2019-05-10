@@ -42,6 +42,8 @@ Bug detail: App will crash when other peoples is editing their questions. onBack
 ***Major change
 Questfy-TW 0.0.5 2019/4/28(First Alpha test 0.0.6, Change pakage name from com.example.welsenho.questfy_tw to taiwan.questfy.welsenho.questfy_tw)
 
+Questfy-TW 0.0.6 2019/5/10(Updated in AnsweredHistory, UserFollowerCheck & AskedQuestion activty)
+
 
 
 

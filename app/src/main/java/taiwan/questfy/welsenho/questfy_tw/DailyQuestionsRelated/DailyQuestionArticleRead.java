@@ -3,6 +3,7 @@ package taiwan.questfy.welsenho.questfy_tw.DailyQuestionsRelated;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -96,10 +97,10 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
 
         editRelatedMethod = new EditRelatedMethod();
 
-        collapsingToolbarLayout.setTitle(null);
-        toolbar.setTitle(" ");
+
         txtTitle.bringToFront();
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("  ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         arrayList = new ArrayList<>();
@@ -113,10 +114,33 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
                 if (dataSnapshot.exists()){
                     final FirebaseDatabaseGetSet getSet = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
                     Picasso.get().load(getSet.getDailyQuestionImage()).fit().into(imgArticlePicture);
-                    txtTitle.setText(getSet.getDailyQuestionTitle());
                     txtSubject.setText(getSet.getDailyQuestionSubject());
                     txtAuthor.setText(getSet.getDailyQuestionAuthor());
                     txtContent.setText(getSet.getDailyQuestionContent());
+                    collapsingToolbarLayout.setTitle(getSet.getDailyQuestionTitle());
+                    collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.FullWhite));
+
+
+                    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+                        boolean isShow = true;
+                        int scrollRange = -1;
+
+                        @Override
+                        public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                            if (scrollRange == -1) {
+                                scrollRange = appBarLayout.getTotalScrollRange();
+                            }
+                            if (scrollRange + i == 0) {
+                                collapsingToolbarLayout.setTitle(getSet.getDailyQuestionTitle());
+                                isShow = true;
+                            } else if(isShow) {
+                                txtTitle.setText(getSet.getDailyQuestionTitle());
+                                collapsingToolbarLayout.setTitle("  ");
+                                isShow = false;
+                            }
+                        }
+                    });
                 }
             }
 

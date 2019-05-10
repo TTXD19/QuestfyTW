@@ -47,6 +47,7 @@ import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import taiwan.questfy.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
+import taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod.UserAskedQuestionsFragment;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class ReadArticleActivity extends AppCompatActivity {
@@ -90,7 +91,6 @@ public class ReadArticleActivity extends AppCompatActivity {
     private ArrayList<FirebaseDatabaseGetSet> arrayUserData;
     private EditRelatedMethod editRelatedMethod;
     private RelativeLayout relayReadAnsers;
-
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;

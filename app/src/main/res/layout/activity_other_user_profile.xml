@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/otherUser_profile_relayMain"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/otherUser_profile_coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OtherUserProfileRelatedMethod.OtherUserProfileActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/otherUser_profile_toolBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/user_profile_background"
-        app:title="User's Profile"
-        app:titleTextColor="@color/FullWhite"
-        android:theme="@style/BaseTheme">
 
 
-    </android.support.v7.widget.Toolbar>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/otherUser_profile_coordinatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/otherUser_profile_toolBar">
-
-    <android.support.v4.widget.NestedScrollView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/otherUser_profile_appBayLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/otherUser_profile_collaspingToolBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:contentScrim="@drawable/user_profile_background"
+            app:expandedTitleMarginEnd="10dp"
+            app:expandedTitleMarginStart="20dp"
+            app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
                 android:id="@+id/relayUserProfile1"
@@ -68,233 +62,245 @@
                     android:text="University Name"
                     android:textColor="@color/ＭainOrange"
                     android:textSize="22sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/otherUser_profile_txtMainCourse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Main Course"
-                    android:textSize="20sp"
-                    android:textColor="@color/LightMainOrange"
-                    android:textStyle="bold"
-                    android:layout_centerHorizontal="true"
                     android:layout_below="@+id/otherUser_profile_txtUniName"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Main Course"
+                    android:textColor="@color/LightMainOrange"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/otherUser_profile_txtSpeciality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Speciality"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/FullWhite"
+                    android:layout_below="@+id/otherUser_profile_txtMainCourse"
                     android:layout_centerHorizontal="true"
-                    android:textAlignment="center"
+                    android:layout_marginTop="16dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:layout_below="@+id/otherUser_profile_txtMainCourse"
-                    android:layout_marginTop="16dp"/>
+                    android:text="Speciality"
+                    android:textAlignment="center"
+                    android:textColor="@color/FullWhite"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/otherUser_profile_txtStatuseMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status message"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/FullWhite"
-                    android:layout_centerHorizontal="true"
-                    android:textAlignment="center"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
                     android:layout_below="@+id/otherUser_profile_txtSpeciality"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    />
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Status message"
+                    android:textAlignment="center"
+                    android:textColor="@color/FullWhite"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/otherUser_profile_btnFollow"
-                android:layout_width="135dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/relayUserProfile1"
-                android:layout_centerHorizontal="true"
-                android:background="@color/LightMainOrange"
-                android:text="@string/follow"
-                android:textColor="@color/FullWhite"
-                android:textStyle="bold"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/otherUser_profile_toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/FullWhite"
+                android:theme="@style/BaseTheme">
+
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:id="@+id/otherUser_profile_relay_2"
+                android:id="@+id/otherUser_profile_relay_4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/otherUser_profile_btnFollow"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/otherUser_profile_btnFollow"
+                    android:layout_width="135dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/LightMainOrange"
+                    android:text="@string/follow"
+                    android:textColor="@color/FullWhite"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:id="@+id/otherUser_profile_relay_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/otherUser_profile_btnFollow"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/otherUser_profile_line_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/otherUser_profile_txtFollowers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/followers" />
+
+                            <TextView
+                                android:id="@+id/otherUser_profile_txtFollowersCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/otherUser_profile_txtFollowers"
+                                android:layout_centerHorizontal="true"
+                                android:text="0" />
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/otherUser_profile_txtAnswered"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/answered" />
+
+                            <TextView
+                                android:id="@+id/otherUser_profile_txtAnsweredCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/otherUser_profile_txtAnswered"
+                                android:layout_centerHorizontal="true"
+                                android:text="0" />
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/otherUser_profile_txtPosts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/posts" />
+
+                            <TextView
+                                android:id="@+id/otherUser_profile_txtPostsCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/otherUser_profile_txtPosts"
+                                android:layout_centerHorizontal="true"
+                                android:text="0" />
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/otherUser_profile_btnAddFriend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/otherUser_profile_line_1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/add_friend_btn_background"
+                        android:text="------"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/FullWhite" />
+
+
+                    <Button
+                        android:id="@+id/otherUser_profile_btnSendMessageQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/otherUser_profile_btnAddFriend"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/message_btn_background"
+                        android:text="@string/ask_me_anything"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/FullWhite" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/otherUser_profile_relay_4"
                 android:layout_marginTop="10dp"
-                >
+                android:orientation="vertical"
+                android:descendantFocusability="blocksDescendants"
+                android:background="@color/CatergoryLightGrayBackground">
 
-                <LinearLayout
-                    android:id="@+id/otherUser_profile_line_1"
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/otherUser_profile_tabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:background="@color/FullWhite"
+                    app:tabGravity="fill"
+                    app:tabMode="scrollable"
+                    app:tabSelectedTextColor="@color/FullBlack"
+                    app:tabTextColor="@color/CatergoryDarkGrayText"
+                    >
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                </android.support.design.widget.TabLayout>
 
-                        <TextView
-                            android:id="@+id/otherUser_profile_txtFollowers"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/followers"
-                            android:layout_centerHorizontal="true"/>
-
-                        <TextView
-                            android:id="@+id/otherUser_profile_txtFollowersCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:layout_centerHorizontal="true"
-                            android:layout_below="@+id/otherUser_profile_txtFollowers"/>
-
-
-
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/otherUser_profile_txtAnswered"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/answered"
-                            android:layout_centerHorizontal="true"/>
-
-                        <TextView
-                            android:id="@+id/otherUser_profile_txtAnsweredCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:layout_centerHorizontal="true"
-                            android:layout_below="@+id/otherUser_profile_txtAnswered"/>
-
-
-
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/otherUser_profile_txtPosts"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/posts"
-                            android:layout_centerHorizontal="true"/>
-
-                        <TextView
-                            android:id="@+id/otherUser_profile_txtPostsCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:layout_centerHorizontal="true"
-                            android:layout_below="@+id/otherUser_profile_txtPosts"/>
-
-
-
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/otherUser_profile_btnAddFriend"
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/otherUser_profile_viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="------"
-                    android:background="@drawable/add_friend_btn_background"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/FullWhite"
-                    android:layout_below="@id/otherUser_profile_line_1"
-                    android:layout_marginTop="15dp"
-                    android:textAllCaps="false"/>
+                    android:layout_height="600dp">
 
+                </android.support.v4.view.ViewPager>
 
-                <Button
-                    android:id="@+id/otherUser_profile_btnSendMessageQuestion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ask_me_anything"
-                    android:background="@drawable/message_btn_background"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/FullWhite"
-                    android:layout_below="@id/otherUser_profile_btnAddFriend"
-                    android:layout_marginTop="18dp"
-                    android:textAllCaps="false"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/otherUser_profile_relay_3"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#EEEDED"
-                android:layout_below="@+id/otherUser_profile_relay_2"
-                android:layout_marginTop="20dp">
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/txtPosts2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="發問問題"
-                android:textColor="@color/FullBlack"
-                android:layout_below="@id/otherUser_profile_relay_3"
-                android:textSize="28sp"
-                android:padding="5dp"
-                android:layout_marginTop="2dp"
-                android:textStyle="bold"
-                />
-
-            <TextView
-                android:id="@+id/otherUser_profile_txtNoPost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="目前他沒有詢問任何問題喔"
-                android:textSize="18sp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/txtPosts2"
-                android:layout_marginTop="20dp"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/otherUser_profile_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtPosts2">
-
-
-
-
-            </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    </android.support.design.widget.CoordinatorLayout>
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

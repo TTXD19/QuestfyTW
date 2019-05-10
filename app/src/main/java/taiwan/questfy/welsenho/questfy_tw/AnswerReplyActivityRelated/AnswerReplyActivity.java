@@ -125,7 +125,9 @@ public class AnswerReplyActivity extends AppCompatActivity{
             hashMap.put("UserImage", firebaseUser.getPhotoUrl().toString());
             hashMap.put("UpdateDate", txtUpdateDate.getText().toString());
             hashMap.put("AnswerContent", editAnswer.getText().toString());
+            hashMap.put("Title", Article_Title);
             hashMap.put("AnswerID", randomID);
+            hashMap.put("Article_ID", Article_ID);
             if (imageUri != null){
                 hashMap.put("editInitImageUploadViewUri", imageUri);
             }
@@ -147,6 +149,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
             });
 
             databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("AnsweredCount").child(Article_ID).child(randomID).updateChildren(hashMap);
+            databaseReference.child("UserArticleAnswers").child(firebaseUser.getUid()).child(randomID).updateChildren(hashMap);
         }else {
             progressDialog.dismiss();
             buildDialouge("Answer Error", "Answer length must be over 15", "OK");

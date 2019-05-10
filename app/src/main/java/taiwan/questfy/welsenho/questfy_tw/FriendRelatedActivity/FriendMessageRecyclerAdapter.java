@@ -45,7 +45,12 @@ public class FriendMessageRecyclerAdapter extends RecyclerView.Adapter<FriendMes
     public void onBindViewHolder(@NonNull FriendMessageViewHolder friendMessageViewHolder, int i) {
         FirebaseDatabaseGetSet getSet = arrayList.get(i);
         friendMessageViewHolder.txtUserName.setText(getSet.getFriendName());
-        friendMessageViewHolder.txtChatLines.setText(getSet.getLatestMessage());
+        if (getSet.getLatestMessage() != null) {
+            friendMessageViewHolder.txtChatLines.setText(getSet.getLatestMessage());
+        }else {
+            String defaultLastMessage = "向" + getSet.getFriendName() + "打招戶吧";
+            friendMessageViewHolder.txtChatLines.setText(defaultLastMessage);
+        }
         if (getSet.getFriendImage() != null) {
             Picasso.get().load(getSet.getFriendImage()).fit().into(friendMessageViewHolder.circleImageView);
         }
