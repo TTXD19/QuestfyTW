@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
+                Log.d("GSFAILEFD", e.getMessage() + e.getLocalizedMessage());
                 // Google Sign In failed, update UI appropriately
             }
 
@@ -242,12 +243,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
                     firebaseUser = firebaseAuth.getCurrentUser();
-                    if (CheckAccountStatus("Facebook").equals("Registered")){
+                    if (isNew){
+                        ProviderRegister("Facebook");
+                    }else {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
-                    }else {
-                        ProviderRegister("Facebook");
                     }
                 }
             }
@@ -276,16 +278,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
                             firebaseUser = firebaseAuth.getCurrentUser();
-                            if (CheckAccountStatus("Google").equals("Registered")){
+                            if (isNew){
+                                ProviderRegister("Google");
+                            }else {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
-                            }else {
-                                ProviderRegister("Google");
                             }
-                        } else {
-                            // If sign in fails, display a message to the user.
                         }
                     }
                 });

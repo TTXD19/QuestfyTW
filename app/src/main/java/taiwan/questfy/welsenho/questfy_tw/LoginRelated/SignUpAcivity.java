@@ -93,7 +93,6 @@ public class SignUpAcivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkSex();
                 if (checkSex() == null) {
                     txtMissing.setText("請選擇您的性別");
                     txtMissing.setVisibility(View.VISIBLE);
@@ -117,6 +116,16 @@ public class SignUpAcivity extends AppCompatActivity {
             }
         });
 
+        txtUserAgreements.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://welsen9595.wixsite.com/questfyprivacypolicy";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
     }
 
 
@@ -124,7 +133,7 @@ public class SignUpAcivity extends AppCompatActivity {
 
         getUserInput();
         final String createDate = editRelatedMethod.getUploadDate();
-        if (checkPrivacyPolicy.isChecked()) {
+        if (checkPrivacyPolicy.isChecked() && checkUserAgreements.isChecked()) {
             if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty() && !ID.isEmpty()) {
                 if (password.equals(confirmPassword)) {
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -162,10 +171,10 @@ public class SignUpAcivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     txtMissing.setVisibility(View.VISIBLE);
                                     txtMissing.setText("信箱格式錯誤");
+                                }else {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(SignUpAcivity.this, R.string.regis_type_failed, Toast.LENGTH_SHORT).show();
                                 }
-                                progressDialog.dismiss();
-                                Log.d("RgisterFailed", task.getException().getMessage());
-                                Toast.makeText(SignUpAcivity.this, R.string.regis_type_failed, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -182,8 +191,8 @@ public class SignUpAcivity extends AppCompatActivity {
                 scrollView.fullScroll(View.FOCUS_DOWN);
             }
         }else {
-            Toast.makeText(this, "您必須同意隱私權政策內容才能繼續", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
+            Toast.makeText(this, "您必須同意隱私權政策及使用者協議內容才能繼續", Toast.LENGTH_SHORT).show();
         }
     }
 
