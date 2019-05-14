@@ -10,6 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,11 +32,15 @@ public class MeetUpScheduleRecyclerAdapter extends RecyclerView.Adapter<MeetUpSc
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private MainOnClickListener onClickListener;
     private onArticleClick onArticleClick;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public MeetUpScheduleRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, onArticleClick onArticleClick){
         this.arrayList = arrayList;
         this.context = context;
         this.onArticleClick = onArticleClick;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     public void setOnClickListener(MainOnClickListener onClickListener){
@@ -48,7 +57,7 @@ public class MeetUpScheduleRecyclerAdapter extends RecyclerView.Adapter<MeetUpSc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MeetUpViewHolder meetUpViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final MeetUpViewHolder meetUpViewHolder, int i) {
         firebaseDatabaseGetSet = arrayList.get(i);
         meetUpViewHolder.txtTitle.setText(firebaseDatabaseGetSet.getTitle());
         meetUpViewHolder.txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
@@ -56,7 +65,20 @@ public class MeetUpScheduleRecyclerAdapter extends RecyclerView.Adapter<MeetUpSc
         meetUpViewHolder.txtAddress.setText(firebaseDatabaseGetSet.getMeetAddress());
         String meetDateTime = firebaseDatabaseGetSet.getMeetDate() + firebaseDatabaseGetSet.getMeetTime();
         meetUpViewHolder.txtDateTime.setText(meetDateTime);
-        Picasso.get().load(firebaseDatabaseGetSet.getUser_Image()).fit().into(meetUpViewHolder.circleImageView);
+
+        databaseReference.child("Users_profile").child(firebaseDatabaseGetSet.getUserUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(meetUpViewHolder.circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

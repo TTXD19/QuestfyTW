@@ -7,10 +7,4 @@
         android:title="@string/report"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/read_article_share"
-        android:icon="@drawable/share"
-        android:title="share"
-        app:showAsAction="ifRoom"/>
-
 </menu>

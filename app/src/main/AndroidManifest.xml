@@ -20,6 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".LoginRelated.PasswordResetActivity"></activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.questfy.welsenho.provider"
@@ -33,7 +35,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyByDLGHKUl2OutFByrDy0FgPUGU1FywsOg" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -55,59 +56,59 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity"
+            android:name=".LoginRelated.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.LoginRelated.SignUpAcivity"
+            android:name=".LoginRelated.SignUpAcivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.MainUserActivity.MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity" />
+            android:name=".MainUserActivity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".OtherUserProfileRelatedMethod.OtherUserProfileActivity" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditInitActivity"
+            android:name=".EditActivityRelated.EditInitActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name="taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditDetailMeetUpActivity" />
+        <activity android:name=".EditActivityRelated.EditDetailMeetUpActivity" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditQuestionRelateMajorChose"
+            android:name=".EditActivityRelated.EditQuestionRelateMajorChose"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity"
+            android:name=".ReadArticleRelated.ReadArticleActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.ReadAnswersActivity"
+            android:name=".AnswerReplyActivityRelated.ReadAnswersActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.AnswerReplyActivity"
+            android:name=".AnswerReplyActivityRelated.AnswerReplyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity"
+            android:name=".ReigisterCompleteInfoRelated.RealNameRegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.BirthdayRegisterActivity"
+            android:name=".ReigisterCompleteInfoRelated.BirthdayRegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.UniversityRegister"
+            android:name=".ReigisterCompleteInfoRelated.UniversityRegister"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.MainCourseRegister"
+            android:name=".ReigisterCompleteInfoRelated.MainCourseRegister"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.FriendMessagingRelated.FriendMessagingActivity"
+            android:name=".FriendMessagingRelated.FriendMessagingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.DailyQuestionsRelated.DailyQuestionArticleRead"
+            android:name=".DailyQuestionsRelated.DailyQuestionArticleRead"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.MainUserActivity.OutOfConnectionActivity"
+            android:name=".MainUserActivity.OutOfConnectionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.MainUserActivity.WelcomeScreenActivity"
+            android:name=".MainUserActivity.WelcomeScreenActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -116,35 +117,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.EnlargeImageActivity"
+            android:name=".ReadArticleRelated.EnlargeImageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.FriendRelatedActivity.SearchAndAddFriendActivity"
+            android:name=".FriendRelatedActivity.SearchAndAddFriendActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditPreviewActivity"
+            android:name=".EditActivityRelated.EditPreviewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.LoginRelated.FacebookRegister"
+            android:name=".LoginRelated.FacebookRegister"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.PersonAskQuestionRelated.PersonalAskQuestReplyActivity"
+            android:name=".PersonAskQuestionRelated.PersonalAskQuestReplyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.PersonAskQuestionRelated.PersonalAskReplyingActivity"
+            android:name=".PersonAskQuestionRelated.PersonalAskReplyingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.AppIntroRelated.AppIntroActivity"
+            android:name=".AppIntroRelated.AppIntroActivity"
             android:label="@string/appIntro"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.AppAnnouncementRelated.AppAnnouncementActivity"
+            android:name=".AppAnnouncementRelated.AppAnnouncementActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="taiwan.questfy.welsenho.questfy_tw.AppAnnouncementRelated.AppRulesActivity"
+            android:name=".AppAnnouncementRelated.AppRulesActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.CurrentDegreeChoose" />
-        <activity android:name="taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.EnlargeAnswerImageActivity"></activity>
+        <activity android:name=".ReigisterCompleteInfoRelated.CurrentDegreeChoose" />
+        <activity android:name=".AnswerReplyActivityRelated.EnlargeAnswerImageActivity" />
     </application>
 
 </manifest>

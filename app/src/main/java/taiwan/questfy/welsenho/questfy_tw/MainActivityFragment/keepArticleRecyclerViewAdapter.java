@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
 
@@ -26,10 +31,14 @@ public class keepArticleRecyclerViewAdapter extends RecyclerView.Adapter<keepArt
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private MainOnClickListener onClickListener;
     private EditRelatedMethod editRelatedMethod;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public keepArticleRecyclerViewAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
         this.arrayList = arrayList;
         this.context = context;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     public void setOnClickListener(MainOnClickListener onClickListener){
@@ -46,7 +55,7 @@ public class keepArticleRecyclerViewAdapter extends RecyclerView.Adapter<keepArt
     }
 
     @Override
-    public void onBindViewHolder(@NonNull keepArticlesViewHolder keepArticlesViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final keepArticlesViewHolder keepArticlesViewHolder, int i) {
         firebaseDatabaseGetSet = arrayList.get(i);
         editRelatedMethod = new EditRelatedMethod();
         keepArticlesViewHolder.txtUserName.setText(firebaseDatabaseGetSet.getUser_Name());
@@ -55,8 +64,22 @@ public class keepArticleRecyclerViewAdapter extends RecyclerView.Adapter<keepArt
         keepArticlesViewHolder.txtContent.setText(firebaseDatabaseGetSet.getContent());
         keepArticlesViewHolder.txtCourseName.setText(firebaseDatabaseGetSet.getMajors());
         if (firebaseDatabaseGetSet.getUser_Image() != null) {
-            Picasso.get().load(firebaseDatabaseGetSet.getUser_Image()).fit().into(keepArticlesViewHolder.circleImageView);
+
         }
+
+        databaseReference.child("Users_profile").child(firebaseDatabaseGetSet.getUserUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(keepArticlesViewHolder.circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         keepArticlesViewHolder.shineButton.setChecked(true);
 

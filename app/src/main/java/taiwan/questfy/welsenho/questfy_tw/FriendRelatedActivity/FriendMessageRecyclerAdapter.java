@@ -8,6 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,11 +27,15 @@ public class FriendMessageRecyclerAdapter extends RecyclerView.Adapter<FriendMes
     private Context context;
     private checkUserPorfile checkUserPorfile;
     public onMainFriendRequestClickListener listener;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public FriendMessageRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, checkUserPorfile checkUserPorfile){
         this.arrayList = arrayList;
         this.context = context;
         this.checkUserPorfile = checkUserPorfile;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     public void setOnMainClickListener(onMainFriendRequestClickListener listener){
@@ -42,7 +51,7 @@ public class FriendMessageRecyclerAdapter extends RecyclerView.Adapter<FriendMes
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendMessageViewHolder friendMessageViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final FriendMessageViewHolder friendMessageViewHolder, int i) {
         FirebaseDatabaseGetSet getSet = arrayList.get(i);
         friendMessageViewHolder.txtUserName.setText(getSet.getFriendName());
         if (getSet.getLatestMessage() != null) {
@@ -54,6 +63,20 @@ public class FriendMessageRecyclerAdapter extends RecyclerView.Adapter<FriendMes
         if (getSet.getFriendImage() != null) {
             Picasso.get().load(getSet.getFriendImage()).fit().into(friendMessageViewHolder.circleImageView);
         }
+
+        databaseReference.child("Users_profile").child(getSet.getFriendUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(friendMessageViewHolder.circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

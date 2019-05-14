@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,10 +29,14 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
     private Context context;
     private MainOnClickListener mainOnClickListener;
     private EditRelatedMethod editRelatedMethod;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public list_article_recyclerView_adapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     @NonNull
@@ -39,9 +48,9 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         editRelatedMethod = new EditRelatedMethod();
-        FirebaseDatabaseGetSet getSet = arrayList.get(i);
+        final FirebaseDatabaseGetSet getSet = arrayList.get(i);
 
         viewHolder.txtUserName.setText(getSet.getUser_Name());
         viewHolder.txtTitle.setText(getSet.getTitle());
@@ -61,7 +70,20 @@ public class list_article_recyclerView_adapter extends RecyclerView.Adapter<list
         } else {
             viewHolder.txtAnserCount.setText(String.valueOf(0));
         }
-        Picasso.get().load(getSet.getUser_Image()).fit().into(viewHolder.circleImageViewUserImage);
+        databaseReference.child("Users_profile").child(getSet.getUserUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(viewHolder.circleImageViewUserImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

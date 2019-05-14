@@ -99,6 +99,27 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
             }
         });
 
+        preTermOfAgreements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                String url = "https://welsen9595.wixsite.com/questfyprivacypolicy";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                return true;
+            }
+        });
+
+        preFacebookPage.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getContext(), "臉書專頁製作中，🈲️請期待", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        preInviteFriend.setVisible(false);
+
 
 
 

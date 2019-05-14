@@ -171,9 +171,6 @@ public class ReadArticleActivity extends AppCompatActivity {
                     createReportDialog();
                 }
                 break;
-            case R.id.read_article_share:
-                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

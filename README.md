@@ -44,6 +44,8 @@ Questfy-TW 0.0.5 2019/4/28(First Alpha test 0.0.6, Change pakage name from com.e
 
 Questfy-TW 0.0.6 2019/5/10(Updated in AnsweredHistory, UserFollowerCheck & AskedQuestion activty)
 
+Questfy_TW 0.0.6 2019/5/14(修改FriendList circleImage View, KeepArticle.Activity circleImageView, MyOwnPost.Activity circleImageView, UserFollwers.fragment circleImage, FriendRequest.fragment circleImageView使用者圖片自動更新載入方法)
+
 
 
 

@@ -10,6 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,11 +29,15 @@ public class FriendRequestRecyclerAdapter extends RecyclerView.Adapter<FriendReq
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private Context context;
     private userImageClick userImageClick;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public FriendRequestRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, userImageClick userImageClick){
         this.arrayList = arrayList;
         this.context = context;
         this.userImageClick = userImageClick;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     public void setOnMainClickListener(onMainFriendRequestClickListener listener){
@@ -45,12 +54,23 @@ public class FriendRequestRecyclerAdapter extends RecyclerView.Adapter<FriendReq
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FiriendRequestViewHolder firiendRequestViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final FiriendRequestViewHolder firiendRequestViewHolder, int i) {
 
-        FirebaseDatabaseGetSet getSet = arrayList.get(i);
+        final FirebaseDatabaseGetSet getSet = arrayList.get(i);
         firiendRequestViewHolder.txtUserName.setText(getSet.getRequestName());
-        Picasso.get().load(getSet.getRequestUserImage()).fit().into(firiendRequestViewHolder.circleImageView);
+        databaseReference.child("Users_profile").child(getSet.getSenderUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(firiendRequestViewHolder.circleImageView);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
