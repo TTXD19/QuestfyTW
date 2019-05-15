@@ -462,21 +462,6 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
         });
     }
 
-    /*
-    private void setRecyclerView(){
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-        adapter.setOnMainClickListener(new MainOnClickListener() {
-            @Override
-            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                Intent intent = new Intent(OtherUserProfileActivity.this, ReadArticleActivity.class);
-                intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
-                startActivity(intent);
-            }
-        });
-    }*/
-
     private void followUser() {
         HashMap<String, Object> followBy = new HashMap<>();
         followBy.put("userUid", firebaseUser.getUid());
@@ -656,14 +641,15 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OtherUserProfileActivity.this, "登入享有更多功能", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherUserProfileActivity.this, "登入即可追蹤這位使用者", Toast.LENGTH_SHORT).show();
             }
         });
 
+        btnAddFriend.setText(R.string.add_friend);
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OtherUserProfileActivity.this, "登入享有更多功能", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherUserProfileActivity.this, "登入即可加入好友", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -671,7 +657,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
         btnSendMessageQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OtherUserProfileActivity.this, "登入享有更多功能", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherUserProfileActivity.this, "登入即可詢問這位使用者您的問題", Toast.LENGTH_SHORT).show();
 
             }
         });

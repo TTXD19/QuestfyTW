@@ -163,6 +163,7 @@ public class KeepArticlesFragment extends Fragment {
                     recyclerView.setVisibility(View.GONE);
                     txtNoArticlesKeep.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
 

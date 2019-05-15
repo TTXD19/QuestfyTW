@@ -55,7 +55,6 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
             for (int i = 0; i < size; i++) {
                 arrayList.remove(0);
             }
-
             notifyItemRangeRemoved(0, size);
         }
     }
@@ -95,7 +94,7 @@ public class NewArticleListRecyclerAdapter extends RecyclerView.Adapter<NewArtic
             viewHolder.txtAnserCount.setText(String.valueOf(0));
         }
 
-        databaseReference.child("Users_profile").child(getSet.getUserUid()).child("User_image_uri").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users_profile").child(getSet.getUserUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){

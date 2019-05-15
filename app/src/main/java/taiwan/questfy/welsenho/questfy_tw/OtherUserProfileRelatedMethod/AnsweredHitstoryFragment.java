@@ -26,8 +26,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.EnlargeAnswerImageActivity;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.R;
+import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.EnlargeImageActivity;
 import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 
 
@@ -113,29 +115,39 @@ public class AnsweredHitstoryFragment extends Fragment {
                 intent.putExtra("ArticleID", arrayList.get(position).getArticle_ID());
                 startActivity(intent);
             }
+
+            @Override
+            public void ImageClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(getContext(), EnlargeAnswerImageActivity.class);
+                intent.putExtra("imageUri", arrayList.get(position).getEditInitImageUploadViewUri());
+                startActivity(intent);
+            }
         });
 
     }
 
     private void getFirebaseData(){
-        databaseReference.child("UserArticleAnswers").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot DS:dataSnapshot.getChildren()){
-                        firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                        arrayList.add(firebaseDatabaseGetSet);
+            databaseReference.child("UserArticleAnswers").child(otherUserUid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot DS : dataSnapshot.getChildren()) {
+                            firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                            arrayList.add(firebaseDatabaseGetSet);
+                        }
+                        txtNoAnswered.setVisibility(View.GONE);
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        txtNoAnswered.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                     }
-                    txtNoAnswered.setVisibility(View.GONE);
-                    recyclerView.setAdapter(adapter);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
     }
 
     /**

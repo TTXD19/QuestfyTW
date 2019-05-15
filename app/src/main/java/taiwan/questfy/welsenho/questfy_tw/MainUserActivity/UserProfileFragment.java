@@ -193,6 +193,7 @@ public class UserProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onUserImageChange();
+        void reCertificate();
     }
 
     @Override
@@ -227,7 +228,14 @@ public class UserProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseUser.reload();
+        listener.reCertificate();
+    }
 
     private void onItemClick(){
         circleImageView.setOnClickListener(new View.OnClickListener() {
@@ -368,7 +376,7 @@ public class UserProfileFragment extends Fragment {
         if (firebaseUser.isEmailVerified()) {
             btnEmailCertifiacte.setText("信箱已認證\n" + firebaseUser.getEmail());
         }else {
-            Toast.makeText(getContext(), "如果Email已經驗證過，請關閉App在重開一次", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "如果Email已經驗證過，請關閉App在重開一次", Toast.LENGTH_SHORT).show();
             btnEmailCertifiacte.setText("信箱未認證(點擊認證)\n" + firebaseUser.getEmail());
             btnEmailCertifiacte.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -1,7 +1,9 @@
 package taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class ReadAnswersActivity extends AppCompatActivity {
@@ -83,6 +87,20 @@ public class ReadAnswersActivity extends AppCompatActivity {
                     intent.putExtra("Article_Title", Article_Title);
                     startActivity(intent);
                     finish();
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ReadAnswersActivity.this);
+                    builder.setMessage("登入即可回覆這篇問題").setPositiveButton("登入", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(ReadAnswersActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }).setNegativeButton("稍後登入", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
                 }
             }
         });

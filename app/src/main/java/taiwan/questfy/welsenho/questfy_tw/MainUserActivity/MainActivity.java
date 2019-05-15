@@ -524,6 +524,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         Picasso.get().load(firebaseUser.getPhotoUrl()).fit().into(circleImageView);
     }
 
+    @Override
+    public void reCertificate() {
+        InitUserPofile();
+    }
+
     public static class UserInfoNotComplete extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {

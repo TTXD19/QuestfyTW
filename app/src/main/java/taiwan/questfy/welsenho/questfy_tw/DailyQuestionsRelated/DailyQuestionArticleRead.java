@@ -1,9 +1,12 @@
 package taiwan.questfy.welsenho.questfy_tw.DailyQuestionsRelated;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -30,8 +33,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.ReadAnswersActivity;
 import taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class DailyQuestionArticleRead extends AppCompatActivity {
@@ -164,7 +169,19 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
                 if (firebaseUser != null) {
                     SendComment();
                 }else {
-                    Toast.makeText(DailyQuestionArticleRead.this, "登入以享有這項功能", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DailyQuestionArticleRead.this);
+                    builder.setMessage("登入即可回覆這篇文章").setPositiveButton("登入", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(DailyQuestionArticleRead.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }).setNegativeButton("稍後登入", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
                 }
             }
         });

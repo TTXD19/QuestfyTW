@@ -143,7 +143,7 @@ public class UserAskedQuestionsFragment extends Fragment {
 
 
     private void getUserArticlesData() {
-        databaseReference.child("Users_Question_Articles").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users_Question_Articles").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -162,6 +162,9 @@ public class UserAskedQuestionsFragment extends Fragment {
                     } else {
                         txtNoPost.setVisibility(View.GONE);
                     }
+                }else {
+                    progressBar.setVisibility(View.GONE);
+                    txtNoPost.setVisibility(View.VISIBLE);
                 }
             }
 

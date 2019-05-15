@@ -165,6 +165,10 @@ public class CheckFollowersFragment extends Fragment {
                     } else {
                         txtNoFollowers.setVisibility(View.GONE);
                     }
+                }else {
+                    progressBar.setVisibility(View.GONE);
+                    txtNoFollowers.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
             }
 

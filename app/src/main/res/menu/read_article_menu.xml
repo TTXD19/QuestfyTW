@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/read_article_report"
-        android:title="@string/report"
+        android:title="檢舉"
         app:showAsAction="never"/>
 
 </menu>

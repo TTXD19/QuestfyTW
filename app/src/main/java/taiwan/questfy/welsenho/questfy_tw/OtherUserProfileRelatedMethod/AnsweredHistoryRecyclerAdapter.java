@@ -56,6 +56,9 @@ public class AnsweredHistoryRecyclerAdapter extends RecyclerView.Adapter<Answere
         viewHolder.txtUserName.setText(firebaseDatabaseGetSet.getUserName());
         viewHolder.txtUploadDate.setText(firebaseDatabaseGetSet.getUpdateDate());
         viewHolder.txtTitle.setText(firebaseDatabaseGetSet.getTitle());
+        if (firebaseDatabaseGetSet.getEditInitImageUploadViewUri() != null){
+            Picasso.get().load(firebaseDatabaseGetSet.getEditInitImageUploadViewUri()).fit().into(viewHolder.imgAnsweredImage);
+        }
         databaseReference.child("Users_profile").child(firebaseDatabaseGetSet.getUserID()).child("User_image_uri").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -80,6 +83,7 @@ public class AnsweredHistoryRecyclerAdapter extends RecyclerView.Adapter<Answere
         private TextView txtTitle;
         private TextView txtUploadDate;
         private TextView txtArticlePreview;
+        private ImageView imgAnsweredImage;
         private CircleImageView circleImageViewUserImage;
 
 
@@ -91,6 +95,7 @@ public class AnsweredHistoryRecyclerAdapter extends RecyclerView.Adapter<Answere
             txtUploadDate = itemView.findViewById(R.id.answered_history_recycLayout_txtUploadData);
             txtUserName  = itemView.findViewById(R.id.answered_history_recycLayout_txtUserName);
             txtArticlePreview = itemView.findViewById(R.id.answered_history_recycLayout_txtArticlePreview);
+            imgAnsweredImage = itemView.findViewById(R.id.answered_history_recycLayout_imgAnsweredImage);
             circleImageViewUserImage = itemView.findViewById(R.id.answered_history_recycLayout_circleUserImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -102,10 +107,23 @@ public class AnsweredHistoryRecyclerAdapter extends RecyclerView.Adapter<Answere
                     }
                 }
             });
+
+            imgAnsweredImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION){
+                        itemClick.ImageClick(position, arrayList);
+                    }
+                }
+            });
+
+
         }
     }
 
     public interface ItemClick{
         void articleClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList);
+        void ImageClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 }

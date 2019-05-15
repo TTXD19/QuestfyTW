@@ -118,6 +118,24 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
             }
         });
 
+        preRegisterAccount.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+                return true;
+            }
+        });
+
+        preWhatisQuestfy.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getContext(), "網頁製作中，🈲️請期待", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         preInviteFriend.setVisible(false);
 
 
