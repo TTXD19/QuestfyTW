@@ -15,7 +15,8 @@ import com.google.firebase.auth.FirebaseUser;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
-public class AppIntroActivity extends AppIntro implements AppIntroFragment1.OnFragmentInteractionListener, AppIntroFragment2.OnFragmentInteractionListener, AppIntroFragment3.OnFragmentInteractionListener, AppIntroFragment4.OnFragmentInteractionListener{
+public class AppIntroActivity extends AppIntro implements AppIntroFragment1.OnFragmentInteractionListener, AppIntroFragment2.OnFragmentInteractionListener, AppIntroFragment3.OnFragmentInteractionListener, AppIntroFragment4.OnFragmentInteractionListener,
+AppIntroFragment5.OnFragmentInteractionListener{
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -28,6 +29,7 @@ public class AppIntroActivity extends AppIntro implements AppIntroFragment1.OnFr
         addSlide(new AppIntroFragment1());
         addSlide(new AppIntroFragment3());
         addSlide(new AppIntroFragment4());
+        addSlide(new AppIntroFragment5());
         addSlide(new AppIntroFragment2());
 
 

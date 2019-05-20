@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PersonAskQuestionRelated.PersonalAskToFragment">
+    tools:context=".PersonAskQuestionRelated.PersonalAskToFragment"
+    android:background="@color/FullWhite">
 
    <android.support.v7.widget.RecyclerView
        android:id="@+id/personal_ask_to_recyclerView"
@@ -21,7 +22,16 @@
        android:layout_centerInParent="true"
        android:textSize="18sp"
        android:textColor="@color/CatergoryDarkGrayText"
+       android:layout_below="@+id/personal_ask_to_imgNotLogin"
        />
+
+   <ImageView
+       android:id="@+id/personal_ask_to_imgNotLogin"
+       android:layout_width="300dp"
+       android:layout_height="300dp"
+       android:layout_centerInParent="true"
+       android:src="@drawable/not_login"
+       android:visibility="gone"/>
 
 
 </RelativeLayout>

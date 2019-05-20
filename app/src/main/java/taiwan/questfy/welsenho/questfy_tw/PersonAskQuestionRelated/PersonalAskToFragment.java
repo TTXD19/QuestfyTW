@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class PersonalAskToFragment extends Fragment {
 
     private View view;
     private TextView txtNoQuestion;
+    private ImageView imgNoLogin;
     private RecyclerView recyclerView;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private PersonalAskRecyclerAdapter adapter;
@@ -62,6 +64,7 @@ public class PersonalAskToFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_personal_ask_to, container, false);
         recyclerView = view.findViewById(R.id.personal_ask_to_recyclerView);
         txtNoQuestion = view.findViewById(R.id.personal_ask_to_txtNoPostArticles);
+        imgNoLogin = view.findViewById(R.id.personal_ask_to_imgNotLogin);
         InitItem();
         InitFirebase();
         InitRecyclerView();
@@ -77,6 +80,8 @@ public class PersonalAskToFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            imgNoLogin.setVisibility(View.VISIBLE);
         }else {
             getData();
         }

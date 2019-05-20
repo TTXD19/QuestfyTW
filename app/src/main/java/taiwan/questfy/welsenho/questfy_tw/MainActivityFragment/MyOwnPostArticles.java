@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class MyOwnPostArticles extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView txtNoPostArticles;
+    private ImageView imgNoLogin;
     private View view;
 
     private list_article_recyclerView_adapter adapter;
@@ -85,6 +87,8 @@ public class MyOwnPostArticles extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            imgNoLogin.setVisibility(View.VISIBLE);
         }
         return view;
     }
@@ -133,6 +137,7 @@ public class MyOwnPostArticles extends Fragment {
         recyclerView = view.findViewById(R.id.my_own_postArticle_recyclerView);
         progressBar = view.findViewById(R.id.my_own_postArticle_progressBar);
         txtNoPostArticles = view.findViewById(R.id.my_own_postArticle_txtNoPostArticles);
+        imgNoLogin = view.findViewById(R.id.my_own_postArticle_imgNotLogin);
         arrayList = new ArrayList<>();
         adapter = new list_article_recyclerView_adapter(arrayList, getContext());
     }

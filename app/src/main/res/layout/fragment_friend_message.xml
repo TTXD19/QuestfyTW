@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriendRelatedActivity.FriendMessageFragment">
+    tools:context=".FriendRelatedActivity.FriendMessageFragment"
+    android:background="@color/FullWhite">
 
     <ProgressBar
         android:id="@+id/friendMessageProgressBar"
@@ -40,6 +41,17 @@
         android:layout_centerInParent="true"
         android:text="尚未有任何訊息"
         android:textColor="@color/CatergoryDarkGrayText"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/friendMessageImgNotLogin"
+        android:layout_marginTop="10dp"/>
+
+
+    <ImageView
+        android:id="@+id/friendMessageImgNotLogin"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/not_login"
+        android:visibility="gone"/>
 
 </RelativeLayout>

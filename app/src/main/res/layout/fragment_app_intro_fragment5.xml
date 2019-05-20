@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AppIntroRelated.AppIntroFragment5"
+    android:background="@color/FullWhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+
+            <TextView
+                android:id="@+id/AppIntro_fragment5_txtShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:text="更可以Po上"
+                android:textColor="@color/LightMainOrange"
+                android:textSize="28sp" />
+
+            <ImageView
+                android:id="@+id/AppIntro_fragment5_imageView"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_below="@+id/AppIntro_fragment5_txtShow"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/mutliple_article"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AppIntro_fragment5_imageView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="任何你想問的問題"
+                android:textColor="@color/LightMainOrange"
+                android:textSize="28sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

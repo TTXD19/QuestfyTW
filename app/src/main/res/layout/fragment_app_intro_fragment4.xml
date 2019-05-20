@@ -25,14 +25,15 @@
                 android:layout_marginBottom="20dp"
                 android:text="也可以"
                 android:textColor="@color/LightMainOrange"
-                android:textSize="24sp" />
+                android:textSize="28sp" />
 
             <ImageView
                 android:id="@+id/AppIntro_fragment3_imageView"
-                android:layout_width="150dp"
+                android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_below="@+id/AppIntro_fragment4_txtShow"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/private_message"/>
 
 
             <TextView
@@ -44,7 +45,7 @@
                 android:layout_marginBottom="30dp"
                 android:text="擁有個人聊天室"
                 android:textColor="@color/LightMainOrange"
-                android:textSize="24sp" />
+                android:textSize="28sp" />
 
         </RelativeLayout>
 

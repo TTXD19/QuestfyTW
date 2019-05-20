@@ -53,6 +53,7 @@ import taiwan.questfy.welsenho.questfy_tw.R;
 public class ReadArticleActivity extends AppCompatActivity {
 
     private Boolean likePress;
+    private Boolean notification;
     private String Article_ID;
     private String otherUserUid;
     private String reportReason;
@@ -103,6 +104,9 @@ public class ReadArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_article);
 
         Article_ID = getIntent().getStringExtra("ArticleID");
+
+        notification = getIntent().getBooleanExtra("Notification", false);
+
         InitializeItem();
         ItemCLick();
 
@@ -152,7 +156,13 @@ public class ReadArticleActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        if (notification){
+            Intent intent = new Intent(ReadArticleActivity.this, MainActivity.class);
+            startActivity(intent);
+        }else {
+            onBackPressed();
+        }
+        finish();
         return true;
     }
 
@@ -650,7 +660,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         btnRequestMeet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ReadArticleActivity.this, "登入享有更多服務", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ReadArticleActivity.this, "需登入才能和其他人見面", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PersonAskQuestionRelated.PersonAskByFragment">
+    tools:context=".PersonAskQuestionRelated.PersonAskByFragment"
+    android:background="@color/FullWhite">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,7 +25,16 @@
             android:layout_centerInParent="true"
             android:text="尚未有人詢問您任何問題"
             android:textColor="@color/CatergoryDarkGrayText"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_below="@+id/personal_ask_by_imgNotLogin"/>
+
+        <ImageView
+            android:id="@+id/personal_ask_by_imgNotLogin"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/not_login"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

@@ -2,6 +2,7 @@ package taiwan.questfy.welsenho.questfy_tw.MainActivityFragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -38,6 +40,7 @@ public class UserFollowingInfoFragment extends Fragment {
     private TextView txtNoFollowingUsers;
     private RecyclerView recyclerView;
     private UserFollowingRecyclerAdapter adapter;
+    private ImageView imgNoLogin;
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -80,6 +83,8 @@ public class UserFollowingInfoFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            imgNoLogin.setVisibility(View.VISIBLE);
         }
         return view;
     }
@@ -109,6 +114,7 @@ public class UserFollowingInfoFragment extends Fragment {
     private void InitItem(){
         recyclerView = view.findViewById(R.id.user_following_info_recyclerView);
         txtNoFollowingUsers = view.findViewById(R.id.user_following_info_txtNoFollowingUsers);
+        imgNoLogin = view.findViewById(R.id.user_following_info_imgNotLogin);
         arrayList = new ArrayList<>();
         adapter = new UserFollowingRecyclerAdapter(arrayList, getContext(), new UserFollowingRecyclerAdapter.UserItemClick() {
             @Override

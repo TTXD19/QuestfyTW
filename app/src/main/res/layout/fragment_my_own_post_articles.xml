@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivityFragment.MyOwnPostArticles">
+    tools:context=".MainActivityFragment.MyOwnPostArticles"
+    android:background="@color/FullWhite">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_own_postArticle_recyclerView"
@@ -24,9 +25,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="尚未發表任何問題"
-        android:layout_centerInParent="true"
         android:textSize="18sp"
         android:textColor="@color/CatergoryDarkGrayText"
+        android:layout_below="@+id/my_own_postArticle_imgNotLogin"
+        android:layout_centerHorizontal="true"
         />
+
+    <ImageView
+        android:id="@+id/my_own_postArticle_imgNotLogin"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/not_login"
+        android:visibility="gone"/>
 
 </RelativeLayout>

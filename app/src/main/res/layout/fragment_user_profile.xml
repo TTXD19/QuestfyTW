@@ -15,9 +15,19 @@
         android:layout_height="wrap_content"
         android:text="註冊享有更多服務"
         android:textSize="18sp"
-        android:textColor="@color/com_facebook_blue"
+        android:textColor="@color/FullWhite"
         android:layout_centerInParent="true"
+        android:layout_below="@+id/user_profile_fm_imgNotLogin"
+        android:layout_marginTop="10dp"
         />
+
+    <ImageView
+        android:id="@+id/user_profile_fm_imgNotLogin"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/not_login_2"
+        android:visibility="gone"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

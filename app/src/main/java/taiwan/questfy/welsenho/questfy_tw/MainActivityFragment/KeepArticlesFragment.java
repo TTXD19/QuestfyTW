@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class KeepArticlesFragment extends Fragment {
     private ProgressBar progressBar;
     private View view;
     private TextView txtNoArticlesKeep;
+    private ImageView imgNoLogin;
     private keepArticleRecyclerViewAdapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -85,6 +87,8 @@ public class KeepArticlesFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            imgNoLogin.setVisibility(View.VISIBLE);
         }
         return view;
     }
@@ -112,6 +116,7 @@ public class KeepArticlesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.keep_article_recyclerView);
         progressBar = view.findViewById(R.id.keep_articles_progressBar);
         txtNoArticlesKeep = view.findViewById(R.id.keep_article_txtNoArticlesKeep);
+        imgNoLogin = view.findViewById(R.id.keep_article_imgNotLogin);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();

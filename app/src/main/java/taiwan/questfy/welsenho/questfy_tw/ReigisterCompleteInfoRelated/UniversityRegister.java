@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,7 @@ public class UniversityRegister extends AppCompatActivity {
 
     private Button btnPrevious;
     private RecyclerView recyclerView;
+    private TextView txtChooseInDegree;
     private EditText editSearchUniversity;
 
     private FirebaseAuth firebaseAuth;
@@ -75,6 +77,11 @@ public class UniversityRegister extends AppCompatActivity {
         btnPrevious = findViewById(R.id.university_register_btnPrevious);
         recyclerView = findViewById(R.id.university_register_recyclerView);
         editSearchUniversity = findViewById(R.id.universityName_register_editSearchUniversity);
+        txtChooseInDegree = findViewById(R.id.university_register_txtProcess);
+
+        if (currentDegree.equals("HighSchoolInfo")){
+            txtChooseInDegree.setText("請選擇您的高中");
+        }
 
         searchArrayList = new ArrayList<>();
         arrayList = new ArrayList<>();

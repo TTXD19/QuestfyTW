@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,9 +40,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import taiwan.questfy.welsenho.questfy_tw.DailyQuestionsRelated.MainDailyQuestionActivity;
@@ -49,6 +54,7 @@ import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.FriendRelatedActivity.FriendMessageFragment;
 import taiwan.questfy.welsenho.questfy_tw.FriendRelatedActivity.FriendRequestFragment;
 import taiwan.questfy.welsenho.questfy_tw.FriendRelatedActivity.MainFriendFragment;
+import taiwan.questfy.welsenho.questfy_tw.InternetConnectionDetect;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.SignUpMethod;
 import taiwan.questfy.welsenho.questfy_tw.MainActivityFragment.KeepArticlesFragment;
@@ -62,6 +68,7 @@ import taiwan.questfy.welsenho.questfy_tw.PersonAskQuestionRelated.PersonAskByFr
 import taiwan.questfy.welsenho.questfy_tw.PersonAskQuestionRelated.PersonakAskMainFragment;
 import taiwan.questfy.welsenho.questfy_tw.PersonAskQuestionRelated.PersonalAskToFragment;
 import taiwan.questfy.welsenho.questfy_tw.R;
+import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 import taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
 import taiwan.questfy.welsenho.questfy_tw.SettingPageRelated.SettingPageFragment;
 
@@ -76,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
     private String completeInfo = "False";
     private MenuItem menuItem;
     private int currentFilterPage;
+    private InternetConnectionDetect internetConnectionDetect;
 
     private TextView txtID;
     private TextView txtEmail;
@@ -137,9 +145,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
         mainActivityMethods = new MainActivityMethods();
         signUpMethod = new SignUpMethod();
+        internetConnectionDetect = new InternetConnectionDetect();
+
+        if (!internetConnectionDetect.isNetworkAvailable(getApplicationContext())){
+            Intent intent = new Intent(MainActivity.this, OutOfConnectionActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         InitFirebase();
-        if (firebaseUser != null) {
+        if (firebaseUser != null){
+            getTokenID();
             InitUserPofile();
         }else {
             InitGuestUser();
@@ -177,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
          */
         initializeArrayList();
         ItmeClick();
-
     }
 
     @Override
@@ -582,5 +597,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         latestArticleFragment.LoadQueryData(course);
         MainActivityTabFragment mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().getFragments().get(0);
         mainActivityTabFragment.changePage();
+    }
+
+    private void getTokenID(){
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TOKENFAILED", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("UserTokenID", token);
+                        databaseReference.child("Users_profile").child(firebaseUser.getUid()).updateChildren(hashMap);
+                        Log.d("USERCLOUDMESMAIN", token);
+                    }
+                });
     }
 }

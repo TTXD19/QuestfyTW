@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class FriendMessageFragment extends Fragment {
 
     private View view;
     private TextView txtNoMessage;
+    private ImageView imgNoLognin;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
@@ -91,6 +93,8 @@ public class FriendMessageFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            imgNoLognin.setVisibility(View.VISIBLE);
         }
         return view;
     }
@@ -136,6 +140,7 @@ public class FriendMessageFragment extends Fragment {
 
     private void InitItem() {
         txtNoMessage = view.findViewById(R.id.friendMessagetxtMessages);
+        imgNoLognin = view.findViewById(R.id.friendMessageImgNotLogin);
         recyclerView = view.findViewById(R.id.friendMessageRecyclerView);
         progressBar = view.findViewById(R.id.friendMessageProgressBar);
         btnAddFriend = view.findViewById(R.id.friendMessageBtnAddFriend);

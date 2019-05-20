@@ -75,6 +75,7 @@ public class UserProfileFragment extends Fragment {
     private TextView txtNotRegister;
     private TextView txtAddPhoto;
     private ImageView imgAddPhoto;
+    private ImageView imgNoLogin;
     private EditText editText;
     private ImageButton imageButtonSpeciality;
     private ImageButton imageButtonStatusMessage;
@@ -127,6 +128,7 @@ public class UserProfileFragment extends Fragment {
         progressBar = view.findViewById(R.id.user_profile_fm_progressBar);
         cardView = view.findViewById(R.id.user_profile_fm_cardView);
         txtNotRegister = view.findViewById(R.id.user_profile_fm_txtNotRegister);
+        imgNoLogin = view.findViewById(R.id.user_profile_fm_imgNotLogin);
 
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
@@ -156,6 +158,8 @@ public class UserProfileFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            imgNoLogin.setVisibility(View.VISIBLE);
         }
 
 
@@ -233,8 +237,10 @@ public class UserProfileFragment extends Fragment {
         super.onResume();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseUser.reload();
-        listener.reCertificate();
+        if (firebaseUser != null) {
+            firebaseUser.reload();
+            listener.reCertificate();
+        }
     }
 
     private void onItemClick(){

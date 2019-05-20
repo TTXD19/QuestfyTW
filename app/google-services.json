@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "31006726738-m5n4hg3kdvb1j97nav8ehsj32u6e06g4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "taiwan.questfy.welsenho.questfy_tw",
+            "certificate_hash": "1bb99231de2800b331939781d9032001535ed9aa"
+          }
+        },
+        {
           "client_id": "31006726738-ltfg0n8dfqr12r8cu627is6f1bvmu2n5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
