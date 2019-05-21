@@ -108,11 +108,22 @@ public class readAnswersRecyclerViewAdapter extends RecyclerView.Adapter<readAns
                     }
                 }
             });
+
+            userCircleImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION){
+                        answerImage.getUserProfile(arrayList, position);
+                    }
+                }
+            });
         }
     }
 
     public interface AnswerImage{
         void getImage(String imageUri);
+        void getUserProfile(ArrayList<FirebaseDatabaseGetSet> arrayList, int position);
     }
 
 

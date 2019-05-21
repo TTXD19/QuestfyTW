@@ -36,7 +36,6 @@ public class UserFirebaseMessagingService extends FirebaseMessagingService {
         //Log.d("USERCLOUDMESSAGING", remoteMessage.getData().get("ArticleID"));
         //Log.d("USERCLOUDMESSAGING", remoteMessage.getData().get("UserUid"));
 
-
         int requestID = (int) System.currentTimeMillis();
         //Detect whether notify with a article ID or not
         Intent intent;
@@ -51,9 +50,9 @@ public class UserFirebaseMessagingService extends FirebaseMessagingService {
 
 
         Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle("Questfy台灣")
+                .setContentTitle(remoteMessage.getNotification().getTitle())
                 .setContentText(remoteMessage.getNotification().getBody())
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.questfy_logo_style_5_4_round))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.questfy_logo_style_5_4))
                 .setSmallIcon(R.drawable.edit_pencil)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".AnswerReplyActivityRelated.ReadAnswersActivity">
 
+    <TextView
+        android:id="@+id/read_answers_txtNoAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="尚未有答案\n來成為第一個分享答案的人吧 !"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/FullBlack"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/read_answers_progressBar"
         android:layout_width="wrap_content"
@@ -23,7 +33,6 @@
 
 
     </android.support.v7.widget.Toolbar>
-
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/read_answers_scrollView"

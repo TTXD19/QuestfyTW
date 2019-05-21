@@ -475,7 +475,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
         if (firebaseDatabaseGetSet.getSchoolName() != null || !firebaseDatabaseGetSet.getSchoolName().isEmpty()) {
             following.put("schoolName", firebaseDatabaseGetSet.getSchoolName());
         } else {
-            following.put("schoolName", "未註冊");
+            following.put("schoolName", "未註冊大學");
         }
         following.put("User_image_uri", firebaseDatabaseGetSet.getUser_image_uri());
 

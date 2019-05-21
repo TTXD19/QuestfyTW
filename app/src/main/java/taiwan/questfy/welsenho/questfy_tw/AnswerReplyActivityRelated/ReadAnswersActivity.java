@@ -3,6 +3,7 @@ package taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,17 +31,20 @@ import java.util.ArrayList;
 
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
+import taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class ReadAnswersActivity extends AppCompatActivity {
 
     private TextView txtAnswerTitle;
+    private TextView txtNoAnswers;
     private RecyclerView recyclerView;
     private RelativeLayout relayReplyAnswer;
     private ProgressBar progressBar;
     private Toolbar toolbar;
 
     private readAnswersRecyclerViewAdapter adapter;
+    private NestedScrollView nestedScrollView;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -108,10 +112,12 @@ public class ReadAnswersActivity extends AppCompatActivity {
 
     private void IninItem() {
         txtAnswerTitle = findViewById(R.id.read_answers_txtTitle);
+        txtNoAnswers = findViewById(R.id.read_answers_txtNoAnswers);
         relayReplyAnswer = findViewById(R.id.read_answers_relay_2);
         recyclerView = findViewById(R.id.read_answers_recyclerView);
         progressBar = findViewById(R.id.read_answers_progressBar);
         toolbar = findViewById(R.id.read_answers_toolBar);
+        nestedScrollView = findViewById(R.id.read_answers_scrollView);
         txtAnswerTitle.setText(Article_Title);
         arrayList = new ArrayList<>();
         adapter = new readAnswersRecyclerViewAdapter(arrayList, getApplicationContext(), new readAnswersRecyclerViewAdapter.AnswerImage() {
@@ -119,6 +125,13 @@ public class ReadAnswersActivity extends AppCompatActivity {
             public void getImage(String imageUri) {
                 Intent intent = new Intent(ReadAnswersActivity.this, EnlargeAnswerImageActivity.class);
                 intent.putExtra("imageUri", imageUri);
+                startActivity(intent);
+            }
+
+            @Override
+            public void getUserProfile(ArrayList<FirebaseDatabaseGetSet> arrayList, int position) {
+                Intent intent = new Intent(ReadAnswersActivity.this, OtherUserProfileActivity.class);
+                intent.putExtra("otherUserUid", arrayList.get(position).getUserID());
                 startActivity(intent);
             }
         });
@@ -140,7 +153,7 @@ public class ReadAnswersActivity extends AppCompatActivity {
     }
 
     private void LoadDateFromFirebase() {
-        databaseReference.child("ArticleAnswers").child(Article_ID).addValueEventListener(new ValueEventListener() {
+        databaseReference.child("ArticleAnswers").child(Article_ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -153,6 +166,9 @@ public class ReadAnswersActivity extends AppCompatActivity {
                     }
                 } else {
                     progressBar.setVisibility(View.GONE);
+                    txtNoAnswers.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    nestedScrollView.setVisibility(View.GONE);
                 }
             }
 
