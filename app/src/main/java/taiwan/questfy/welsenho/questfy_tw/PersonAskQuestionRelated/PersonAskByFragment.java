@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -28,11 +29,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.EnlargeAnswerImageActivity;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
+import taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class PersonAskByFragment extends Fragment {
+
+    private String AskerUid;
 
     private View view;
     private TextView txtNoQuestion;
@@ -41,6 +46,7 @@ public class PersonAskByFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private PersonalAskRecyclerAdapter adapter;
+    private ProgressBar progressBar;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -125,6 +131,7 @@ public class PersonAskByFragment extends Fragment {
         recyclerView = view.findViewById(R.id.personal_ask_by_recyclerView);
         txtNoQuestion = view.findViewById(R.id.personal_ask_by_txtNoPostArticles);
         imgNoLogin = view.findViewById(R.id.personal_ask_by_imgNotLogin);
+        progressBar = view.findViewById(R.id.personal_ask_by_progrssBar);
         arrayList = new ArrayList<>();
         adapter = new PersonalAskRecyclerAdapter(arrayList, getContext(), new PersonalAskRecyclerAdapter.getQuestionUid() {
             @Override
@@ -133,6 +140,21 @@ public class PersonAskByFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PersonalAskQuestReplyActivity.class);
                 intent.putExtra("questionUid", questionUid);
                 intent.putExtra("questioType", "AskBy");
+                intent.putExtra("AskerUid", arrayList.get(position).getAskerUid());
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnImageClick(String imgUrl) {
+                Intent intent = new Intent(getContext(), EnlargeAnswerImageActivity.class);
+                intent.putExtra("imageUri", imgUrl);
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnUserImageClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(getContext(), OtherUserProfileActivity.class);
+                intent.putExtra("otherUserUid", arrayList.get(position).getAskerUid());
                 startActivity(intent);
             }
         });
@@ -164,9 +186,12 @@ public class PersonAskByFragment extends Fragment {
                         arrayList.add(getSet);
                         recyclerView.setAdapter(adapter);
                     }
+
+                    progressBar.setVisibility(View.GONE);
                 }else {
                     recyclerView.setVisibility(View.GONE);
                     txtNoQuestion.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

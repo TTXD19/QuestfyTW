@@ -31,10 +31,12 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
     private FirebaseUser firebaseUser;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private Context context;
+    private ImageClick imageClick;
 
-    public FriendMessagingRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
+    public FriendMessagingRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, ImageClick imageClick){
         this.arrayList = arrayList;
         this.context = context;
+        this.imageClick = imageClick;
     }
 
     @NonNull
@@ -73,13 +75,13 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
                     friendMessagingViewHolder.txtRight.setText(getSet.getMessage());
                     break;
                 case MESSAGE_TYPE_LEFT_PICTURE:
-                    Picasso.get().load(getSet.getMessage()).resize(200,200).into(friendMessagingViewHolder.imgLeft);
+                    Picasso.get().load(getSet.getMessage()).fit().into(friendMessagingViewHolder.imgLeft);
                     if (getSet.getMessageUserImage() != null) {
                         Picasso.get().load(getSet.getMessageUserImage()).fit().into(friendMessagingViewHolder.userImage);
                     }
                     break;
                 case MESSAGE_TYPE_RIGHT_PICTURE:
-                    Picasso.get().load(getSet.getMessage()).resize(200,200).into(friendMessagingViewHolder.imgRight);
+                    Picasso.get().load(getSet.getMessage()).fit().into(friendMessagingViewHolder.imgRight);
                     break;
             }
     }
@@ -98,7 +100,7 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
         private ImageView imgLeft;
         private ImageView imgRight;
 
-        public FriendMessagingViewHolder(@NonNull View itemView) {
+        public FriendMessagingViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             txtLeft = itemView.findViewById(R.id.friendMessagingLeftText);
@@ -107,7 +109,23 @@ public class FriendMessagingRecyclerAdapter extends RecyclerView.Adapter<FriendM
             imgLeft = itemView.findViewById(R.id.friendMessagingLeftImage);
             imgRight = itemView.findViewById(R.id.friendMessagingRightImage);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getItemViewType() == MESSAGE_TYPE_LEFT_PICTURE || getItemViewType() == MESSAGE_TYPE_RIGHT_PICTURE){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            imageClick.onImageClick(position, arrayList);
+                        }
+                    }
+                }
+            });
         }
+    }
+
+
+    public interface ImageClick{
+        void onImageClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 
     @Override

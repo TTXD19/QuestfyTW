@@ -10,10 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.R;
@@ -24,10 +30,14 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
     private Context context;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private EditRelatedMethod editRelatedMethod;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     public PersonalAskQuestReplyRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
         this.arrayList = arrayList;
         this.context = context;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     @NonNull
@@ -39,7 +49,7 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
     }
 
     @Override
-    public void onBindViewHolder(@NonNull personQuestViewHolder personQuestViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final personQuestViewHolder personQuestViewHolder, int i) {
         editRelatedMethod = new EditRelatedMethod();
         firebaseDatabaseGetSet = arrayList.get(i);
         String title = "來自" + firebaseDatabaseGetSet.getUser_Name() + "的回覆";
@@ -51,6 +61,20 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
         }else {
             personQuestViewHolder.imgAsk.setVisibility(View.GONE);
         }
+
+        databaseReference.child("Users_profile").child(firebaseDatabaseGetSet.getUserUid()).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(personQuestViewHolder.circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -64,6 +88,7 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
         private TextView txtAskContent;
         private TextView txtAskDate;
         private ImageView imgAsk;
+        private CircleImageView circleImageView;
 
         public personQuestViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +97,7 @@ public class PersonalAskQuestReplyRecyclerAdapter extends RecyclerView.Adapter<P
             txtAskContent = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_txtQuestionContent);
             txtAskDate = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_txtUserAskDate);
             imgAsk = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_imgQuestionImage);
+            circleImageView = itemView.findViewById(R.id.personal_ask_quest_reply_recycler_imgUserImage);
         }
     }
 }

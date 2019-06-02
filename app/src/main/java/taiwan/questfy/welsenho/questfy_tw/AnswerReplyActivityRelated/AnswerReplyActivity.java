@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -143,7 +145,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
                         finish();
                     }else {
                         progressDialog.dismiss();
-                        buildDialouge("Error", "Sorry we're currently having a trouble, please try again later", "OK");
+                        buildDialouge("網路錯誤", "請稍候在試一次", "OK");
                     }
                 }
             });
@@ -152,7 +154,7 @@ public class AnswerReplyActivity extends AppCompatActivity{
             databaseReference.child("UserArticleAnswers").child(firebaseUser.getUid()).child(randomID).updateChildren(hashMap);
         }else {
             progressDialog.dismiss();
-            buildDialouge("Answer Error", "Answer length must be over 15", "OK");
+            buildDialouge("喔喔 ！！！", "答案回覆需超過15字元", "OK");
         }
 
     }
@@ -177,6 +179,17 @@ public class AnswerReplyActivity extends AppCompatActivity{
                         }
                     });
                 }
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                progressDialog.setMessage("圖片上傳進度" + (int)progress + "%");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AnswerReplyActivity.this, "上傳失敗，請在試一次", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -211,12 +224,12 @@ public class AnswerReplyActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if (checkConnetivity()) {
-                    progressDialog.setTitle("Updating your answer");
-                    progressDialog.setMessage("Please hold on for a moment, we're updating your answer.......");
+                    progressDialog.setTitle("正在更新您的回覆中");
+                    progressDialog.setMessage("請稍候，更新即將完成");
                     progressDialog.show();
                     UploadFirebase();
                 }else {
-                    buildDialouge("Network error", "Please turn on your network connection", "OK");
+                    buildDialouge("網路錯誤", "請稍候在是一次", "OK");
                 }
             }
         });

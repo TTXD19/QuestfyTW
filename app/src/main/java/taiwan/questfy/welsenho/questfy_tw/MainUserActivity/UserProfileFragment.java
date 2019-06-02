@@ -53,6 +53,8 @@ import taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
+import taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.RealNameRegisterActivity;
+import taiwan.questfy.welsenho.questfy_tw.ReigisterCompleteInfoRelated.UniversityRegister;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -79,6 +81,8 @@ public class UserProfileFragment extends Fragment {
     private EditText editText;
     private ImageButton imageButtonSpeciality;
     private ImageButton imageButtonStatusMessage;
+    private ImageButton imageButtonSchoolName;
+    private ImageButton imageButtonMajor;
     private Dialog dialog;
     private Button btnEmailCertifiacte;
     private CircleImageView circleImageView;
@@ -123,6 +127,8 @@ public class UserProfileFragment extends Fragment {
         txtStatusMessage = view.findViewById(R.id.user_profile_fm_txt_customMessage);
         imageButtonSpeciality = view.findViewById(R.id.user_profile_fm_imgBtn_editSpeciality);
         imageButtonStatusMessage = view.findViewById(R.id.user_profile_fm_imgBtn_editStatusMessage);
+        imageButtonSchoolName = view.findViewById(R.id.user_profile_fm_imgBtn_schoolName);
+        imageButtonMajor = view.findViewById(R.id.user_profile_fm_imgBtn_schoolMajor);
         btnEmailCertifiacte = view.findViewById(R.id.user_profile_fm_btn_emailCertificate);
         circleImageView = view.findViewById(R.id.user_profile_fm_circleImage_userImage);
         progressBar = view.findViewById(R.id.user_profile_fm_progressBar);
@@ -254,14 +260,30 @@ public class UserProfileFragment extends Fragment {
         imageButtonSpeciality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopUpMessage(getString(R.string.speciality));
+                showPopUpMessage(getString(R.string.speciality), txtSpeciality.getText().toString());
             }
         });
 
         imageButtonStatusMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopUpMessage(getString(R.string.status_message));
+                showPopUpMessage(getString(R.string.status_message), txtStatusMessage.getText().toString());
+            }
+        });
+
+        imageButtonSchoolName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), RealNameRegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imageButtonMajor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), RealNameRegisterActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -273,7 +295,7 @@ public class UserProfileFragment extends Fragment {
         });
     }
 
-    private void showPopUpMessage(final String type){
+    private void showPopUpMessage(final String type, String message){
         dialog.setContentView(R.layout.user_profile_custom_message_editing);
         txtPopTitle = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtTitle);
         txtCount = dialog.findViewById(R.id.pop_up_userProfile_customMessage_txtCount);
@@ -284,6 +306,7 @@ public class UserProfileFragment extends Fragment {
         imgAddPhoto = dialog.findViewById(R.id.pop_up_userProfile_customMessage_addPicture);
 
         txtPopTitle.setText(type);
+        editText.setText(message);
         txtAddPhoto.setVisibility(View.GONE);
         imgAddPhoto.setVisibility(View.GONE);
         dialog.show();

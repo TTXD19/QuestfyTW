@@ -14,37 +14,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/pesonal_ask_recycler_imgUserImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/user_default_image"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"/>
+
         <TextView
             android:id="@+id/pesonal_ask_recycler_txtUserFrom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Question come from user"
             android:textColor="@color/FullBlack"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="18dp"
+            android:textSize="18sp"
+            android:layout_toEndOf="@+id/pesonal_ask_recycler_imgUserImage"/>
 
         <TextView
             android:id="@+id/pesonal_ask_recycler_txtQuestionContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="25dp"
             android:text="Question content"
-            android:layout_below="@+id/pesonal_ask_recycler_txtUserFrom"
+            android:layout_below="@+id/pesonal_ask_recycler_imgUserImage"
             android:textSize="18sp"
-            android:textColor="@color/CatergoryDarkGrayText"/>
+            android:textColor="@color/CatergoryDarkGrayText"
+            android:layout_alignStart="@+id/pesonal_ask_recycler_imgUserImage"/>
         
         <ImageView
             android:id="@+id/pesonal_ask_recycler_imgQuestionImage"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp"
             android:layout_below="@+id/pesonal_ask_recycler_txtQuestionContent"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="4dp"
+            android:layout_alignStart="@+id/pesonal_ask_recycler_imgUserImage"
             />
 
         <TextView

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,13 +25,17 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
+import taiwan.questfy.welsenho.questfy_tw.MainUserActivity.MainActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class PersonalAskQuestReplyActivity extends AppCompatActivity {
 
     private String questionUid;
     private String questioType;
+    private String AskerUid;
+    private boolean notificationOpen = false;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
     private PersonalAskQuestReplyRecyclerAdapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
@@ -42,6 +47,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
     private TextView txtSolveIt;
     private TextView txtMessagesCount;
     private ImageView imgContent;
+    private CircleImageView circleImageView;
     private Button btnClickReply;
     private RecyclerView recyclerView;
 
@@ -57,6 +63,9 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
 
         questionUid = getIntent().getStringExtra("questionUid");
         questioType = getIntent().getStringExtra("questioType");
+        AskerUid = getIntent().getStringExtra("AskerUid");
+        notificationOpen = getIntent().getBooleanExtra("notificationOpen", false);
+
         InitFirebase();
         InitItem();
         ItemClick();
@@ -76,6 +85,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
         imgContent = findViewById(R.id.person_ask_quest_reply_imgQuestionImage);
         btnClickReply = findViewById(R.id.person_ask_quest_reply_btnReply);
         recyclerView = findViewById(R.id.person_ask_quest_reply_recyclerView);
+        circleImageView = findViewById(R.id.person_ask_quest_reply_imgUserImage);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,7 +105,13 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (notificationOpen){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }else {
+            finish();
+        }
         super.onBackPressed();
     }
 
@@ -106,6 +122,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
                 Intent intent = new Intent(PersonalAskQuestReplyActivity.this, PersonalAskReplyingActivity.class);
                 intent.putExtra("questionUid", questionUid);
                 intent.putExtra("questioType", questioType);
+                intent.putExtra("AskerUid", AskerUid);
                 startActivity(intent);
                 finish();
             }
@@ -131,6 +148,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
                         txtContent.setText(firebaseDatabaseGetSet.getAskQuestionContent());
                         txtUploadData.setText(firebaseDatabaseGetSet.getAskDate());
                         Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(imgContent);
+                        loadImage(firebaseDatabaseGetSet.getAskerUid());
                     }
                 }
 
@@ -150,6 +168,7 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
                         txtContent.setText(firebaseDatabaseGetSet.getAskQuestionContent());
                         txtUploadData.setText(firebaseDatabaseGetSet.getAskDate());
                         Picasso.get().load(firebaseDatabaseGetSet.getQuestionTumbnail()).fit().into(imgContent);
+                        loadImage(firebaseDatabaseGetSet.getAnswerUid());
                     }
                 }
 
@@ -159,6 +178,23 @@ public class PersonalAskQuestReplyActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+
+    private void loadImage(String userUid){
+        databaseReference.child("Users_profile").child(userUid).child("User_image_uri").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Picasso.get().load(dataSnapshot.getValue().toString()).fit().into(circleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getMessahgeCount(){

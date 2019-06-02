@@ -2,341 +2,345 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/read_article_relayMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReadArticleRelated.ReadArticleActivity">
+    tools:context=".ReadArticleRelated.ReadArticleActivity"
+    android:background="@color/FullWhite">
 
-    <ProgressBar
-        android:id="@+id/read_article_progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/read_article_toolbar"
+    <RelativeLayout
+        android:id="@+id/read_article_relayArticle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/LightMainOrange"
-        app:title="    "
-        app:titleTextColor="@color/FullWhite"
-        android:theme="@style/BaseTheme">
+        android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/read_article_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-    </android.support.v7.widget.Toolbar>
-
-    <ScrollView
-        android:id="@+id/read_article_scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/read_article_LinearBot"
-        android:layout_below="@+id/read_article_toolbar">
-
-        <RelativeLayout
-            android:id="@+id/read_article_relaytiveTop"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/read_article_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingBottom="10dp">
+            android:background="@color/LightMainOrange"
+            android:theme="@style/BaseTheme"
+            app:title="    "
+            app:titleTextColor="@color/FullWhite">
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <ScrollView
+            android:id="@+id/read_article_scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/read_article_LinearBot"
+            android:layout_below="@+id/read_article_toolbar">
 
             <RelativeLayout
-                android:id="@+id/read_article_relaytiveTopUserInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/read_article_circle_image_user"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/user_default_image" />
-
-                <TextView
-                    android:id="@+id/read_article_txt_userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/read_article_circle_image_user"
-                    android:layout_toEndOf="@+id/read_article_circle_image_user"
-                    android:layout_toRightOf="@+id/read_article_circle_image_user"
-                    android:text="Bred Pete"
-                    android:textColor="@color/FullBlack"
-                    android:textSize="18sp"
-                    android:maxLength="10"/>
-
-                <TextView
-                    android:id="@+id/read_article_txt_UploadDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/read_article_circle_image_user"
-                    android:layout_toEndOf="@+id/read_article_circle_image_user"
-                    android:layout_toRightOf="@+id/read_article_circle_image_user"
-                    android:text="Upload Date"
-                    android:textColor="@color/DateBlue"
-                    android:textSize="14sp" />
-
-                <com.sackcentury.shinebuttonlib.ShineButton
-                    android:id="@+id/read_article_shineBtn_heart"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@android:color/darker_gray"
-                    app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="#FF6666"
-                    app:allow_random_color="false"
-                    app:enable_flashing="false"
-                    app:big_shine_color="#FF6666"
-                    app:click_animation_duration="200"
-                    app:shine_animation_duration="1500"
-                    app:shine_turn_angle="10"
-                    app:small_shine_offset_angle="20"
-                    app:small_shine_color="#CC9999"
-                    app:shine_count="8"
-                    app:siShape="@raw/heart"
-                    android:layout_marginStart="20dp"
-                    android:layout_toStartOf="@+id/read_article_txtKeep"
-                    android:layout_marginEnd="10dp"
-                    android:layout_above="@+id/read_article_txt_UploadDate"
-                    android:layout_marginBottom="2dp"/>
-
-                <TextView
-                    android:id="@+id/read_article_txtKeep"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/keep"
-                    android:layout_toStartOf="@+id/read_article_shineBtn_like"
-                    android:textSize="16sp"
-                    android:textColor="@color/FullBlack"
-                    android:layout_marginTop="5dp"
-                    android:layout_above="@+id/read_article_txt_UploadDate"
-                    android:layout_marginBottom="2dp"/>
-
-                <com.sackcentury.shinebuttonlib.ShineButton
-                    android:id="@+id/read_article_shineBtn_like"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:color/darker_gray"
-                    app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="@color/LightMainOrange"
-                    app:allow_random_color="false"
-                    app:enable_flashing="false"
-                    app:big_shine_color="@color/messageLightBlue"
-                    app:click_animation_duration="200"
-                    app:shine_animation_duration="1500"
-                    app:shine_turn_angle="10"
-                    app:small_shine_offset_angle="20"
-                    app:small_shine_color="#CC9999"
-                    app:shine_count="8"
-                    app:siShape="@raw/like"
-                    android:layout_toStartOf="@+id/read_article_txtLikeCount"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_above="@+id/read_article_txt_UploadDate"
-                    android:layout_marginBottom="2dp"/>
-
-                <TextView
-                    android:id="@+id/read_article_txtLikeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="100 K"
-                    android:textColor="@color/FullBlack"
-                    android:textSize="16sp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="40dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_above="@+id/read_article_txt_UploadDate"
-                    android:layout_marginBottom="2dp"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:id="@+id/read_article_relaytiveTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/read_article_relaytiveTopUserInfo"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/read_article_txt_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Title"
-                    android:textColor="@color/FullBlack"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/read_article_txt_major"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Majors realted"
-                    android:textColor="@color/ＭainOrange"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_below="@+id/read_article_txt_title"/>
-
-                <Button
-                    android:id="@+id/read_article_btn_requestMeetUp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/read_article_txt_major"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/request_meet_up"
-                    android:textAllCaps="false"
-                    android:textColor="@color/FullWhite"
-                    android:background="@drawable/meet_up_btn_background"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16sp"
-                    android:visibility="gone"/>
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp">
 
                 <RelativeLayout
-                    android:id="@+id/read_article_relaytive_userMeetCount"
+                    android:id="@+id/read_article_relaytiveTopUserInfo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/read_article_btn_requestMeetUp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/read_article_circle_image_user"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/user_default_image" />
 
                     <TextView
-                        android:id="@+id/read_article_txt_attendants"
+                        android:id="@+id/read_article_txt_userName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/attendants"
-                        />
+                        android:layout_alignTop="@+id/read_article_circle_image_user"
+                        android:layout_toEndOf="@+id/read_article_circle_image_user"
+                        android:layout_toRightOf="@+id/read_article_circle_image_user"
+                        android:maxLength="10"
+                        android:text="Bred Pete"
+                        android:textColor="@color/FullBlack"
+                        android:textSize="18sp" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/read_article_recyclerView_userAttendant"
+                    <TextView
+                        android:id="@+id/read_article_txt_UploadDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/read_article_circle_image_user"
+                        android:layout_toEndOf="@+id/read_article_circle_image_user"
+                        android:layout_toRightOf="@+id/read_article_circle_image_user"
+                        android:text="Upload Date"
+                        android:textColor="@color/DateBlue"
+                        android:textSize="14sp" />
+
+                    <com.sackcentury.shinebuttonlib.ShineButton
+                        android:id="@+id/read_article_shineBtn_heart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_above="@+id/read_article_txt_UploadDate"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toStartOf="@+id/read_article_txtKeep"
+                        android:src="@android:color/darker_gray"
+                        app:allow_random_color="false"
+                        app:big_shine_color="#FF6666"
+                        app:btn_color="@android:color/darker_gray"
+                        app:btn_fill_color="#FF6666"
+                        app:click_animation_duration="200"
+                        app:enable_flashing="false"
+                        app:shine_animation_duration="1500"
+                        app:shine_count="8"
+                        app:shine_turn_angle="10"
+                        app:siShape="@raw/heart"
+                        app:small_shine_color="#CC9999"
+                        app:small_shine_offset_angle="20" />
+
+                    <TextView
+                        android:id="@+id/read_article_txtKeep"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/read_article_txt_UploadDate"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toStartOf="@+id/read_article_shineBtn_like"
+                        android:text="@string/keep"
+                        android:textColor="@color/FullBlack"
+                        android:textSize="16sp" />
+
+                    <com.sackcentury.shinebuttonlib.ShineButton
+                        android:id="@+id/read_article_shineBtn_like"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_above="@+id/read_article_txt_UploadDate"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toStartOf="@+id/read_article_txtLikeCount"
+                        android:src="@android:color/darker_gray"
+                        app:allow_random_color="false"
+                        app:big_shine_color="@color/messageLightBlue"
+                        app:btn_color="@android:color/darker_gray"
+                        app:btn_fill_color="@color/LightMainOrange"
+                        app:click_animation_duration="200"
+                        app:enable_flashing="false"
+                        app:shine_animation_duration="1500"
+                        app:shine_count="8"
+                        app:shine_turn_angle="10"
+                        app:siShape="@raw/like"
+                        app:small_shine_color="#CC9999"
+                        app:small_shine_offset_angle="20" />
+
+                    <TextView
+                        android:id="@+id/read_article_txtLikeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/read_article_txt_UploadDate"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="40dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="100 K"
+                        android:textColor="@color/FullBlack"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/read_article_relaytiveTopUserInfo"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/read_article_txt_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Title"
+                        android:textColor="@color/FullBlack"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/read_article_txt_major"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_txt_title"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Majors realted"
+                        android:textColor="@color/ＭainOrange"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/read_article_btn_requestMeetUp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/read_article_txt_attendants"
-                        android:layout_marginTop="2dp">
+                        android:layout_below="@+id/read_article_txt_major"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/meet_up_btn_background"
+                        android:text="@string/request_meet_up"
+                        android:textAllCaps="false"
+                        android:textColor="@color/FullWhite"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:id="@+id/read_article_relaytive_userMeetCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_btn_requestMeetUp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:id="@+id/read_article_txt_attendants"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/attendants" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/read_article_recyclerView_userAttendant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/read_article_txt_attendants"
+                            android:layout_marginTop="2dp">
 
 
+                        </android.support.v7.widget.RecyclerView>
 
-                    </android.support.v7.widget.RecyclerView>
 
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/read_article_txt_Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_relaytive_userMeetCount"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="8dp"
+                        android:text="討論日期"
+                        android:textColor="@color/FullBlack"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/read_article_txt_Time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_txt_Date"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="討論時間" />
+
+                    <TextView
+                        android:id="@+id/read_article_txt_meetUpPlace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_txt_Time"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="8dp"
+                        android:text="討論地方"
+                        android:textColor="@color/FullBlack"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/read_article_txt_meetUpAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_txt_meetUpPlace"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="討論地址"
+                        android:textColor="@color/CatergoryDarkGrayText" />
+
+                    <TextView
+                        android:id="@+id/read_article_txt_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/read_article_txt_meetUpAddress"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="10dp"
+                        android:lineSpacingExtra="10dp"
+                        android:text="Content"
+                        android:textColor="@color/FullBlack"
+                        android:textIsSelectable="true"
+                        android:textSize="18sp" />
 
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/read_article_txt_Date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="討論日期"
-                    android:textSize="16sp"
-                    android:textColor="@color/FullBlack"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@+id/read_article_relaytive_userMeetCount"/>
-
-                <TextView
-                    android:id="@+id/read_article_txt_Time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="討論時間"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_below="@+id/read_article_txt_Date"/>
-
-                <TextView
-                    android:id="@+id/read_article_txt_meetUpPlace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="討論地方"
-                    android:textSize="16sp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/FullBlack"
-                    android:layout_below="@+id/read_article_txt_Time"/>
-
-                <TextView
-                    android:id="@+id/read_article_txt_meetUpAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="討論地址"
-                    android:textColor="@color/CatergoryDarkGrayText"
-                    android:layout_below="@+id/read_article_txt_meetUpPlace"/>
-
-                <TextView
-                    android:id="@+id/read_article_txt_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Content"
-                    android:textColor="@color/FullBlack"
-                    android:textSize="18sp"
-                    android:lineSpacingExtra="10dp"
-                    android:textIsSelectable="true"
-                    android:layout_below="@+id/read_article_txt_meetUpAddress"/>
-
-
             </RelativeLayout>
+        </ScrollView>
 
-        </RelativeLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/read_article_LinearBot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/read_article_relaytive_ClcikToSeeAnswer"
-        android:orientation="vertical">
-
-        <com.github.florent37.expansionpanel.ExpansionHeader
-            android:id="@+id/read_article_expan_header"
+        <LinearLayout
+            android:id="@+id/read_article_LinearBot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            app:expansion_headerIndicator="@id/read_article_imgHeader"
-            app:expansion_layout="@id/read_article_expansionLayout"
-            app:expansion_toggleOnClick="true">
+            android:layout_above="@+id/read_article_relaytive_ClcikToSeeAnswer"
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:id="@+id/read_article_expan_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp">
+                android:layout_marginBottom="2dp"
+                app:expansion_headerIndicator="@id/read_article_imgHeader"
+                app:expansion_layout="@id/read_article_expansionLayout"
+                app:expansion_toggleOnClick="true">
 
-                <ImageView
-                    android:id="@+id/read_article_imgHeader"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:rotation="180"
-                    android:src="@drawable/down_arrow" />
-
-                <TextView
-                    android:id="@+id/read_article_txt_CheckimageView"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toEndOf="@+id/read_article_imgHeader"
-                    android:layout_toRightOf="@+id/read_article_imgHeader"
-                    android:text="@string/click_to_check"
-                    android:textColor="@color/ＭainOrange"
-                    android:textSize="18sp"/>
+                    android:paddingTop="10dp">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/read_article_imgHeader"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:rotation="180"
+                        android:src="@drawable/down_arrow" />
+
+                    <TextView
+                        android:id="@+id/read_article_txt_CheckimageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toEndOf="@+id/read_article_imgHeader"
+                        android:layout_toRightOf="@+id/read_article_imgHeader"
+                        android:text="@string/click_to_check"
+                        android:textColor="@color/ＭainOrange"
+                        android:textSize="18sp" />
+
+                </RelativeLayout>
 
 
-        </com.github.florent37.expansionpanel.ExpansionHeader>
+            </com.github.florent37.expansionpanel.ExpansionHeader>
 
-        <com.github.florent37.expansionpanel.ExpansionLayout
-            android:id="@+id/read_article_expansionLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:id="@+id/read_article_expansionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/read_article_recyclerView"
@@ -347,34 +351,57 @@
 
                 </android.support.v7.widget.RecyclerView>
 
-            <!-- CONTENT -->
+                <!-- CONTENT -->
 
 
-        </com.github.florent37.expansionpanel.ExpansionLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/read_article_relaytive_ClcikToSeeAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="?selectableItemBackground">
-
-        <TextView
-            android:id="@+id/read_article_txtReadAnswers"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/read_article_relaytive_ClcikToSeeAnswer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="查看其它70條分享的答案"
-            android:textColor="@color/LightBlackText"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_alignParentBottom="true"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:id="@+id/read_article_txtReadAnswers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="查看其它70條分享的答案"
+                android:textColor="@color/LightBlackText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/read_article_imgHideArticle"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/mutliple_article"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/read_article_txtHideArticle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QQ這篇文章因為違反版規\n所以已經不存在囉"
+        android:textColor="@color/FullBlack"
+        android:layout_below="@+id/read_article_imgHideArticle"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

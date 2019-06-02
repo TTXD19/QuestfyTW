@@ -112,6 +112,17 @@
                     android:textColor="@color/LightMainOrange"
                     android:textSize="24sp" />
 
+                <ImageButton
+                    android:id="@+id/user_profile_fm_imgBtn_schoolName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edit_pencil"
+                    android:background="@color/FullWhite"
+                    android:layout_alignTop="@+id/user_profile_fm_txt_schoolName"
+                    android:layout_toEndOf="@+id/user_profile_fm_txt_schoolName"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"/>
+
                 <TextView
                     android:id="@+id/user_profile_fm_txt_schoolMajor"
                     android:layout_width="wrap_content"
@@ -121,7 +132,18 @@
                     android:layout_marginTop="10dp"
                     android:text="----------------------------"
                     android:textColor="@color/ＭainOrange"
-                    android:textSize="22sp" />
+                    android:textSize="22sp"/>
+
+                <ImageButton
+                    android:id="@+id/user_profile_fm_imgBtn_schoolMajor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edit_pencil"
+                    android:background="@color/FullWhite"
+                    android:layout_alignTop="@+id/user_profile_fm_txt_schoolMajor"
+                    android:layout_toEndOf="@+id/user_profile_fm_txt_schoolMajor"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"/>
 
                 <TextView
                     android:id="@+id/user_profile_fm_txt_specialityDisplay"
@@ -159,7 +181,8 @@
                     android:paddingRight="20dp"
                     android:text="----------------------------"
                     android:textColor="@color/FullBlack"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textAlignment="center"/>
 
                 <Button
                     android:id="@+id/user_profile_fm_btn_emailCertificate"
@@ -214,7 +237,8 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="-------------------"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textAlignment="center"/>
 
             </RelativeLayout>
 

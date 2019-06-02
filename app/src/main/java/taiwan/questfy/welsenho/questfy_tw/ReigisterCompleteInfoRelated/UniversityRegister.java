@@ -16,7 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.R;
@@ -33,6 +37,7 @@ public class UniversityRegister extends AppCompatActivity {
     private String realName;
     private String currentDegree;
     private String schoolName;
+
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private ArrayList<FirebaseDatabaseGetSet> searchArrayList;
@@ -47,6 +52,7 @@ public class UniversityRegister extends AppCompatActivity {
     private EditText editSearchUniversity;
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
@@ -55,8 +61,10 @@ public class UniversityRegister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_register);
 
+
         realName = getIntent().getStringExtra("realName");
         currentDegree = getIntent().getStringExtra("currentDegree");
+
 
         InitItem();
         ItemClick();
@@ -73,49 +81,55 @@ public class UniversityRegister extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void InitItem(){
+    private void InitItem() {
         btnPrevious = findViewById(R.id.university_register_btnPrevious);
         recyclerView = findViewById(R.id.university_register_recyclerView);
         editSearchUniversity = findViewById(R.id.universityName_register_editSearchUniversity);
         txtChooseInDegree = findViewById(R.id.university_register_txtProcess);
 
-        if (currentDegree.equals("HighSchoolInfo")){
+
+        if (currentDegree.equals("HighSchoolInfo")) {
             txtChooseInDegree.setText("請選擇您的高中");
         }
+
 
         searchArrayList = new ArrayList<>();
         arrayList = new ArrayList<>();
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         adapter = new UniversityAndMajorsChooseRecyclerAdapter(arrayList, this, new UniversityAndMajorsChooseRecyclerAdapter.itemOnClick() {
             @Override
             public void getClickItem(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+
                 Intent intent = new Intent(UniversityRegister.this, MainCourseRegister.class);
                 intent.putExtra("realName", realName);
                 intent.putExtra("currentDegree", currentDegree);
                 intent.putExtra("schoolName", arrayList.get(position).getSchoolName());
                 startActivity(intent);
                 finish();
+
             }
         });
     }
 
-    private void ItemClick(){
+    private void ItemClick() {
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
+
     }
 
-    private void getFirebaseData(){
+    private void getFirebaseData() {
         databaseReference.child(currentDegree).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot DS : dataSnapshot.getChildren()){
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot DS : dataSnapshot.getChildren()) {
                         firebaseDatabaseGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
                         arrayList.add(firebaseDatabaseGetSet);
                     }
@@ -130,13 +144,13 @@ public class UniversityRegister extends AppCompatActivity {
         });
     }
 
-    private void InitRecyclerView(){
+    private void InitRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
-    private void searchUniversity(){
+    private void searchUniversity() {
         editSearchUniversity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -150,10 +164,10 @@ public class UniversityRegister extends AppCompatActivity {
                 databaseReference.child(currentDegree).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
-                            for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot DS : dataSnapshot.getChildren()) {
                                 FirebaseDatabaseGetSet getSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                                if (getSet.getSchoolName().contains(searchQuery)){
+                                if (getSet.getSchoolName().contains(searchQuery)) {
                                     searchArrayList.add(getSet);
                                 }
                             }

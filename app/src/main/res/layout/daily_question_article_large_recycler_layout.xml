@@ -9,7 +9,8 @@
         android:id="@+id/daily_question_imageView_large_recyclerLayout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:background="@color/CatergoryDarkGrayText"/>
 
     <TextView
         android:id="@+id/daily_question_txtTitle_large_recyclerLayout"
@@ -17,15 +18,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="2dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:text="Image and Text test "
         android:textColor="@color/FullWhite"
         android:textStyle="bold"
         android:layout_alignBottom="@+id/daily_question_imageView_large_recyclerLayout"
-        android:layout_alignLeft="@+id/daily_question_imageView_large_recyclerLayout"
         android:layout_alignStart="@+id/daily_question_imageView_large_recyclerLayout"
         android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp" />
+        android:layout_marginStart="5dp"
+        android:layout_alignEnd="@+id/daily_question_imageView_large_recyclerLayout"
+        android:layout_marginEnd="10dp"
+        />
 
     <TextView
         android:id="@+id/daily_question_txtSubject_large_recyclerLayout"

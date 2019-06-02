@@ -8,15 +8,62 @@
 
 
     <TextView
-        android:id="@+id/add_announcement_txt"
+        android:id="@+id/app_announcement_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="您好，Beta參加者。目前公告尚在製作中，近日內很快將會更新。非常感謝您擔任本次app的測試者。如果App有任何非預期之發生錯誤或停止運作，歡迎到Google play留下您的評論，我們將做更多的改進。
-        \n\nQuestfy製作者敬上"
+        android:text="-----------"
         android:padding="12dp"
         android:textSize="18sp"
         android:textColor="@color/FullBlack"/>
+
+    <TextView
+        android:id="@+id/app_announcement_txtRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="註冊人數："
+        android:layout_below="@+id/app_announcement_txt"
+        android:layout_marginStart="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"
+        />
+
+    <TextView
+        android:id="@+id/app_announcement_txtQuestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="問題數量："
+        android:layout_below="@+id/app_announcement_txtRegister"
+        android:layout_marginStart="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:id="@+id/add_announcement_txtRegisterCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_below="@+id/app_announcement_txt"
+        android:layout_toRightOf="@+id/app_announcement_txtQuestions"
+        android:layout_marginStart="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"
+        />
+
+    <TextView
+        android:id="@+id/add_announcement_txtQuestionsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_below="@+id/app_announcement_txtRegister"
+        android:layout_toEndOf="@+id/app_announcement_txtQuestions"
+        android:layout_marginStart="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/FullBlack"
+        android:layout_marginTop="20dp"
+        />
 
     <ImageView
         android:id="@+id/add_announcement_imgLogo"
@@ -24,7 +71,7 @@
         android:layout_height="100dp"
         android:src="@mipmap/questfy_logo_style_5_4"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/add_announcement_txt"
+        android:layout_above="@+id/app_announcement_txt"
         android:layout_marginBottom="40dp"/>
 
 </RelativeLayout>

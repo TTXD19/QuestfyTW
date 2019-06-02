@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +42,8 @@ public class UserFollowingInfoFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserFollowingRecyclerAdapter adapter;
     private ImageView imgNoLogin;
+    private ImageView imgNoFollowing;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -83,7 +86,7 @@ public class UserFollowingInfoFragment extends Fragment {
                     startActivity(intent);
                 }
             });
-
+            imgNoFollowing.setVisibility(View.GONE);
             imgNoLogin.setVisibility(View.VISIBLE);
         }
         return view;
@@ -115,6 +118,8 @@ public class UserFollowingInfoFragment extends Fragment {
         recyclerView = view.findViewById(R.id.user_following_info_recyclerView);
         txtNoFollowingUsers = view.findViewById(R.id.user_following_info_txtNoFollowingUsers);
         imgNoLogin = view.findViewById(R.id.user_following_info_imgNotLogin);
+        imgNoFollowing = view.findViewById(R.id.user_following_info_imgNoFollowing);
+        swipeRefreshLayout = view.findViewById(R.id.user_following_info_swipeRefreshLayout);
         arrayList = new ArrayList<>();
         adapter = new UserFollowingRecyclerAdapter(arrayList, getContext(), new UserFollowingRecyclerAdapter.UserItemClick() {
             @Override
@@ -123,6 +128,13 @@ public class UserFollowingInfoFragment extends Fragment {
                 Intent intent = new Intent(getContext(), OtherUserProfileActivity.class);
                 intent.putExtra("otherUserUid", userUid);
                 startActivity(intent);
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserFollowingData();
             }
         });
     }
@@ -139,6 +151,8 @@ public class UserFollowingInfoFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
+                    arrayList.clear();
+                    imgNoFollowing.setVisibility(View.GONE);
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         recyclerView.setVisibility(View.VISIBLE);
                         txtNoFollowingUsers.setVisibility(View.GONE);
@@ -147,14 +161,17 @@ public class UserFollowingInfoFragment extends Fragment {
                     }
                     recyclerView.setAdapter(adapter);
                 }else {
+                    imgNoFollowing.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     txtNoFollowingUsers.setVisibility(View.VISIBLE);
                 }
+
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

@@ -81,12 +81,12 @@ public class EditQuestionRelateMajorChose extends AppCompatActivity{
             @Override
             public void select(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
                 if (!getMajors.contains(arrayList.get(position).getMajor())) {
-                    if (getMajors.size() < 3) {
+                    if (getMajors.size() < 5) {
                         getMajors.add(arrayList.get(position).getMajor());
                         tagGroup.setTags(getMajors);
                         confirmRecyclerAdapter = new EditInitMajorChooseConfirmRecyclerAdapter(getMajors);
                     }else {
-                        Toast.makeText(EditQuestionRelateMajorChose.this, "只能選3種相關科系", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditQuestionRelateMajorChose.this, "只能選5種相關科系", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -28,11 +29,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.EnlargeAnswerImageActivity;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
+import taiwan.questfy.welsenho.questfy_tw.OtherUserProfileRelatedMethod.OtherUserProfileActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class PersonalAskToFragment extends Fragment {
+
 
     private View view;
     private TextView txtNoQuestion;
@@ -40,6 +44,7 @@ public class PersonalAskToFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private PersonalAskRecyclerAdapter adapter;
+    private ProgressBar progressBar;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -65,6 +70,7 @@ public class PersonalAskToFragment extends Fragment {
         recyclerView = view.findViewById(R.id.personal_ask_to_recyclerView);
         txtNoQuestion = view.findViewById(R.id.personal_ask_to_txtNoPostArticles);
         imgNoLogin = view.findViewById(R.id.personal_ask_to_imgNotLogin);
+        progressBar = view.findViewById(R.id.personal_ask_to_progressBar);
         InitItem();
         InitFirebase();
         InitRecyclerView();
@@ -130,9 +136,25 @@ public class PersonalAskToFragment extends Fragment {
             @Override
             public void QuestionClick(int position) {
                 String questionUid = arrayList.get(position).getAskQuesitonUid();
+                String AskerUid = arrayList.get(position).getAskerUid();
                 Intent intent = new Intent(getContext(), PersonalAskQuestReplyActivity.class);
                 intent.putExtra("questionUid", questionUid);
                 intent.putExtra("questioType", "AskTo");
+                intent.putExtra("AskerUid", AskerUid);
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnImageClick(String imgUrl) {
+                Intent intent = new Intent(getContext(), EnlargeAnswerImageActivity.class);
+                intent.putExtra("imageUri", imgUrl);
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnUserImageClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(getContext(), OtherUserProfileActivity.class);
+                intent.putExtra("otherUserUid", arrayList.get(position).getAnswerUid());
                 startActivity(intent);
             }
         });
@@ -163,9 +185,11 @@ public class PersonalAskToFragment extends Fragment {
                         arrayList.add(getSet);
                         recyclerView.setAdapter(adapter);
                     }
+                    progressBar.setVisibility(View.GONE);
                 }else {
                     txtNoQuestion.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

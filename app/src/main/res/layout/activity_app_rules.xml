@@ -8,11 +8,37 @@
 
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/app_rules_txtUploadDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="日期更新"
+        android:textSize="24sp"
+        android:textColor="@color/FullBlack"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"/>
+
+    <TextView
+        android:id="@+id/app_rules_txt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="發問規則更新中"
-        android:layout_centerInParent="true"
-        android:textSize="24sp"
-        android:textColor="@color/ＭainOrange"/>
+        android:textSize="20sp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:textColor="@color/FullBlack"
+        android:textAlignment="textStart"
+        android:layout_marginTop="80dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+
+
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

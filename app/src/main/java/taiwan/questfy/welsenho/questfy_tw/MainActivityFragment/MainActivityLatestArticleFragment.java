@@ -1,5 +1,6 @@
 package taiwan.questfy.welsenho.questfy_tw.MainActivityFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -15,9 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +38,8 @@ import taiwan.questfy.welsenho.questfy_tw.R;
 import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 
 public class MainActivityLatestArticleFragment extends Fragment {
+
+    private View view;
 
     private RelativeLayout relayAnnounce;
     private RelativeLayout relayRules;
@@ -73,7 +78,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main_activity_latest_article, container, false);
+        view = inflater.inflate(R.layout.fragment_main_activity_latest_article, container, false);
 
         relayAnnounce = view.findViewById(R.id.latest_article_recycler1);
         relayRules = view.findViewById(R.id.latest_article_recycler2);
@@ -89,15 +94,16 @@ public class MainActivityLatestArticleFragment extends Fragment {
         setRecyclerView();
         getLastKeyFromFirebase();
         loadMoreRecyclerData();
+
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MainActivityLatestArticleFragment.OnFragmentInteractionListener){
+        if (context instanceof MainActivityLatestArticleFragment.OnFragmentInteractionListener) {
             mListener = (MainActivityLatestArticleFragment.OnFragmentInteractionListener) context;
-        }else {
+        } else {
             throw new RuntimeException(context.toString() +
                     " must implement OnFragmentInteractionListener");
         }
@@ -115,7 +121,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
         //getLastKeyFromFirebase();
     }
 
-    private void InitItem(){
+    private void InitItem() {
         progressBar.setVisibility(View.VISIBLE);
         searchArrayList = new ArrayList<>();
         arrayList = new ArrayList<>();
@@ -178,19 +184,18 @@ public class MainActivityLatestArticleFragment extends Fragment {
         void latestArticleFilter(ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 
-    public void LoadQueryData(final String inputSearch){
+    public void LoadQueryData(final String inputSearch) {
         progressBar.setVisibility(View.VISIBLE);
-        swipeRefreshLayout.setEnabled(false);
         Query query = databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     searchArrayList.clear();
-                    if (!inputSearch.equals("")) {
+                    if (inputSearch != null) {
                         for (DataSnapshot DS : dataSnapshot.getChildren()) {
                             FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                            if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase()) || searchGetSet.getMajors().toLowerCase().contains(inputSearch.toLowerCase())) {
+                            if ((searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase()) || searchGetSet.getMajors().toLowerCase().contains(inputSearch.toLowerCase()))) {
                                 searchArrayList.add(searchGetSet);
                             }
                         }
@@ -201,7 +206,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         }
                         recyclerView.setAdapter(adapter);
                         progressBar.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         getLastKeyFromFirebase();
                     }
                 }
@@ -213,7 +218,6 @@ public class MainActivityLatestArticleFragment extends Fragment {
             }
         });
     }
-
 
 
     private void getLastKeyFromFirebase() {
@@ -262,23 +266,18 @@ public class MainActivityLatestArticleFragment extends Fragment {
                             arrayList.add(getSet);
                         }
                     }
-
-                    for (int i = 0; i<= arrayList.size() - 1; i++){
-                        Log.d("MOSTPOPMAXDATACOUNT12", String.valueOf(arrayList.get(i).getUploadTimeStamp()));
-                    }
                     /**
                      * Handle arrayList filter & load first data
                      */
 
                     newArticleListRecyclerAdapter.addAll(arrayList);
                     lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
-                    Log.d("MOSTPOPMAXDATALastNode", String.valueOf(lastNode));
+                    //Log.d("MOSTPOPMAXDATALastNode", String.valueOf(lastNode));
 
                     recyclerView.setVisibility(View.VISIBLE);
                     recyclerView.setAdapter(newArticleListRecyclerAdapter);
 
                     progressBar.setVisibility(View.GONE);
-                    swipeRefreshLayout.setEnabled(true);
                     swipeRefreshLayout.setRefreshing(false);
 
                     /**
@@ -288,7 +287,7 @@ public class MainActivityLatestArticleFragment extends Fragment {
                     Log.d("MOSTPOPMAXDATALastNum", String.valueOf(lastNum));
                     if (lastNum == lastNode) {
                         isMaxData = true;
-                    }else {
+                    } else {
                         isMaxData = false;
                     }
                 }
@@ -306,11 +305,12 @@ public class MainActivityLatestArticleFragment extends Fragment {
             nestedScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if (!nestedScrollView.canScrollVertically(1)){
-                        if (!isMaxData){
+                    hideKeyboardFrom(getContext(), view);
+                    if (!nestedScrollView.canScrollVertically(1)) {
+                        if (!isMaxData) {
                             getMoreData();
                             Log.d("GETMOREDATA", "LOADMORE");
-                        }else {
+                        } else {
                             Log.d("GETMOREDATA", "NOTLOADMORE");
                         }
                     }
@@ -319,15 +319,15 @@ public class MainActivityLatestArticleFragment extends Fragment {
         }
     }
 
-    private void getMoreData(){
-        if (!isMaxData){
+    private void getMoreData() {
+        if (!isMaxData) {
             databaseReference.child("Users_Question_Articles").orderByChild("uploadTimeStamp").startAt(lastNode).limitToFirst(100).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()){
+                    if (dataSnapshot.exists()) {
                         Log.d("GETMOREDATA", "LOADING");
                         arrayList.clear();
-                        for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        for (DataSnapshot DS : dataSnapshot.getChildren()) {
                             FirebaseDatabaseGetSet get = DS.getValue(FirebaseDatabaseGetSet.class);
                             if (get.getUser_Name() != null) {
                                 arrayList.add(get);
@@ -335,18 +335,20 @@ public class MainActivityLatestArticleFragment extends Fragment {
                         }
 
                         arrayList.remove(0);
+
                         /*for (int i = 0; i<= arrayList.size() - 1; i++){
                             Log.d("MOSTPOPMAXDATACOUNT12", String.valueOf(arrayList.get(i).getUploadTimeStamp()));
                         }*/
+
                         lastNode = arrayList.get(arrayList.size() - 1).getUploadTimeStamp();
                         newArticleListRecyclerAdapter.addAll(arrayList);
                         newArticleListRecyclerAdapter.notifyDataSetChanged();
                         Log.d("GETMOREDATA", "TOTAL DATA : " + String.valueOf(arrayList.size()));
-                        if (lastNum == lastNode){
+                        if (lastNum == lastNode) {
                             isMaxData = true;
                         }
 
-                    }else {
+                    } else {
                         Log.d("GETMOREDATA", "NOTEXIST");
                     }
                 }
@@ -356,17 +358,21 @@ public class MainActivityLatestArticleFragment extends Fragment {
 
                 }
             });
-        }else {
+        } else {
             Log.d("GETMOREDATA", "DATAMAX");
         }
     }
 
 
-
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

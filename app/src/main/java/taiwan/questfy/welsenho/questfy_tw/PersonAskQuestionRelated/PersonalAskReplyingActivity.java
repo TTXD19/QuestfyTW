@@ -42,6 +42,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
     private String imageUri;
     private String imageDate;
     private String questioType;
+    private String AskerUid;
     private EditRelatedMethod editRelatedMethod;
 
     private TextView txtUserName;
@@ -67,6 +68,8 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
 
         questionUid = getIntent().getStringExtra("questionUid");
         questioType = getIntent().getStringExtra("questioType");
+        AskerUid = getIntent().getStringExtra("AskerUid");
+        Toast.makeText(this, AskerUid, Toast.LENGTH_SHORT).show();
         InitFirebase();
         InitItem();
         ItemClick();
@@ -106,6 +109,8 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PersonalAskReplyingActivity.this, PersonalAskQuestReplyActivity.class);
                 intent.putExtra("questionUid", questionUid);
+                intent.putExtra("questioType", questioType);
+                intent.putExtra("AskerUid", AskerUid);
                 startActivity(intent);
                 finish();
             }
@@ -166,6 +171,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
             hashMap.put("User_Name", firebaseUser.getDisplayName());
             hashMap.put("userUid", firebaseUser.getUid());
             hashMap.put("Content", content);
+            hashMap.put("AskerUid", AskerUid);
             long uploadTimeStamp = System.currentTimeMillis();
             uploadTimeStamp *= -1;
             hashMap.put("uploadTimeStamp", uploadTimeStamp);
@@ -179,6 +185,7 @@ public class PersonalAskReplyingActivity extends AppCompatActivity {
                         Intent intent = new Intent(PersonalAskReplyingActivity.this, PersonalAskQuestReplyActivity.class);
                         intent.putExtra("questionUid", questionUid);
                         intent.putExtra("questioType", questioType);
+                        intent.putExtra("AskerUid", AskerUid);
                         startActivity(intent);
                         finish();
                     }

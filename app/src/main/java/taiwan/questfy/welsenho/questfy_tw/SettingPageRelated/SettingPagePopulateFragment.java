@@ -13,6 +13,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import taiwan.questfy.welsenho.questfy_tw.LoginRelated.LoginActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
@@ -35,6 +37,8 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -80,6 +84,8 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
         preLogOut.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                //當使用者登出時，移除tokenID
+                databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("UserTokenID").removeValue();
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -148,6 +154,8 @@ public class SettingPagePopulateFragment extends PreferenceFragmentCompat {
     private void InitFirebase(){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     private void setKey(){

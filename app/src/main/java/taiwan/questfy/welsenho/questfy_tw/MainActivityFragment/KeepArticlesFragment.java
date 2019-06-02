@@ -43,6 +43,7 @@ public class KeepArticlesFragment extends Fragment {
     private View view;
     private TextView txtNoArticlesKeep;
     private ImageView imgNoLogin;
+    private ImageView imgNoArticles;
     private keepArticleRecyclerViewAdapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private FirebaseDatabaseGetSet firebaseDatabaseGetSet;
@@ -87,7 +88,7 @@ public class KeepArticlesFragment extends Fragment {
                     startActivity(intent);
                 }
             });
-
+            imgNoArticles.setVisibility(View.GONE);
             imgNoLogin.setVisibility(View.VISIBLE);
         }
         return view;
@@ -117,6 +118,7 @@ public class KeepArticlesFragment extends Fragment {
         progressBar = view.findViewById(R.id.keep_articles_progressBar);
         txtNoArticlesKeep = view.findViewById(R.id.keep_article_txtNoArticlesKeep);
         imgNoLogin = view.findViewById(R.id.keep_article_imgNotLogin);
+        imgNoArticles = view.findViewById(R.id.keep_article_imgNoArticle);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -154,6 +156,7 @@ public class KeepArticlesFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
+                    imgNoArticles.setVisibility(View.GONE);
                     arrayList.clear();
                     for (DataSnapshot DS:dataSnapshot.getChildren()){
                         recyclerView.setVisibility(View.VISIBLE);
@@ -165,6 +168,7 @@ public class KeepArticlesFragment extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }else {
+                    imgNoArticles.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     txtNoArticlesKeep.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);

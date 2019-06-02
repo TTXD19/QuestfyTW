@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -76,6 +77,8 @@ public class ReadArticleActivity extends AppCompatActivity {
     private TextView txtMeetPlace;
     private TextView txtMeetAdress;
     private TextView txtAttedants;
+    private TextView txtHideArticle;
+    private ImageView imgHideArticle;
     private Toolbar toolbar;
     private Button btnRequestMeet;
     private ShineButton shineButtonHeart;
@@ -92,6 +95,8 @@ public class ReadArticleActivity extends AppCompatActivity {
     private ArrayList<FirebaseDatabaseGetSet> arrayUserData;
     private EditRelatedMethod editRelatedMethod;
     private RelativeLayout relayReadAnsers;
+    private RelativeLayout relayMain;
+    private RelativeLayout relayArticle;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -208,6 +213,8 @@ public class ReadArticleActivity extends AppCompatActivity {
         txtMeetPlace = findViewById(R.id.read_article_txt_meetUpPlace);
         txtMeetAdress = findViewById(R.id.read_article_txt_meetUpAddress);
         txtAttedants = findViewById(R.id.read_article_txt_attendants);
+        txtHideArticle = findViewById(R.id.read_article_txtHideArticle);
+        imgHideArticle = findViewById(R.id.read_article_imgHideArticle);
         btnRequestMeet = findViewById(R.id.read_article_btn_requestMeetUp);
         expansionHeader = findViewById(R.id.read_article_expan_header);
         toolbar = findViewById(R.id.read_article_toolbar);
@@ -217,6 +224,8 @@ public class ReadArticleActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.read_article_progressBar);
         shineButtonHeart = findViewById(R.id.read_article_shineBtn_heart);
         shineButtonLike = findViewById(R.id.read_article_shineBtn_like);
+        relayMain = findViewById(R.id.read_article_relayMain);
+        relayArticle = findViewById(R.id.read_article_relayArticle);
 
         scrollView.smoothScrollTo(0,0);
         editRelatedMethod = new EditRelatedMethod();
@@ -299,31 +308,35 @@ public class ReadArticleActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     getUserProfile = dataSnapshot.getValue(FirebaseDatabaseGetSet.class);
-                    txtUserName.setText(getUserProfile.getUser_Name());
-                    txtUploadData.setText(editRelatedMethod.getFormattedDate(getApplicationContext(), Math.abs(getUserProfile.getUploadTimeStamp())));
-                    txtMajors.setText(getUserProfile.getMajors());
-                    txtTitle.setText(getUserProfile.getTitle());
-                    txtContent.setText(getUserProfile.getContent());
-                    if (getUserProfile.getMeetDate() != null) {
-                        txtMeetdate.setText(getUserProfile.getMeetDate());
-                        txtMeetTime.setText(getUserProfile.getMeetTime());
-                        txtMeetPlace.setText(getUserProfile.getMeetPlace());
-                        txtMeetAdress.setText(getUserProfile.getMeetAddress());
-                        txtAttedants.setVisibility(View.VISIBLE);
-                        btnRequestMeet.setVisibility(View.VISIBLE);
+                    if (getUserProfile.getIllegalArticle().equals("True")){
+                        hideArticle();
                     }else {
-                        txtMeetdate.setVisibility(View.GONE);
-                        txtMeetTime.setVisibility(View.GONE);
-                        txtMeetPlace.setVisibility(View.GONE);
-                        txtMeetAdress.setVisibility(View.GONE);
-                        txtAttedants.setVisibility(View.GONE);
-                        txtAttedants.setVisibility(View.GONE);
-                        btnRequestMeet.setVisibility(View.GONE);
+                        txtUserName.setText(getUserProfile.getUser_Name());
+                        txtUploadData.setText(editRelatedMethod.getFormattedDate(getApplicationContext(), Math.abs(getUserProfile.getUploadTimeStamp())));
+                        txtMajors.setText(getUserProfile.getMajors());
+                        txtTitle.setText(getUserProfile.getTitle());
+                        txtContent.setText(getUserProfile.getContent());
+                        if (getUserProfile.getMeetDate() != null) {
+                            txtMeetdate.setText(getUserProfile.getMeetDate());
+                            txtMeetTime.setText(getUserProfile.getMeetTime());
+                            txtMeetPlace.setText(getUserProfile.getMeetPlace());
+                            txtMeetAdress.setText(getUserProfile.getMeetAddress());
+                            txtAttedants.setVisibility(View.VISIBLE);
+                            btnRequestMeet.setVisibility(View.VISIBLE);
+                        } else {
+                            txtMeetdate.setVisibility(View.GONE);
+                            txtMeetTime.setVisibility(View.GONE);
+                            txtMeetPlace.setVisibility(View.GONE);
+                            txtMeetAdress.setVisibility(View.GONE);
+                            txtAttedants.setVisibility(View.GONE);
+                            txtAttedants.setVisibility(View.GONE);
+                            btnRequestMeet.setVisibility(View.GONE);
+                        }
+                        setOtherUserUid(getUserProfile.getUserUid());
+                        checkArticleUserImage();
+                        Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
+                        ShowItem();
                     }
-                    setOtherUserUid(getUserProfile.getUserUid());
-                    checkArticleUserImage();
-                    Picasso.get().load(getUserProfile.getUser_Image()).into(circleImageView);
-                    ShowItem();
                 }
             }
 
@@ -735,5 +748,11 @@ public class ReadArticleActivity extends AppCompatActivity {
 
         String randomID = databaseReference.child("Report_articles_section").child(getUserProfile.getArticle_ID()).child(firebaseUser.getUid()).push().getKey();
         databaseReference.child("Report_articles_section").child(getUserProfile.getArticle_ID()).child(firebaseUser.getUid()).child(randomID).updateChildren(hashMap);
+    }
+
+    private void hideArticle(){
+        relayArticle.setVisibility(View.GONE);
+        imgHideArticle.setVisibility(View.VISIBLE);
+        txtHideArticle.setVisibility(View.VISIBLE);
     }
 }

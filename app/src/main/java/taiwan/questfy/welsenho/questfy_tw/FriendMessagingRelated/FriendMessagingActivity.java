@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,15 +32,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.AnswerReplyActivity;
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.EnlargeAnswerImageActivity;
 import taiwan.questfy.welsenho.questfy_tw.EditActivityRelated.EditRelatedMethod;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.R;
+import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.EnlargeImageActivity;
 
 public class FriendMessagingActivity extends AppCompatActivity {
 
@@ -89,7 +94,14 @@ public class FriendMessagingActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.friend_messaging_recyclerView);
         editRelatedMethod = new EditRelatedMethod();
         arrayList = new ArrayList<>();
-        adapter = new FriendMessagingRecyclerAdapter(arrayList, this);
+        adapter = new FriendMessagingRecyclerAdapter(arrayList, this, new FriendMessagingRecyclerAdapter.ImageClick() {
+            @Override
+            public void onImageClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                Intent intent = new Intent(FriendMessagingActivity.this, EnlargeAnswerImageActivity.class);
+                intent.putExtra("imageUri", arrayList.get(position).getMessage());
+                startActivity(intent);
+            }
+        });
         toolbar.setTitle(FriendName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -235,7 +247,18 @@ public class FriendMessagingActivity extends AppCompatActivity {
                     });
                 }
             }
-        });
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                progressDialog.setMessage("圖片上傳進度" + (int)progress + "%");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(FriendMessagingActivity.this, "上傳失敗，請在試一次", Toast.LENGTH_SHORT).show();
+            }
+        });;
     }
 
     private void imageUploadDatebase(String imgLink){

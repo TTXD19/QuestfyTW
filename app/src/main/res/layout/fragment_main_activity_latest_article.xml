@@ -26,7 +26,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BETA公告 \n 歡迎來到Questfy"
+                    android:text="官方公告\n 歡迎來到Questfy"
                     android:textSize="20sp"
                     android:textColor="@color/FullWhite"
                     android:layout_centerInParent="true"
@@ -45,7 +45,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="發文規則 更新日期2019/4/15"
+                    android:text="發文規則"
                     android:textSize="20sp"
                     android:textColor="@color/CatergoryDarkGrayText"
                     android:layout_centerVertical="true"

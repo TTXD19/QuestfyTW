@@ -75,27 +75,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/person_ask_quest_reply_imgUserImage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/user_default_image"/>
+
                     <TextView
                         android:id="@+id/person_ask_quest_reply_txtUserFrom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="25dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="25dp"
                         android:text="Question come from user"
                         android:textColor="@color/FullBlack"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:layout_toEndOf="@+id/person_ask_quest_reply_imgUserImage"/>
 
                     <TextView
                         android:id="@+id/person_ask_quest_reply_txtQuestionContent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/person_ask_quest_reply_txtUserFrom"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginRight="25dp"
+                        android:layout_below="@+id/person_ask_quest_reply_imgUserImage"
+                        android:layout_marginEnd="25dp"
                         android:text="Question content"
                         android:textColor="@color/FullBlack"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_alignStart="@+id/person_ask_quest_reply_imgUserImage"/>
 
                     <ImageView
                         android:id="@+id/person_ask_quest_reply_imgQuestionImage"
@@ -103,9 +112,9 @@
                         android:layout_height="180dp"
                         android:layout_below="@+id/person_ask_quest_reply_txtQuestionContent"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="25dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="25dp" />
+                        android:layout_marginRight="25dp"
+                        android:layout_alignStart="@+id/person_ask_quest_reply_imgUserImage"/>
 
                     <TextView
                         android:id="@+id/person_ask_quest_reply_txtUserSolveIt"

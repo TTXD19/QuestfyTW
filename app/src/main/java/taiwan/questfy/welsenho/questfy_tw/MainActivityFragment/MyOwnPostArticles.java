@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +43,9 @@ public class MyOwnPostArticles extends Fragment {
     private ProgressBar progressBar;
     private TextView txtNoPostArticles;
     private ImageView imgNoLogin;
+    private ImageView imgNoPost;
     private View view;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private list_article_recyclerView_adapter adapter;
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
@@ -87,7 +90,7 @@ public class MyOwnPostArticles extends Fragment {
                     startActivity(intent);
                 }
             });
-
+            imgNoPost.setVisibility(View.GONE);
             imgNoLogin.setVisibility(View.VISIBLE);
         }
         return view;
@@ -138,8 +141,17 @@ public class MyOwnPostArticles extends Fragment {
         progressBar = view.findViewById(R.id.my_own_postArticle_progressBar);
         txtNoPostArticles = view.findViewById(R.id.my_own_postArticle_txtNoPostArticles);
         imgNoLogin = view.findViewById(R.id.my_own_postArticle_imgNotLogin);
+        imgNoPost = view.findViewById(R.id.my_own_postArticle_imgNoArticle);
+        swipeRefreshLayout = view.findViewById(R.id.my_own_postArticle_swipeRefreshLayout);
         arrayList = new ArrayList<>();
         adapter = new list_article_recyclerView_adapter(arrayList, getContext());
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadData();
+            }
+        });
     }
 
     private void LoadData() {
@@ -148,6 +160,7 @@ public class MyOwnPostArticles extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    imgNoPost.setVisibility(View.GONE);
                     txtNoPostArticles.setVisibility(View.GONE);
                     arrayList.clear();
                     for (DataSnapshot DS : dataSnapshot.getChildren()) {
@@ -157,16 +170,18 @@ public class MyOwnPostArticles extends Fragment {
                     }
                     recyclerView.setAdapter(adapter);
                 } else {
+                    imgNoPost.setVisibility(View.VISIBLE);
                     txtNoPostArticles.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
 
                 progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         /*

@@ -6,6 +6,13 @@
     tools:context=".PersonAskQuestionRelated.PersonalAskToFragment"
     android:background="@color/FullWhite">
 
+   <ProgressBar
+       android:id="@+id/personal_ask_to_progressBar"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       />
+
    <android.support.v7.widget.RecyclerView
        android:id="@+id/personal_ask_to_recyclerView"
        android:layout_width="match_parent"

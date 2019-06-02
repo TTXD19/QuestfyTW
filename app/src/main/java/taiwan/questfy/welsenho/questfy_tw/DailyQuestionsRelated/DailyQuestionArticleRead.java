@@ -48,6 +48,7 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
     private TextView txtContent;
     private TextView txtTitle;
     private TextView txtComment;
+    private TextView txtCommentCounts;
     private EditText editComment;
     private ImageView imgArticlePicture;
     private AppBarLayout appBarLayout;
@@ -94,6 +95,7 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
         txtAuthor = findViewById(R.id.daily_question_readArticle_txtAuthor);
         txtContent = findViewById(R.id.daily_question_readArticle_txtContent);
         txtComment = findViewById(R.id.daily_question_readArticle_txtSendComment);
+        txtCommentCounts = findViewById(R.id.daily_question_readArticle_txtCommentCounts);
         editComment = findViewById(R.id.daily_question_readArticle_editComments);
         imgArticlePicture = findViewById(R.id.daily_question_readArticle_imgPicture);
         toolbar = findViewById(R.id.daily_question_readArticle_toolBar);
@@ -146,6 +148,25 @@ public class DailyQuestionArticleRead extends AppCompatActivity {
                             }
                         }
                     });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        databaseReference.child("DailyQuestion").child(ArticleUid).child("CommentSection").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    String count = String.valueOf(dataSnapshot.getChildrenCount());
+                    String text = count + "則留言";
+                    txtCommentCounts.setText(text);
+                }else {
+                    String text = 0 + "則留言";
+                    txtCommentCounts.setText(text);
                 }
             }
 

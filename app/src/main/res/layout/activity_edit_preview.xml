@@ -179,10 +179,12 @@
             android:id="@+id/edit_preview_expan_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="7dp"
             app:expansion_headerIndicator="@id/edit_preview_imgHeader"
             app:expansion_layout="@id/edit_preview_expansionLayout"
-            app:expansion_toggleOnClick="true">
+            app:expansion_toggleOnClick="true"
+            android:layout_marginStart="2dp"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"

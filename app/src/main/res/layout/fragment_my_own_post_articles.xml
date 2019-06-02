@@ -1,42 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/my_own_postArticle_swipeRefreshLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivityFragment.MyOwnPostArticles"
-    android:background="@color/FullWhite">
+    android:background="@color/FullWhite"
+    tools:context=".MainActivityFragment.MyOwnPostArticles">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_own_postArticle_recyclerView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_own_postArticle_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
-    <ProgressBar
-        android:id="@+id/my_own_postArticle_progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        <ProgressBar
+            android:id="@+id/my_own_postArticle_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-    <TextView
-        android:id="@+id/my_own_postArticle_txtNoPostArticles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="尚未發表任何問題"
-        android:textSize="18sp"
-        android:textColor="@color/CatergoryDarkGrayText"
-        android:layout_below="@+id/my_own_postArticle_imgNotLogin"
-        android:layout_centerHorizontal="true"
-        />
+        <TextView
+            android:id="@+id/my_own_postArticle_txtNoPostArticles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_own_postArticle_imgNoArticle"
+            android:layout_centerHorizontal="true"
+            android:text="尚未發表任何問題"
+            android:textColor="@color/CatergoryDarkGrayText"
+            android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/my_own_postArticle_imgNotLogin"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/not_login"
-        android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/my_own_postArticle_imgNotLogin"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/not_login"
+            android:visibility="gone" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/my_own_postArticle_imgNoArticle"
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/mutliple_article" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

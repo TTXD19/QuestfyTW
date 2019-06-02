@@ -1,6 +1,6 @@
 package taiwan.questfy.welsenho.questfy_tw;
 
-public class FirebaseDatabaseGetSet{
+public class FirebaseDatabaseGetSet {
 
 
     private Boolean isSelected;
@@ -23,6 +23,7 @@ public class FirebaseDatabaseGetSet{
     private String MeetPlace;
     private String MeetAddress;
     private String isMeet;
+    private String illegalArticle;
     private long uploadTimeStamp;
     private int AnswerCount;
     private int Article_like_count;
@@ -92,6 +93,12 @@ public class FirebaseDatabaseGetSet{
     //TESTING
     private int NUMBER;
 
+
+    //Announcement
+
+    private String Announcement;
+    private int QuestionsCount;
+    private int RegisterCount;
 
 
     //GetSet for firebase
@@ -597,5 +604,37 @@ public class FirebaseDatabaseGetSet{
 
     public void setRequestUserImage(String requestUserImage) {
         RequestUserImage = requestUserImage;
+    }
+
+    public String getAnnouncement() {
+        return Announcement;
+    }
+
+    public void setAnnouncement(String announcement) {
+        Announcement = announcement;
+    }
+
+    public int getQuestionsCount() {
+        return QuestionsCount;
+    }
+
+    public void setQuestionsCount(int questionsCount) {
+        QuestionsCount = questionsCount;
+    }
+
+    public int getRegisterCount() {
+        return RegisterCount;
+    }
+
+    public void setRegisterCount(int registerCount) {
+        RegisterCount = registerCount;
+    }
+
+    public String getIllegalArticle() {
+        return illegalArticle;
+    }
+
+    public void setIllegalArticle(String illegalArticle) {
+        this.illegalArticle = illegalArticle;
     }
 }

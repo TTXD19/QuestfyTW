@@ -151,9 +151,17 @@ public class EditPreviewActivity extends AppCompatActivity {
     }
 
     private void showImages(){
-        if (arrayList != null){
-            adapterImageViews = new EditOfflineImageViewRecyclerAdapter(arrayList);
+        if (!arrayList.isEmpty()){
+            adapterImageViews = new EditOfflineImageViewRecyclerAdapter(arrayList, new EditOfflineImageViewRecyclerAdapter.ImageClick() {
+                @Override
+                public void onRemoverImage(ArrayList<String> arrayList, int position) {
+
+                }
+            });
             recyclerView.setAdapter(adapterImageViews);
+            expansionHeader.setVisibility(View.VISIBLE);
+        }else {
+            expansionHeader.setVisibility(View.GONE);
         }
     }
 }

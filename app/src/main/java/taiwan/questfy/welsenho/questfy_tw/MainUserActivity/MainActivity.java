@@ -42,6 +42,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
     private MostPopularFragment mostPopularFragment;
     private MainActivityLatestArticleFragment latestArticleFragment;
+    private MainSubjectChooseFragment mainSubjectChooseFragment;
     private MainActivityTabFragment mainActivityTabFragment;
 
     @Override
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
 
         InitFirebase();
         if (firebaseUser != null){
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("COMPUTER_SCIENCE");
             getTokenID();
             InitUserPofile();
         }else {
@@ -217,11 +220,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
             public boolean onQueryTextChange(String s) {
                 mainActivityTabFragment = (MainActivityTabFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment");
                 if (mainActivityTabFragment != null && mainActivityTabFragment.isVisible()){
+                    mainSubjectChooseFragment = (MainSubjectChooseFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(0);
                         latestArticleFragment = (MainActivityLatestArticleFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(1);
                         mostPopularFragment = (MostPopularFragment) getSupportFragmentManager().findFragmentByTag("MainHomeFragment").getChildFragmentManager().getFragments().get(2);
                         mostPopularFragment.LoadQueryData(s);
                         latestArticleFragment.LoadQueryData(s);
-
+                        mainSubjectChooseFragment.SearchMajor(s);
                 }
                 return false;
             }
@@ -304,6 +308,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
                         break;
 
                     case R.id.Sign_out:
+                        //當使用者登出時，移除tokenID
+                        if (firebaseUser != null) {
+                            databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("UserTokenID").removeValue();
+                        }
                         firebaseAuth.signOut();
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);

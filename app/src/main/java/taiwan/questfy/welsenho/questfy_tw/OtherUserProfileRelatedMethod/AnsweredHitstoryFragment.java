@@ -127,7 +127,7 @@ public class AnsweredHitstoryFragment extends Fragment {
     }
 
     private void getFirebaseData(){
-            databaseReference.child("UserArticleAnswers").child(otherUserUid).addValueEventListener(new ValueEventListener() {
+            databaseReference.child("UserArticleAnswers").child(otherUserUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {

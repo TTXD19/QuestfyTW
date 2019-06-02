@@ -10,15 +10,22 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import taiwan.questfy.welsenho.questfy_tw.MainUserActivity.MainActivity;
+import taiwan.questfy.welsenho.questfy_tw.PersonAskQuestionRelated.PersonalAskQuestReplyActivity;
 import taiwan.questfy.welsenho.questfy_tw.R;
 import taiwan.questfy.welsenho.questfy_tw.ReadArticleRelated.ReadArticleActivity;
 
 public class UserFirebaseMessagingService extends FirebaseMessagingService {
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+
 
     @Override
     public void onNewToken(String s) {
@@ -31,6 +38,10 @@ public class UserFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
         Log.d("USERCLOUDMESSAGING", remoteMessage.getFrom());
         Log.d("USERCLOUDMESSAGING", remoteMessage.getNotification().getBody());
         //Log.d("USERCLOUDMESSAGING", remoteMessage.getData().get("ArticleID"));
@@ -42,6 +53,12 @@ public class UserFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().get("ArticleID") != null){
             intent = new Intent(this, ReadArticleActivity.class);
             intent.putExtra("ArticleID", remoteMessage.getData().get("ArticleID"));
+        }else if(remoteMessage.getData().get("questionUid") != null){
+            intent = new Intent(this, PersonalAskQuestReplyActivity.class);
+            intent.putExtra("questionUid", remoteMessage.getData().get("questionUid"));
+            intent.putExtra("questioType", "AskTo");
+            intent.putExtra("AskerUid", firebaseUser.getUid());
+            intent.putExtra("notificationOpen", true);
         }else {
             intent = new Intent(this, MainActivity.class);
         }

@@ -11,15 +11,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
 public class EditOfflineImageViewRecyclerAdapter extends RecyclerView.Adapter<EditOfflineImageViewRecyclerAdapter.ViewHolder> {
 
 
     private ArrayList<String> arrayList;
+    private ImageClick imageClick;
 
-    public EditOfflineImageViewRecyclerAdapter(ArrayList<String> arrayList) {
+    public EditOfflineImageViewRecyclerAdapter(ArrayList<String> arrayList, ImageClick imageClick) {
         this.arrayList = arrayList;
+        this.imageClick = imageClick;
     }
 
     @NonNull
@@ -47,6 +50,21 @@ public class EditOfflineImageViewRecyclerAdapter extends RecyclerView.Adapter<Ed
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgViews = itemView.findViewById(R.id.edit_init_recycler_adapter_ImageView);
+
+            imgViews.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION){
+                        imageClick.onRemoverImage(arrayList ,position);
+                    }
+                }
+            });
         }
+    }
+
+
+    public interface ImageClick{
+        void onRemoverImage(ArrayList<String> arrayList, int position);
     }
 }

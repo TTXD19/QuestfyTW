@@ -33,7 +33,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="尚未收藏任何問題"
-           android:layout_below="@+id/keep_article_imgNotLogin"
+           android:layout_below="@+id/keep_article_imgNoArticle"
            android:layout_centerHorizontal="true"
            android:textSize="18sp"
            android:textColor="@color/CatergoryDarkGrayText"
@@ -46,6 +46,13 @@
            android:layout_centerInParent="true"
            android:src="@drawable/not_login"
            android:visibility="gone"/>
+
+       <ImageView
+           android:id="@+id/keep_article_imgNoArticle"
+           android:layout_width="200dp"
+           android:layout_height="300dp"
+           android:src="@drawable/mutliple_article"
+           android:layout_centerInParent="true"/>
 
 
    </RelativeLayout>

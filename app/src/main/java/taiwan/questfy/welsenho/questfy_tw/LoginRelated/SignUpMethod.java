@@ -51,31 +51,6 @@ public class SignUpMethod {
         firebaseProfile.updateProfile(profileUpdate);
     }
 
-    public void signInMethod(FirebaseAuth mAuth, String email, String password, final Context context, final Activity activity, final ProgressDialog progressDialog, final TextView textView){
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                     if (task.isSuccessful()){
-                         Log.d("Login : ", "success");
-                         progressDialog.dismiss();
-                         Intent intent = new Intent(context, MainActivity.class);
-                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                         context.startActivity(intent);
-                         activity.finish();
-                     }else {
-                         progressDialog.dismiss();
-                         Log.d("PASSWORD", task.getException().getMessage());
-                         textView.setVisibility(View.VISIBLE);
-                         if (task.getException().getMessage().equals("The password is invalid or the user does not have a password.")) {
-                             textView.setText(context.getString(R.string.wrong_password_or_account));
-                         }else if (task.getException().getMessage().equals("There is no user record corresponding to this identifier. The user may have been deleted.")){
-                             textView.setText(context.getString(R.string.account_not_exist));
-                         }
-                     }
-            }
-        });
-    }
-
     public void emailVarification(FirebaseUser firebaseUser, final Context context){
         if (firebaseUser.isEmailVerified()){
             Toast.makeText(context, "Email has verified", Toast.LENGTH_SHORT).show();

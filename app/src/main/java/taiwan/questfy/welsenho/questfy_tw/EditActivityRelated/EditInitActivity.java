@@ -1,15 +1,20 @@
 package taiwan.questfy.welsenho.questfy_tw.EditActivityRelated;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +38,7 @@ import android.widget.Toast;
 
 import com.github.florent37.expansionpanel.ExpansionHeader;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
@@ -44,6 +50,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.philliphsu.bottomsheetpickers.date.DatePickerDialog;
@@ -63,6 +70,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import taiwan.questfy.welsenho.questfy_tw.AnswerReplyActivityRelated.AnswerReplyActivity;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.MainActivityFragment.MainOnClickListener;
 import taiwan.questfy.welsenho.questfy_tw.MainUserActivity.MainActivity;
@@ -74,6 +82,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 3;
+    private static final int PERMISSION_REQUEST_CODE = 4;
     private static final String TAG = "tag";
     private static final String PLACE_API_KEY = "AIzaSyByDLGHKUl2OutFByrDy0FgPUGU1FywsOg";
 
@@ -155,9 +164,31 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         if (getIntent().getStringArrayListExtra("ImageList") != null){
             if (getIntent().getStringArrayListExtra("ImageList").size() != 0) {
                 imageList = getIntent().getStringArrayListExtra("ImageList");
-                offlineImageViewRecyclerAdapter = new EditOfflineImageViewRecyclerAdapter(imageList);
-                recyclerView.setAdapter(offlineImageViewRecyclerAdapter);
                 expansionHeader.setVisibility(View.VISIBLE);
+                offlineImageViewRecyclerAdapter = new EditOfflineImageViewRecyclerAdapter(imageList, new EditOfflineImageViewRecyclerAdapter.ImageClick() {
+                    @Override
+                    public void onRemoverImage(final ArrayList<String> arrayList, final int position) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(EditInitActivity.this);
+                        builder.setTitle("移除照片").setMessage("點擊確定將移除照片").setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                arrayList.remove(position);
+                                offlineImageViewRecyclerAdapter.notifyItemRemoved(position);
+                                if (arrayList.isEmpty()){
+                                    expansionHeader.setVisibility(View.GONE);
+                                }else {
+                                    expansionHeader.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+                    }
+                });
+                recyclerView.setAdapter(offlineImageViewRecyclerAdapter);
             }else {
                 expansionHeader.setVisibility(View.GONE);
             }
@@ -266,6 +297,36 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                    SaveCurrentContent();
+                    dispatchTakePictureIntent();
+                    // main logic
+                } else {
+                    Toast.makeText(getApplicationContext(), "權限不允許", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            showMessageOKCancel("您需允許照相機權限，以啟用這項功能",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermission();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
     private void InitItem(){
         toolbar = findViewById(R.id.edit_init_toolbar);
         txtChooseMajor = findViewById(R.id.edit_init_txt_chooseMajor);
@@ -328,7 +389,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             }
             if (file != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.welsenho.provider",
+                        "taiwan.questfy.welsenho.provider",
                         file);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -354,9 +415,12 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             hashMap.put("User_Name", txtUserName.getText().toString());
             hashMap.put("Upload_Date", txtUploadDate.getText().toString());
             hashMap.put("Title", title);
-            hashMap.put("Majors", getMajors.toString());
+            String majors = getMajors.toString();
+            majors = majors.substring(1, majors.length() - 1);
+            hashMap.put("Majors", majors);
             hashMap.put("Content", content);
             hashMap.put("Article_ID", articleUid);
+            hashMap.put("illegalArticle", "False");
             hashMap.put("userUid", firebaseAuth.getUid());
             hashMap.put("Article_like_count", 0);
             hashMap.put("uploadTimeStamp", timeStamp);
@@ -408,11 +472,11 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                         }
                     });
                 } else {
-                    Toast.makeText(this, "Meet up detail can not be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "詳細見面內容需要填寫喔", Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
-            Toast.makeText(this, "Something is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "標題、內容、相關科系不能空白喔 : )", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -430,7 +494,8 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private void UploadPhotoFirebase(final FirebaseUser firebaseUser, final StorageReference storageReference, final Uri uri) {
 
         progressDialog.show();
-        progressDialog.setMessage("Uploading Photo...");
+        progressDialog.setMessage("圖片上傳中....");
+        progressDialog.setCanceledOnTouchOutside(false);
         final String date = editRelatedMethod.getDate();
         UploadTask uploadTask = storageReference.child("User_Article_Upload_Image").child(firebaseUser.getUid()).child(date).putFile(uri);
         uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -449,14 +514,50 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                     });
                 }
             }
-        });
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                //System.out.println("Upload is " + progress + "% done");
+                progressDialog.setProgress((int) progress);
+                progressDialog.setMessage("上傳進度" + (int)progress + "%");
+                Log.d("TotalByte", String.valueOf(progress));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditInitActivity.this, "上傳失敗，請在試一次", Toast.LENGTH_SHORT).show();
+            }
+        });;
     }
 
     private void addOffLineImageLink(String uri){
         imageList.add(uri);
-        offlineImageViewRecyclerAdapter = new EditOfflineImageViewRecyclerAdapter(imageList);
-        recyclerView.setAdapter(offlineImageViewRecyclerAdapter);
         expansionHeader.setVisibility(View.VISIBLE);
+        offlineImageViewRecyclerAdapter = new EditOfflineImageViewRecyclerAdapter(imageList, new EditOfflineImageViewRecyclerAdapter.ImageClick() {
+            @Override
+            public void onRemoverImage(final ArrayList<String> arrayList, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditInitActivity.this);
+                builder.setTitle("移除照片").setMessage("點擊確定將移除照片").setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        arrayList.remove(position);
+                        offlineImageViewRecyclerAdapter.notifyItemRemoved(position);
+                        if (arrayList.isEmpty()){
+                            expansionHeader.setVisibility(View.GONE);
+                        }else {
+                            expansionHeader.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }
+        });
+        recyclerView.setAdapter(offlineImageViewRecyclerAdapter);
     }
 
     /**
@@ -485,8 +586,15 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
         imgTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SaveCurrentContent();
-                dispatchTakePictureIntent();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    if (checkPermission()){
+                        SaveCurrentContent();
+                        dispatchTakePictureIntent();
+                    }else {
+                        requestPermission();
+                    }
+                }
+
             }
         });
 
@@ -530,6 +638,13 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
+        txtDatePick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgDateTimePicker.performClick();
+            }
+        });
+
         swithMeetUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -558,6 +673,13 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
             public void onClick(View v) {
                 SaveCurrentContent();
                 GoogleSearchPlace();
+            }
+        });
+
+        txtPlaceName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgPlcePicker.performClick();
             }
         });
     }
@@ -698,7 +820,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
 
     private void buildDialog(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Error").setMessage("Sorry, we're having a server issue. Please try again later")
+        dialog.setTitle("Error").setMessage("抱歉，目前網路有問題請稍後再試")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -725,6 +847,30 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
                 AutocompleteActivityMode.FULLSCREEN, fields)
                 .build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
 
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(EditInitActivity.this)
+                .setMessage(message)
+                .setPositiveButton(R.string.confirm, okListener)
+                .setNegativeButton(R.string.cancel, null)
+                .create()
+                .show();
     }
 }

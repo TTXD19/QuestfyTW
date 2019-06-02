@@ -1,5 +1,6 @@
 package taiwan.questfy.welsenho.questfy_tw.MainActivityFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -96,7 +98,6 @@ public class MostPopularFragment extends Fragment {
         InitRecyclerView();
         getLastKeyFromFirebase();
         loadMoreRecyclerData();
-
 
         return view;
     }
@@ -183,6 +184,7 @@ public class MostPopularFragment extends Fragment {
 
     private void getLastKeyFromFirebase() {
 
+
         isMaxData = false;
         arrayList = new ArrayList<>();
         arrayList.clear();
@@ -243,7 +245,6 @@ public class MostPopularFragment extends Fragment {
                     recyclerView.setAdapter(newArticleListRecyclerAdapter);
 
                     progressBar.setVisibility(View.GONE);
-                    swipeRefreshLayout.setEnabled(true);
                     swipeRefreshLayout.setRefreshing(false);
 
                     /**
@@ -270,11 +271,12 @@ public class MostPopularFragment extends Fragment {
             nestedScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    hideKeyboardFrom(getContext(), view);
                     if (!nestedScrollView.canScrollVertically(1)){
                         if (!isMaxData){
-                            //testData();
-                            getMoreData();
-                            Log.d("GETMOREDATA", "LOADMORE");
+                                //testData();
+                                getMoreData();
+                                Log.d("GETMOREDATA", "LOADMORE");
                         }else {
                             Log.d("GETMOREDATA", "NOTLOADMORE");
                         }
@@ -329,17 +331,16 @@ public class MostPopularFragment extends Fragment {
 
     public void LoadQueryData(final String inputSearch) {
         progressBar.setVisibility(View.VISIBLE);
-        swipeRefreshLayout.setEnabled(false);
         Query query = databaseReference.child("Users_Question_Articles").orderByChild("MostPopCount");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     searchArrayList.clear();
-                    if (!inputSearch.equals("")) {
+                    if (inputSearch != null) {
                         for (DataSnapshot DS : dataSnapshot.getChildren()) {
                             FirebaseDatabaseGetSet searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
-                            if (searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase()) || searchGetSet.getMajors().toLowerCase().contains(inputSearch.toLowerCase())) {
+                            if ((searchGetSet.getTitle().toLowerCase().contains(inputSearch.toLowerCase()) || searchGetSet.getMajors().toLowerCase().contains(inputSearch.toLowerCase()))) {
                                 searchArrayList.add(searchGetSet);
                             }
                         }
@@ -348,6 +349,7 @@ public class MostPopularFragment extends Fragment {
                         } else {
                             recyclerView.setVisibility(View.VISIBLE);
                         }
+
                         recyclerView.setAdapter(adapter);
                         progressBar.setVisibility(View.GONE);
                     }else {
@@ -378,6 +380,10 @@ public class MostPopularFragment extends Fragment {
         void mostPopularArticleFilter(ArrayList<FirebaseDatabaseGetSet> arrayList);
     }
 
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
 

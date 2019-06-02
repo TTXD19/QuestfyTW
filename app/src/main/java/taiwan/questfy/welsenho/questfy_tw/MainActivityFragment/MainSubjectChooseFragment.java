@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +40,8 @@ public class MainSubjectChooseFragment extends Fragment {
     private MainSubjectChooseFragmentRecyclerAdapter adapter;
     private MainSubjectChooseFragmentRecyclerAdapter adapterHistory;
     private EditRelatedMethod editRelatedMethod;
+    private FirebaseDatabaseGetSet searchGetSet;
+    private ArrayList<FirebaseDatabaseGetSet> searchArrayList;
 
 
     private FirebaseAuth firebaseAuth;
@@ -68,7 +71,6 @@ public class MainSubjectChooseFragment extends Fragment {
         if (firebaseUser != null) {
             getFirebaseHistorySearch();
         }
-        onItemClick();
         getFirebaseData();
         return view;
     }
@@ -114,14 +116,29 @@ public class MainSubjectChooseFragment extends Fragment {
     }
 
     private void InitItem(){
-        arrayList = new ArrayList<>();
         arrayListHistory = new ArrayList<>();
-        adapter = new MainSubjectChooseFragmentRecyclerAdapter(arrayList, getContext());
-        adapterHistory = new MainSubjectChooseFragmentRecyclerAdapter(arrayListHistory, getContext());
+        searchArrayList = new ArrayList<>();
+        adapterHistory = new MainSubjectChooseFragmentRecyclerAdapter(arrayListHistory, getContext(), new MainSubjectChooseFragmentRecyclerAdapter.majorClick() {
+            @Override
+            public void onMajorClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                mListener.onSubjectChooseFilter(arrayList.get(position).getMajor());
+            }
+        });
         editRelatedMethod = new EditRelatedMethod();
     }
 
     private void getFirebaseData(){
+        arrayList = new ArrayList<>();
+        arrayList.clear();
+        adapter = new MainSubjectChooseFragmentRecyclerAdapter(arrayList, getContext(), new MainSubjectChooseFragmentRecyclerAdapter.majorClick() {
+            @Override
+            public void onMajorClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                mListener.onSubjectChooseFilter(arrayList.get(position).getMajor());
+                if (firebaseUser != null) {
+                    writeHistory(arrayList.get(position).getMajor());
+                }
+            }
+        });
         databaseReference.child("Choose_majors_section").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -163,25 +180,6 @@ public class MainSubjectChooseFragment extends Fragment {
         });
     }
 
-    private void onItemClick(){
-        adapter.setOnClickListener(new MainOnClickListener() {
-            @Override
-            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                mListener.onSubjectChooseFilter(arrayList.get(position).getMajor());
-                if (firebaseUser != null) {
-                    writeHistory(arrayList.get(position).getMajor());
-                }
-            }
-        });
-
-        adapterHistory.setOnClickListener(new MainOnClickListener() {
-            @Override
-            public void onClicked(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
-                mListener.onSubjectChooseFilter(arrayList.get(position).getMajor());
-            }
-        });
-    }
-
     private void writeHistory(String subject){
         EditRelatedMethod editRelatedMethod = new EditRelatedMethod();
         if (!subject.equals("全部")) {
@@ -193,5 +191,47 @@ public class MainSubjectChooseFragment extends Fragment {
             hashMap.put("DateSequence", editRelatedMethod.getDate());
             databaseReference.child("UserSearchHistory").child(firebaseUser.getUid()).child("Choose_majors_section_history").child(subject).updateChildren(hashMap);
         }
+    }
+
+    public void SearchMajor(final String searchMajor){
+        databaseReference.child("Choose_majors_section").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!searchMajor.equals("")){
+                    searchArrayList.clear();
+                    for (DataSnapshot DS:dataSnapshot.getChildren()){
+                        searchGetSet = DS.getValue(FirebaseDatabaseGetSet.class);
+                        if (searchGetSet.getMajor().toLowerCase().contains(searchMajor.toLowerCase())){
+                            searchArrayList.add(searchGetSet);
+                        }
+                    }
+                    if (!searchArrayList.isEmpty()) {
+                        recyclerViewCurrent.setVisibility(View.VISIBLE);
+                        adapter = new MainSubjectChooseFragmentRecyclerAdapter(searchArrayList, getContext(), new MainSubjectChooseFragmentRecyclerAdapter.majorClick() {
+                            @Override
+                            public void onMajorClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList) {
+                                mListener.onSubjectChooseFilter(arrayList.get(position).getMajor());
+                                if (firebaseUser != null) {
+                                    writeHistory(arrayList.get(position).getMajor());
+                                }
+                            }
+                        });
+                        recyclerViewCurrent.setAdapter(adapter);
+                        recyclerViewCurrent.setVisibility(View.VISIBLE);
+
+                    }else {
+                        recyclerViewCurrent.setVisibility(View.GONE);
+                    }
+                }else {
+                    recyclerViewCurrent.setVisibility(View.VISIBLE);
+                    getFirebaseData();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

@@ -149,7 +149,7 @@ public class CheckFollowersFragment extends Fragment {
 
 
     private void getUserArticlesData() {
-        databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users_Followers_Section").child(otherUserUid).child("Follow_by").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

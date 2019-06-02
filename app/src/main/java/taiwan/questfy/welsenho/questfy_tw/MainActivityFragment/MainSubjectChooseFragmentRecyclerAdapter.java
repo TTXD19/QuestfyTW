@@ -14,15 +14,17 @@ import java.util.ArrayList;
 import taiwan.questfy.welsenho.questfy_tw.FirebaseDatabaseGetSet;
 import taiwan.questfy.welsenho.questfy_tw.R;
 
-public class MainSubjectChooseFragmentRecyclerAdapter extends RecyclerView.Adapter<MainSubjectChooseFragmentRecyclerAdapter.SbjectHolder> implements MainAdapterOnClickListener{
+public class MainSubjectChooseFragmentRecyclerAdapter extends RecyclerView.Adapter<MainSubjectChooseFragmentRecyclerAdapter.SbjectHolder>{
 
     private ArrayList<FirebaseDatabaseGetSet> arrayList;
     private Context context;
     private MainOnClickListener listener;
+    private majorClick majorClick;
 
-    public MainSubjectChooseFragmentRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context){
+    public MainSubjectChooseFragmentRecyclerAdapter(ArrayList<FirebaseDatabaseGetSet> arrayList, Context context, majorClick majorClick){
         this.arrayList = arrayList;
         this.context = context;
+        this.majorClick = majorClick;
     }
 
 
@@ -30,7 +32,7 @@ public class MainSubjectChooseFragmentRecyclerAdapter extends RecyclerView.Adapt
     @Override
     public SbjectHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.main_subject_choose_recycler_layout, viewGroup, false);
-        SbjectHolder viewHolder = new SbjectHolder(view, this);
+        SbjectHolder viewHolder = new SbjectHolder(view);
         return viewHolder;
     }
 
@@ -49,16 +51,11 @@ public class MainSubjectChooseFragmentRecyclerAdapter extends RecyclerView.Adapt
         this.listener = listener;
     }
 
-    @Override
-    public void onClick(int position) {
-        listener.onClicked(position, arrayList);
-    }
-
     public class SbjectHolder extends RecyclerView.ViewHolder {
 
         private TextView txtShowSubjects;
 
-        public SbjectHolder(@NonNull View itemView, final MainAdapterOnClickListener adapterOnClickListener) {
+        public SbjectHolder(@NonNull View itemView) {
             super(itemView);
             txtShowSubjects = itemView.findViewById(R.id.mainSubjectChoose_layout_txtSubjects);
 
@@ -67,10 +64,17 @@ public class MainSubjectChooseFragmentRecyclerAdapter extends RecyclerView.Adapt
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION){
-                        adapterOnClickListener.onClick(position);
+                        majorClick.onMajorClick(position, arrayList);
                     }
                 }
             });
         }
     }
+
+    public interface  majorClick{
+        void onMajorClick(int position, ArrayList<FirebaseDatabaseGetSet> arrayList);
+    }
+
+
+
 }

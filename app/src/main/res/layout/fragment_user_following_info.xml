@@ -1,35 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/user_following_info_swipeRefreshLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/FullWhite"
     tools:context=".MainActivityFragment.UserFollowingInfoFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/user_following_info_recyclerView"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/user_following_info_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/user_following_info_txtNoFollowingUsers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="尚未追蹤任何使用者"
-        android:layout_centerHorizontal="true"
-        android:textSize="18sp"
-        android:textColor="@color/CatergoryDarkGrayText"
-        android:visibility="gone"
-        android:layout_below="@+id/user_following_info_imgNotLogin"/>
+        </android.support.v7.widget.RecyclerView>
 
-    <ImageView
-        android:id="@+id/user_following_info_imgNotLogin"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/not_login"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/user_following_info_txtNoFollowingUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_following_info_imgNoFollowing"
+            android:layout_centerHorizontal="true"
+            android:text="尚未追蹤任何使用者"
+            android:textColor="@color/CatergoryDarkGrayText"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/user_following_info_imgNotLogin"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/not_login"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/user_following_info_imgNoFollowing"
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/know_new_people" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

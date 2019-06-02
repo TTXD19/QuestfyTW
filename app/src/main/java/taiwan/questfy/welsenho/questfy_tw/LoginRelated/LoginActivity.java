@@ -1,9 +1,11 @@
 package taiwan.questfy.welsenho.questfy_tw.LoginRelated;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +38,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -95,9 +101,11 @@ public class LoginActivity extends AppCompatActivity {
         //Auto Login & check internet state
         if (firebaseUser != null) {
             if (internetConnectionDetect.isNetworkAvailable(getApplicationContext())) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                progressDialog.setTitle("登入中");
+                progressDialog.setMessage("請稍後，登入即將完成");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                checkRegisterFailed("EmailPassword");
             }else {
                 Intent intent = new Intent(LoginActivity.this, OutOfConnectionActivity.class);
                 startActivity(intent);
@@ -122,12 +130,18 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            progressDialog.setTitle("登入");
+            progressDialog.setMessage("帳號登入中，請稍後");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Log.d("GSFAILEFD", e.getMessage() + e.getLocalizedMessage());
+                Toast.makeText(this, "創帳失敗，請在試一次", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
                 // Google Sign In failed, update UI appropriately
             }
 
@@ -189,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                 email = editEmail.getText().toString();
                 password = editPassword.getText().toString();
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    signUpMethod.signInMethod(firebaseAuth, email, password, getApplicationContext(), LoginActivity.this, progressDialog, txtWrongPassword);
+                    signInMethod(firebaseAuth, email, password);
                 }else{
                     txtWrongPassword.setText("帳號密碼不能為空");
                     txtWrongPassword.setVisibility(View.VISIBLE);
@@ -259,8 +273,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (isNew){
                         ProviderRegister("Facebook");
                     }else {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        checkRegisterFailed("Facebook");
                     }
                 }
             }
@@ -294,12 +307,39 @@ public class LoginActivity extends AppCompatActivity {
                             if (isNew){
                                 ProviderRegister("Google");
                             }else {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                checkRegisterFailed("Google");
                             }
+                        }else {
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "登入失敗，請在試一次", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void signInMethod(FirebaseAuth mAuth, String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Log.d("Login : ", "success");
+                    firebaseAuth = FirebaseAuth.getInstance();
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    checkRegisterFailed("EmailPassword");
+                }else {
+                    progressDialog.dismiss();
+                    Log.d("PASSWORD", task.getException().getMessage());
+                    txtWrongPassword.setVisibility(View.VISIBLE);
+                    if (task.getException().getMessage().equals("The password is invalid or the user does not have a password.")) {
+                        txtWrongPassword.setText(R.string.wrong_password_or_account);
+                    }else if (task.getException().getMessage().equals("There is no user record corresponding to this identifier. The user may have been deleted.")){
+                        txtWrongPassword.setText(R.string.account_not_exist);
+                    }else {
+                        txtWrongPassword.setText("登入失敗，請檢查網路並在試一次");
+                    }
+                }
+            }
+        });
     }
 
     private void ProviderRegister(String provider){
@@ -324,9 +364,62 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     progressDialog.dismiss();
                     finish();
+                }else {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "登入失敗，請在試一次", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+    }
+
+    private void FaildProviderRegister(String provider, String uid){
+        EditRelatedMethod editRelatedMethod = new EditRelatedMethod();
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Email", firebaseUser.getEmail());
+        hashMap.put("ID", firebaseUser.getDisplayName());
+        if (firebaseUser.getPhotoUrl() == null) {
+            hashMap.put("User_image_uri", "https://firebasestorage.googleapis.com/v0/b/questfytw.appspot.com/o/Default_Image_ForEach_Condition%2Fuser%20(1).png?alt=media&token=5122a33f-5392-4877-be3d-4f519550c9b6");
+        }else {
+            hashMap.put("User_image_uri", firebaseUser.getPhotoUrl().toString());
+        }
+        hashMap.put("createDate", editRelatedMethod.getUploadDate());
+        hashMap.put("loginType", provider);
+        hashMap.put("userUid", firebaseUser.getUid());
+        databaseReference.child("Users_profile").child(uid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    progressDialog.dismiss();
+                    finish();
+                }else {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "登入失敗，請檢查網路", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void checkRegisterFailed(final String provider){
+        databaseReference.child("Users_profile").child(firebaseUser.getUid()).child("userUid").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    FaildProviderRegister(provider, firebaseUser.getUid());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
