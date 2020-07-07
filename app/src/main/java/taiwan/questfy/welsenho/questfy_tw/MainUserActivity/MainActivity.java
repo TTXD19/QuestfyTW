@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityTabFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        
 
         navigationView = findViewById(R.id.main_activity_navigationView);
         drawerLayout = findViewById(R.id.main_activity_drawerLayout);

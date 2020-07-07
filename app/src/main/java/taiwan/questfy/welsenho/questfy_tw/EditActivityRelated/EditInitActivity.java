@@ -96,6 +96,7 @@ public class EditInitActivity extends AppCompatActivity implements DatePickerDia
     private int countImages;
     private SharedPreferences sharedPreferences;
 
+
     private Toolbar toolbar;
     private TextView txtChooseMajor;
     private TextView txtUserName;
